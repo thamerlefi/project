@@ -51,7 +51,7 @@ export default function Profile() {
       {auth.user && (
         <>
           <Form onSubmit={updateUserHandler}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="formBasicFirstName">
               <Form.Label>first name</Form.Label>
               <Form.Control value={firstName} type="text" placeholder="update your first name" 
                 onChange={(e)=>setFirstName(e.target.value)}
@@ -61,14 +61,14 @@ export default function Profile() {
               </Form.Text>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="formBasicLastName">
               <Form.Label>last name</Form.Label>
               <Form.Control value={lastName} type="text" placeholder="update your last name" 
                 onChange={(e)=>setLastName(e.target.value)}
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="formBasicPicture">
               <Form.Label>change your picture</Form.Label>
               <Form.Control  type="file" accept="image/" onChange={uploadImgHandler} />
             </Form.Group>
@@ -80,7 +80,7 @@ export default function Profile() {
               />
             </Form.Group>
             
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="formBasicConfirm">
               <Form.Label>confirm password</Form.Label>
               <Form.Control value={confirm} type="password" placeholder="confirm your password" 
                 onChange={(e)=>setConfirm(e.target.value)}

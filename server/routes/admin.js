@@ -1,6 +1,8 @@
 const { getAllUsers, adminPage, deleteUser, updateUser } = require('../controllers/adminController')
 const isAdmin = require('../middlewares/IsAdmin')
 const isAuth = require('../middlewares/auth')
+const UserModel = require('../models/UserModel')
+const { paginatedResults } = require('../utils/paginatedResults')
 
 const router = require('express').Router()
 
@@ -8,7 +10,7 @@ const router = require('express').Router()
 router.get('/',isAuth, isAdmin, adminPage)
 
 // get all users => /api/admin/users (only admin)
-router.get('/users',isAuth, isAdmin, getAllUsers)
+router.get('/users',isAuth, isAdmin, paginatedResults(UserModel), getAllUsers)
 
 // delete user => /api/admin/remove/:id
 router.delete('/remove-user/:id', isAuth, isAdmin, deleteUser)
