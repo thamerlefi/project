@@ -40,11 +40,15 @@ export default function NavBar() {
              {/* ------------------------ admin dropdown --------------- */}
              { user.isAdmin &&
             <NavDropdown title="Admin" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action4">Admin Dashboard</NavDropdown.Item>
+              <LinkContainer to="/admin/dashboard">
+                <NavDropdown.Item href="#action4">Admin Dashboard</NavDropdown.Item>
+              </LinkContainer>
               <LinkContainer to='/admin/users'>
                 <NavDropdown.Item>Users List</NavDropdown.Item>
               </LinkContainer>
-              <NavDropdown.Item href="#action4">Products List</NavDropdown.Item>
+              <LinkContainer to="/admin/products">
+                <NavDropdown.Item href="#action4">Products List</NavDropdown.Item>
+              </LinkContainer>
               <NavDropdown.Item href="#action4">Orders List</NavDropdown.Item>
             </NavDropdown>}
               {/* ----------------------- user dropdown ----------------- */}

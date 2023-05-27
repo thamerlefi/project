@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { baseURL } from '../baseURL';
 import { fulfilled, pending, rejected } from '../redux/slices/authSlice';
 import { toast } from 'react-toastify';
-// import { getAllUsers } from '../redux/slices/adminSlice';
 
 export default function UsersList() {
   const dispatch = useDispatch()
@@ -16,6 +15,7 @@ export default function UsersList() {
   useEffect(()=>{
     getAllUsers(5,1)
   },[])
+
   //------------------------------ get all users handler (admin)
   async function getAllUsers(limit,page) {
     try {
@@ -33,9 +33,9 @@ export default function UsersList() {
   }
 
   // generating an array for all users pages [1,2,3...]
-  let Pagesbuttons = []
+  let PagesButtons = []
    for(let i=1;i<=pages;i++){
-    Pagesbuttons.push(i)
+    PagesButtons.push(i)
   }
   //------------------------------ delete a user handler (admin)
   const deleteUserHandler = async(user) =>{
@@ -56,9 +56,10 @@ export default function UsersList() {
   return (
     <div className='mt-4'>
       {/* ---------------------------- users list */}
-      <ListGroup>
-        {allUsers.map(user =>  <ListGroup.Item key={user._id} className='d-flex justify-content-between'>
-          {`${user.lastName} ${user.firstName}`}
+      <div style={{minHeight:"285px"}}>
+      <ListGroup >
+        {allUsers.map((user,i) =>  <ListGroup.Item key={user._id} className='d-flex justify-content-between'>
+          {`${(i+1) + ((activePage - 1) * 5)} - ${user.lastName} ${user.firstName}`}
           <div>
             <span className={`me-2 ${user.isAdmin ? 'text-success': 'text-danger' }`}>{user.isAdmin ? 'admin' : 'user'}</span>
             <button className='btn btn-info me-2'>edit</button>
@@ -66,11 +67,12 @@ export default function UsersList() {
           </div>
         </ListGroup.Item> )}
     </ListGroup>   
+    </div>
         {/* ----------------------- pagination buttons  */}
-    <div className='mt-3'> 
-        {Pagesbuttons.map(page => (
+    <div > 
+        {PagesButtons.map(page => (
           <button key={page} 
-          className={`btn px-2 py-0 text-primary me-1  
+            className={`btn px-2 py-0 text-primary me-1  
                     ${page === activePage ? 'border border-success':''} `}
             onClick={()=>getAllUsers(5,page)}
           >

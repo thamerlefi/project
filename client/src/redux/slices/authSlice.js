@@ -85,7 +85,7 @@ const authSlice = createSlice({
             localStorage.removeItem('token')
             state.isLoading = false
             state.isSuccess = false
-            state.isError = 
+            state.isError = false
             state.isLoggedIn = false
             state.token = null
             state.user = null

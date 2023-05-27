@@ -1,14 +1,21 @@
 import React from 'react'
+import { LinkContainer } from 'react-router-bootstrap'
 import { Outlet } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function Admin() {
-  const tostia = () => toast('not handled yet hahaha')
+  
   return (
     <div className='mt-4'>
-      <button onClick={tostia} className='btn btn-outline-success'>dashboars</button>
-      <button className='btn btn-outline-success mx-3'>products</button>
-      <button className='btn btn-outline-success'>users</button>
+      <LinkContainer to="/admin/dashboard">
+        <button  className='btn btn-outline-success'>dashboars</button>
+      </LinkContainer>
+      <LinkContainer to="/admin/products">
+        <button className='btn btn-outline-success mx-3'>products</button>
+      </LinkContainer>
+      <LinkContainer to="/admin/users">
+        <button className='btn btn-outline-success'>users</button>
+      </LinkContainer>
       <Outlet />
     </div>
   )

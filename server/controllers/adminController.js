@@ -1,4 +1,5 @@
 const User = require('../models/UserModel.js')
+const Product = require('../models/ProductModel')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
@@ -40,6 +41,12 @@ exports.updateUser = async(req,res) => {
 }
 
 // admin page /api/user/admin
-exports.adminPage = (req,res) => {
-    res.send('welcome admin')
+exports.adminPage = async(req,res) => {
+    try {
+        const users = await User.find()
+        const products = await Product.find()
+        res.json({users: users.length, products:products.length})
+    } catch (error) {
+        
+    }
 }

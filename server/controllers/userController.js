@@ -81,7 +81,7 @@ exports.userRegister = async(req,res,next)=>{
         const hashedPass = await bcrypt.hash(req.body.password,10)
         req.body.password = hashedPass
         const user = await User.create(req.body)
-        const token = await jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY,{
+        const token =  jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY,{
             expiresIn: "1h"
         })
         res.status(201).json({token, user: {

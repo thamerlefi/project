@@ -1,0 +1,14 @@
+.dashboard-info{
+    justify-content: center;
+    gap: 100px;
+}
+.dashboard-info div{
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+
+.update-product .col-4 img{
+    width: 250px;
+}

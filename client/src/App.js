@@ -6,25 +6,28 @@ import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import NotFound from './pages/NotFound';
 import { useEffect } from 'react';
-import { getUser, reset } from './redux/slices/authSlice';
+import { getUser } from './redux/slices/authSlice';
 import { Container } from 'react-bootstrap';
 import Admin from './pages/Admin';
 import UsersList from './components/UsersList';
 import ResetPass from './pages/ResetPass'
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminProducts from './pages/AdminProducts';
+import AdminDashboard from './components/AdminDashboard';
+import UpdateProduct from './components/UpdateProduct';
+// import { getAllProducts } from './redux/slices/productSlice';
 
 
 function App() {
-  const {isLoggedIn} = useSelector(state => state.auth)
+  // const {isLoggedIn} = useSelector(state => state.auth)
   const dispatch = useDispatch()
   useEffect(()=>{
     dispatch(getUser())
-    
   },[])
   return (
     <div className="App">
@@ -39,6 +42,9 @@ function App() {
           {  <Route path='/profile' element={<Profile />} />}
           <Route path='/admin' element={<Admin />} >
             <Route path='users' element={<UsersList />} />
+            <Route path='products' element={<AdminProducts />} />
+            <Route path='products/update/:id' element={<UpdateProduct />} />
+            <Route path='dashboard' element={<AdminDashboard />} />
           </Route>
           <Route path='/cart' Component={Cart}/>
           <Route path='*' element={<NotFound />}/>
