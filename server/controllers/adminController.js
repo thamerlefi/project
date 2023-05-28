@@ -2,6 +2,7 @@ const User = require('../models/UserModel.js')
 const Product = require('../models/ProductModel')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
+const cloudinary = require('../utils/cloudinaryConfig.js')
 
 // get all users => /api/user/all (only admin)
 exports.getAllUsers = async(req,res) =>  {
@@ -21,6 +22,7 @@ exports.deleteUser = async(req,res) => {
     try {
         const user = await User.findById(req.params.id)
         if(!user) return res.status(404).json({message: 'user not found'})
+        if(user.image.public_id !== "lqvpcvcnrykdabnpjkmi") cloudinary.uploader.destroy(user.image.public_id);
         await User.findByIdAndDelete(req.params.id)
         res.status(200).json({message: 'user deleted successfuly !'})
     } catch (error) {
@@ -40,7 +42,7 @@ exports.updateUser = async(req,res) => {
     }
 }
 
-// admin page /api/user/admin
+// admin dashboard page /api/user/admin
 exports.adminPage = async(req,res) => {
     try {
         const users = await User.find()

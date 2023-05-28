@@ -46,6 +46,20 @@ export const createNewProduct = createAsyncThunk("product/new", async(product,{r
     }
 })
 
+//---------- update product
+export const updateOneProduct = createAsyncThunk("product/updateOne", async(updated,{rejectWithValue})=>{
+    try {
+        const res = await axios.put(`${baseURL}api/products/${updated.id}`,updated.updatedProduct,{headers: {
+            "x-auth" : localStorage.getItem('token')
+        }}) 
+        toast(res.data.message,  {type: "success"})
+        return res.data
+    } catch (error) {
+        toast(error.response.data.message,{type: "error"})
+        return rejectWithValue(error.response.data.message)
+    }
+})
+
 //----------- delete product
 export const deleteOneProduct = createAsyncThunk("product/deleteOne",async(id,{rejectWithValue})=>{
     try {
@@ -75,7 +89,7 @@ const productSlice = createSlice({
         .addCase(getAllProducts.rejected,(state,action)=>{
             return {...state, isLoading: false,isSuccess: false,isError: true,message: action.payload}
         })
-        //------------------------ get one product
+        //------------------------ get one product cases
         .addCase(getOneProduct.pending,(state)=>{
             return {...state, isLoading: true,isSuccess: false,isError: false,message: ""}
         })
@@ -99,6 +113,25 @@ const productSlice = createSlice({
             }
         })
         .addCase(createNewProduct.rejected,(state,action)=>{
+            return {...state, isLoading: false,isSuccess: false,isError: true,message: action.payload}
+        })
+        //--------------------------- update one product cases
+        .addCase(updateOneProduct.pending,(state)=>{
+            return {...state, isLoading: true,isSuccess: false,isError: false,message: ""}
+        })
+        .addCase(updateOneProduct.fulfilled,(state,action)=>{
+            return {...state, 
+                isLoading: false,
+                isSuccess: true,
+                isError: false,
+                message: action.payload.message,
+                products: state.products.map(product => {
+                    return product._id === action.payload.product._id ? product = action.payload.product :
+                    product 
+                })
+            }
+        })
+        .addCase(updateOneProduct.rejected,(state,action)=>{
             return {...state, isLoading: false,isSuccess: false,isError: true,message: action.payload}
         })
         //--------------------------- delete one product cases

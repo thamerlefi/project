@@ -28,9 +28,12 @@ exports.getOneProduct = async (req,res,next)=>{
 // create new product => /api/products/new
 exports.newProduct = async(req,res,next)=>{
     try {
+        const {name,price,category,description,stock} = req.body
+        if(!name || !price || !category || !description || !stock) 
+            return next(newError(400, 'please fill all required fuilds'))  
         if (!req.body.image) return next(newError(400, 'please choose an image'))
-        const upRes = await cloudinary.uploader.upload(req.body.image, {upload_preset: 'e-commerce'})
-        const {public_id, secure_url} = upRes
+        const uploadRes = await cloudinary.uploader.upload(req.body.image, {upload_preset: 'e-commerce'})
+        const {public_id, secure_url} = uploadRes
         req.body.image = {public_id, secure_url}
         const product = await Product.create(req.body)
         res.status(201).json({
@@ -47,8 +50,14 @@ exports.updateProduct = async(req,res)=>{
     try {
         let product = await Product.findById(req.params.id)
         if(!product) return res.status(404).json({message: 'product not found'})
-        product = await Product.findByIdAndUpdate(req.params.id, req.body)
-        res.status(200).json({message: 'product updated'})
+        if (req.body.image !== "") {
+            cloudinary.uploader.destroy(product.image.public_id)
+            const uploadRes = await cloudinary.uploader.upload(req.body.image, {upload_preset: 'e-commerce'})
+            const {public_id, secure_url} = uploadRes
+            req.body.image = {public_id, secure_url}
+        } else req.body.image = product.image
+        product = await Product.findByIdAndUpdate(req.params.id, req.body,{ new: true })
+        res.json({message: 'product updated',product})
     } catch (error) {
         res.status(400).json({message: error.message})
     }
@@ -59,6 +68,7 @@ exports.deleteProduct= async(req,res)=>{
     try {
         const product = await Product.findById(req.params.id)
         if (!product) return res.status(404).json({message: 'product not found'})
+        cloudinary.uploader.destroy(product.image.public_id)
         const deletedProduct = await Product.findByIdAndDelete(req.params.id)
         res.status(200).json({message: 'product deleted', product: deletedProduct})
     } catch (error) {

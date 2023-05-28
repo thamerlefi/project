@@ -80,6 +80,10 @@ exports.userRegister = async(req,res,next)=>{
         if(req.body.password !== req.body.confirm) return next(newError(400, 'passwords not matches'))
         const hashedPass = await bcrypt.hash(req.body.password,10)
         req.body.password = hashedPass
+        req.body.image = {
+            public_id: "lqvpcvcnrykdabnpjkmi",
+            secure_url: "https://res.cloudinary.com/deftn1jya/image/upload/v1685146335/e-commerce/lqvpcvcnrykdabnpjkmi.png"
+        }
         const user = await User.create(req.body)
         const token =  jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY,{
             expiresIn: "1h"
@@ -149,8 +153,9 @@ exports.userUpdate = async(req,res,next)=>{
         }
         if (user.isAdmin === false) req.body.isAdmin = false 
         if(req.body.image) {
-            const upRes = await cloudinary.uploader.upload(req.body.image, {upload_preset: 'e-commerce'})
-            const {public_id, secure_url} = upRes
+            if(user.image) cloudinary.uploader.destroy(user.image.public_id);
+            const uploadRes = await cloudinary.uploader.upload(req.body.image, {upload_preset: 'e-commerce'})
+            const {public_id, secure_url} = uploadRes
             req.body.image = {public_id, secure_url}
         } else{
             req.body.image = user.image
