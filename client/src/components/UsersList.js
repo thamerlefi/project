@@ -23,7 +23,7 @@ export default function UsersList() {
       const res = await axios.get(baseURL + `api/admin/users/?limit=${limit}&page=${page}`, {headers: {
         "x-auth" : localStorage.getItem('token')
       }})
-      setAllUsers(res.data.users)
+      setAllUsers(res.data.list)
       setPages(res.data.pages)
       setActivePage(page)
       dispatch(fulfilled(res.data.message))

@@ -1,12 +1,14 @@
 const { newProduct, getProducts, getOneProduct, updateProduct, deleteProduct } = require('../controllers/productsController')
 const isAdmin = require('../middlewares/IsAdmin')
 const isAuth = require('../middlewares/auth')
+const ProductModel = require('../models/ProductModel')
+const { paginatedResults } = require('../utils/paginatedResults')
 
 const router = require('express').Router()
 
 
 // get products
-router.get('/', getProducts)
+router.get('/', paginatedResults(ProductModel) ,getProducts)
 router.get('/:id', getOneProduct)
 
 // create new product (only admin)

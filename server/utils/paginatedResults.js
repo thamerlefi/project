@@ -1,6 +1,6 @@
 const { newError } = require("./Errors")
 
-exports.paginatedResults = model => async(req,res,next) => {
+exports.paginatedResults = (model) => async(req,res,next) => {
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
@@ -23,7 +23,7 @@ exports.paginatedResults = model => async(req,res,next) => {
         }
     }
     try {
-        result.users = await model.find().limit(limit).skip(startIndex)
+        result.list = await model.find().limit(limit).skip(startIndex).sort({createdAt: -1})
         const reslt = await model.countDocuments().exec() / limit
         result.pages = Math.ceil(reslt)
         res.pagination = result

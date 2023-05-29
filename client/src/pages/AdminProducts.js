@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Button, ListGroup, Modal } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { createNewProduct, deleteOneProduct, getAllProducts } from '../redux/slices/productSlice'
+import { fulfilled, getAllProducts, pending, rejected } from '../redux/slices/productSlice'
 import { LinkContainer } from 'react-router-bootstrap'
+import axios from 'axios'
+import { baseURL } from '../baseURL'
+import { toast } from 'react-toastify'
 
 export default function AdminProducts() {
     const dispatch = useDispatch()
@@ -22,11 +25,13 @@ export default function AdminProducts() {
     const [stock,setStock] = useState(0)
 
     useEffect(()=>{
-        dispatch(getAllProducts())
+        dispatch(getAllProducts({limit:5,page:1}))
     },[])
-    useEffect(()=>{
-      products.message && products.isSuccess && setShow(false)
-    },[products.message, products.isSuccess])
+
+    let PagesButtons = []
+    for(let i=1;i<=products.products.pages;i++){
+    PagesButtons.push(i)
+    }
 
     const uploadImgHandler = (e)=>{
       const file = e.target.files[0]
@@ -34,20 +39,41 @@ export default function AdminProducts() {
       if(file){
         reader.readAsDataURL(file)
         reader.onloadend = ()=> setImage(reader.result)
-        
       } else{
         setImage('')
       }
     }
     const product = {name,price,description,image,category,stock}
 
-    const addProductHandler = ()=>{
-      dispatch(createNewProduct(product))
+    const addProductHandler = async()=>{
+      try {
+        dispatch(pending())
+        const res = await axios.post(baseURL + 'api/products/new',product,{headers: {
+            "x-auth" : localStorage.getItem('token')
+        }}) 
+        dispatch(fulfilled())
+        toast(res.data.message,  {type: "success"})
+        setShow(false)
+        dispatch(getAllProducts({limit:5,page:1}))
+    } catch (error) {
+        dispatch(rejected())
+        toast(error.response.data.message,{type: "error"})
+    }
     }
 
-    const deleteProductHandler = (id)=>{
-      dispatch(deleteOneProduct(id))
-      dispatch(getAllProducts())
+    const deleteProductHandler = async(id)=>{
+      try {
+        dispatch(pending())
+        const res = await axios.delete(baseURL + `api/products/${id}`, {headers: {
+            "x-auth" : localStorage.getItem('token')
+        }})
+        toast(res.data.message,  {type: "success"})
+        dispatch(getAllProducts({limit:5,page:1}))
+        return res.data
+    } catch (error) {
+        dispatch(rejected())
+        toast(error.response.data.message,{type: "error"})
+    }
     }
 
   return (
@@ -56,8 +82,9 @@ export default function AdminProducts() {
       <Button onClick={handleShow}>add new product</Button>
       <div className='mt-2'>
         {/* ------------------------- products list */}
+        <div style={{minHeight:"285px"}}>
         <ListGroup >
-            {products.products.map(product => (
+            {products.products.list.map(product => (
               <ListGroup.Item className='d-flex justify-content-between' key={product._id}>
                 <div>
                 <img style={{width:"30px",height:"30px",marginRight:"20px"}} src={product.image.secure_url} alt="" />
@@ -74,8 +101,19 @@ export default function AdminProducts() {
             ) )}
             
         </ListGroup>
-
-        
+        </div>
+              <div>
+              {PagesButtons.map(page => (
+                <button key={page} 
+                  className={`btn px-2 py-0 text-primary me-1 
+                  ${page === products.products.activePage ? 'border border-success':''} `}
+                  onClick={()=>dispatch(getAllProducts({limit:5,page}))}
+                >
+                  {page}
+                </button>
+              ))}
+              </div>
+              
 
         
     {/* ------------------add product MODAL */}
