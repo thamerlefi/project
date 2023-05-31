@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AdminProducts from './pages/AdminProducts';
 import AdminDashboard from './components/AdminDashboard';
 import UpdateProduct from './components/UpdateProduct';
+import GoogleMapLocation from './pages/GoogleMap';
 // import { getAllProducts } from './redux/slices/productSlice';
 
 
@@ -47,6 +48,7 @@ function App() {
             <Route path='dashboard' element={<AdminDashboard />} />
           </Route>
           <Route path='/cart' Component={Cart}/>
+          <Route path='/location' element={<GoogleMapLocation />}/>
           <Route path='*' element={<NotFound />}/>
         </Routes>
       </Container>

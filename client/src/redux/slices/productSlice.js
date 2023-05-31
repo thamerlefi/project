@@ -9,6 +9,7 @@ const initialState = {
         pages:1,
         activePage: 1
     },
+    categories: [],
     isLoading: false,
     isSuccess: false,
     isError: false,
@@ -17,9 +18,11 @@ const initialState = {
 }
 
 // ------- get all products
-export const getAllProducts = createAsyncThunk("product/getAll",async({limit,page},{rejectWithValue})=>{
+export const getAllProducts = createAsyncThunk("product/getAll",async(data,{rejectWithValue})=>{
+    const {limit,page,sortBy,order} = data
     try {
-        const res = await axios.get(baseURL + `api/products/?limit=${limit}&page=${page}`)
+        const res = await axios.get(baseURL + 
+            `api/products/?limit=${limit}&page=${page}&sortBy=${sortBy},${order}`)
         return res.data
     } catch (error) {
         return rejectWithValue(error.response.data.message)
@@ -70,7 +73,10 @@ const productSlice = createSlice({
             return {...state, isLoading: true,isSuccess: false,isError: false,message: ""}
         })
         .addCase(getAllProducts.fulfilled,(state,action)=>{
-            return {...state, isLoading: false,isSuccess: true,isError: false,products: action.payload}
+            return {...state, isLoading: false,isSuccess: true,isError: false,
+                products: action.payload.pagination,
+                categories: action.payload.categories
+            }
         })
         .addCase(getAllProducts.rejected,(state,action)=>{
             return {...state, isLoading: false,isSuccess: false,isError: true,message: action.payload}

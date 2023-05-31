@@ -1,26 +1,34 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { ListGroup } from 'react-bootstrap'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { baseURL } from '../baseURL';
 import { fulfilled, pending, rejected } from '../redux/slices/authSlice';
 import { toast } from 'react-toastify';
 
 export default function UsersList() {
   const dispatch = useDispatch()
-  // const auth = useSelector(state => state.auth)
+
   const [allUsers, setAllUsers] = useState([])
   const [pages, setPages] = useState(1)
   const [activePage, setActivePage] = useState(1)
+
+  // sort states
+  const [sortBy,setSortBy] = useState('createdAt')
+  const [order,setOrder] = useState('asc')
+
   useEffect(()=>{
-    getAllUsers(5,1)
-  },[])
+    getAllUsers(5,1,sortBy,order)
+    console.log("aa")
+},[sortBy,order])
 
   //------------------------------ get all users handler (admin)
-  async function getAllUsers(limit,page) {
+  async function getAllUsers(limit,page,sortBy,order) {
     try {
       dispatch(pending())
-      const res = await axios.get(baseURL + `api/admin/users/?limit=${limit}&page=${page}`, {headers: {
+      const res = await axios.get(baseURL + 
+        `api/admin/users/?limit=${limit}&page=${page}&sortBy=${sortBy},${order}`, 
+        {headers: {
         "x-auth" : localStorage.getItem('token')
       }})
       setAllUsers(res.data.list)
@@ -56,6 +64,35 @@ export default function UsersList() {
   return (
     <div className='mt-4'>
       {/* ---------------------------- users list */}
+      <div className='row mb-3'>
+      <div className='col-4'>
+          <select onChange={(e)=>{setSortBy(e.target.value)}} className="form-select">
+              <option value='createdAt' >sort by</option>
+              <option value="createdAt">date</option>
+              <option value="firstName">first name</option>
+              <option value="lastName">last name</option>
+              <option value="isAdmin">role</option>
+          </select>
+        </div>
+        <div className='col-3'>
+          <input className="form-check-input" type="radio" name="flexRadioDefault" id='flexRadioDefault2'
+            value={"asc"}
+            checked={order === "asc"}
+            onChange={(e)=>setOrder(e.target.value)}
+          />
+          <label className="form-check-label" htmlFor="flexRadioDefault2">
+            Ascendant
+          </label>
+          <input className="form-check-input ms-3" type="radio" name="flexRadioDefault" id='flexRadioDefault1'
+            value={"desc"}
+            checked={order === "desc"}
+            onChange={(e)=>setOrder(e.target.value)}
+          />
+          <label className="form-check-label" htmlFor="flexRadioDefault1">
+            Descendant
+          </label>
+        </div>
+        </div>
       <div style={{minHeight:"285px"}}>
       <ListGroup >
         {allUsers.map((user,i) =>  <ListGroup.Item key={user._id} className='d-flex justify-content-between'>

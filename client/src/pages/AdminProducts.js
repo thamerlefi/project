@@ -24,15 +24,22 @@ export default function AdminProducts() {
     const [category,setCategory] = useState('')
     const [stock,setStock] = useState(0)
 
-    useEffect(()=>{
-        dispatch(getAllProducts({limit:5,page:1}))
-    },[])
+    //----------- sortBy state
+    const [sortBy,setSortBy] = useState('createdAt')
+    const [order,setOrder] = useState('asc')
 
+    useEffect(()=>{
+        dispatch(getAllProducts({limit:5,page:1,sortBy,order}))
+    },[sortBy,order])
+
+
+    // generate buttons pages
     let PagesButtons = []
     for(let i=1;i<=products.products.pages;i++){
     PagesButtons.push(i)
     }
 
+    // upload image handler
     const uploadImgHandler = (e)=>{
       const file = e.target.files[0]
       const reader = new FileReader()
@@ -45,6 +52,7 @@ export default function AdminProducts() {
     }
     const product = {name,price,description,image,category,stock}
 
+    // add product function
     const addProductHandler = async()=>{
       try {
         dispatch(pending())
@@ -54,13 +62,14 @@ export default function AdminProducts() {
         dispatch(fulfilled())
         toast(res.data.message,  {type: "success"})
         setShow(false)
-        dispatch(getAllProducts({limit:5,page:1}))
+        dispatch(getAllProducts({limit:5,page:1,sortBy,order}))
     } catch (error) {
         dispatch(rejected())
         toast(error.response.data.message,{type: "error"})
     }
     }
 
+    // delete product function
     const deleteProductHandler = async(id)=>{
       try {
         dispatch(pending())
@@ -68,18 +77,49 @@ export default function AdminProducts() {
             "x-auth" : localStorage.getItem('token')
         }})
         toast(res.data.message,  {type: "success"})
-        dispatch(getAllProducts({limit:5,page:1}))
+        dispatch(getAllProducts({limit:5,page:1,sortBy,order}))
         return res.data
     } catch (error) {
         dispatch(rejected())
         toast(error.response.data.message,{type: "error"})
     }
     }
-
-  return (
+    //---------------------------------------------- J-S-X --------------------------//
+  return ( 
     // ------------------ add new product button
     <div className='mt-3'>
-      <Button onClick={handleShow}>add new product</Button>
+      <div className='row align-items-center'>
+        <Button className='col-2' onClick={handleShow}>add new product</Button>
+        <div className='col-4'>
+          <select onChange={(e)=>{setSortBy(e.target.value)}} className="form-select">
+              <option value='createdAt' >sort by</option>
+              <option value="createdAt">date</option>
+              <option value="name">Name</option>
+              <option value="price">Price</option>
+              <option value="rating">Rating</option>
+              <option value="category">Category</option>
+              <option value="stock">Count in Stock</option>
+          </select>
+        </div>
+        <div className='col-3'>
+          <input className="form-check-input" type="radio" name="flexRadioDefault" id='flexRadioDefault2'
+            value={"asc"}
+            checked={order === "asc"}
+            onChange={(e)=>setOrder(e.target.value)}
+          />
+          <label className="form-check-label" htmlFor="flexRadioDefault2">
+            Ascendant
+          </label>
+          <input className="form-check-input ms-3" type="radio" name="flexRadioDefault" id='flexRadioDefault1'
+            value={"desc"}
+            checked={order === "desc"}
+            onChange={(e)=>setOrder(e.target.value)}
+          />
+          <label className="form-check-label" htmlFor="flexRadioDefault1">
+            Descendant
+          </label>
+        </div>
+      </div>
       <div className='mt-2'>
         {/* ------------------------- products list */}
         <div style={{minHeight:"285px"}}>
@@ -88,7 +128,7 @@ export default function AdminProducts() {
               <ListGroup.Item className='d-flex justify-content-between' key={product._id}>
                 <div>
                 <img style={{width:"30px",height:"30px",marginRight:"20px"}} src={product.image.secure_url} alt="" />
-                {product.name}
+                {`${product.name} :  ${product.price} $ (${product.stock})`}
                 </div>
 
                 <div>
@@ -107,7 +147,7 @@ export default function AdminProducts() {
                 <button key={page} 
                   className={`btn px-2 py-0 text-primary me-1 
                   ${page === products.products.activePage ? 'border border-success':''} `}
-                  onClick={()=>dispatch(getAllProducts({limit:5,page}))}
+                  onClick={()=>dispatch(getAllProducts({limit:5,page,sortBy,order}))}
                 >
                   {page}
                 </button>

@@ -8,7 +8,8 @@ const { newError } = require('../utils/Errors.js');
 exports.getProducts = async(req,res)=>{
     try {
         res.pagination.activePage = +req.query.page
-        res.status(200).json(res.pagination)
+        const categories = await Product.distinct('category');
+        res.status(200).json({pagination:res.pagination,categories})
     } catch (error) {
         res.status(400).json({message: error.message})
     }
