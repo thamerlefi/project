@@ -1,17 +1,51 @@
 const cloudinary = require('../utils/cloudinaryConfig.js')
 const Product = require('../models/ProductModel')
 const { newError } = require('../utils/Errors.js');
+const UserModel = require('../models/UserModel.js');
 
 
 
 // get all products => /api/products
-exports.getProducts = async(req,res)=>{
+exports.getProducts = async(req,res,next)=>{
     try {
         res.pagination.activePage = +req.query.page
         const categories = await Product.distinct('category');
         res.status(200).json({pagination:res.pagination,categories})
     } catch (error) {
         res.status(400).json({message: error.message})
+    }
+}
+
+// comment a product
+exports.commentProduct= async(req,res,next)=>{
+    try {
+        const { productId } = req.params;
+        const { userId, firstName, lastName, image, comment } = req.body;
+        const product = await Product.findById(productId);
+        if(!product) return res.status(404).json({ error: 'Product not found' });
+        const newComment = {
+            user: {
+                _id: userId,
+                firstName,
+                lastName,
+                image,
+            
+            },
+            comment
+        };
+        product.reviews.push(newComment);
+        await product.save();
+        
+        const user = await UserModel.findById(userId);
+        if(!user) return res.status(404).json({ error: 'User not found' });
+        user.reviews.push({
+            productId,
+            comment
+        });
+        await user.save();
+        res.json({ message: 'Comment submitted successfully' });
+    } catch (error) {
+        next(newError(400,error.message))
     }
 }
 

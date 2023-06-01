@@ -5,11 +5,11 @@ exports.paginatedResults = (model) => async(req,res,next) => {
     const limit = parseInt(req.query.limit)
     let sortBy = req.query.sortBy
 
-    sortBy = sortBy.split(',')
-    sortBy[1] = sortBy[1] === "desc" ? 1 : -1
-    const obj = {}
-    obj[sortBy[0]] = sortBy[1]
-    
+    sortBy = sortBy.split(',')                  //
+    sortBy[1] = sortBy[1] === "desc" ? 1 : -1   // convert "sortBy=rating,desc" to => {rating: 1}
+    const obj = {}                              //
+    obj[sortBy[0]] = sortBy[1]                  //
+
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
 

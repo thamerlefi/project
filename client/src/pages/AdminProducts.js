@@ -87,10 +87,10 @@ export default function AdminProducts() {
     //---------------------------------------------- J-S-X --------------------------//
   return ( 
     // ------------------ add new product button
-    <div className='mt-3'>
-      <div className='row align-items-center'>
+    <div className='mt-3 '>
+      <div className='row align-items-center mb-3'>
         <Button className='col-2' onClick={handleShow}>add new product</Button>
-        <div className='col-4'>
+        <div className='col-3'>
           <select onChange={(e)=>{setSortBy(e.target.value)}} className="form-select">
               <option value='createdAt' >sort by</option>
               <option value="createdAt">date</option>
@@ -119,6 +119,9 @@ export default function AdminProducts() {
             Descendant
           </label>
         </div>
+        <div className='col-3'>
+          <input className="form-control me-2" placeholder="Search"/>
+        </div>
       </div>
       <div className='mt-2'>
         {/* ------------------------- products list */}
@@ -133,9 +136,9 @@ export default function AdminProducts() {
 
                 <div>
                   <LinkContainer to={`/admin/products/update/${product._id}`}>
-                    <button className='btn btn-warning me-2'>edit</button>
+                    <button className='btn btn-outline-warning me-2'>edit</button>
                   </LinkContainer>
-                  <button onClick={()=>deleteProductHandler(product._id)} className='btn btn-danger'>delete</button>
+                  <button onClick={()=>deleteProductHandler(product._id)} className='btn btn-outline-danger'>delete</button>
                 </div>
                 </ListGroup.Item>
             ) )}

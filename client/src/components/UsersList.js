@@ -65,7 +65,7 @@ export default function UsersList() {
     <div className='mt-4'>
       {/* ---------------------------- users list */}
       <div className='row mb-3'>
-      <div className='col-4'>
+        <div className='col-4'>
           <select onChange={(e)=>{setSortBy(e.target.value)}} className="form-select">
               <option value='createdAt' >sort by</option>
               <option value="createdAt">date</option>
@@ -74,8 +74,8 @@ export default function UsersList() {
               <option value="isAdmin">role</option>
           </select>
         </div>
-        <div className='col-3'>
-          <input className="form-check-input" type="radio" name="flexRadioDefault" id='flexRadioDefault2'
+        <div className='col-3 mt-1'>
+          <input className="form-check-input " type="radio" name="flexRadioDefault" id='flexRadioDefault2'
             value={"asc"}
             checked={order === "asc"}
             onChange={(e)=>setOrder(e.target.value)}
@@ -92,15 +92,18 @@ export default function UsersList() {
             Descendant
           </label>
         </div>
+        <div className='col-3'>
+          <input className="form-control me-2" placeholder="Search"/>
         </div>
+      </div>
       <div style={{minHeight:"285px"}}>
       <ListGroup >
         {allUsers.map((user,i) =>  <ListGroup.Item key={user._id} className='d-flex justify-content-between'>
           {`${(i+1) + ((activePage - 1) * 5)} - ${user.lastName} ${user.firstName}`}
           <div>
             <span className={`me-2 ${user.isAdmin ? 'text-success': 'text-danger' }`}>{user.isAdmin ? 'admin' : 'user'}</span>
-            <button className='btn btn-info me-2'>edit</button>
-            <button className='btn btn-danger' onClick={()=>deleteUserHandler(user)}>delete</button>
+            <button className='btn btn-outline-info me-2'>edit</button>
+            <button className='btn btn-outline-danger' onClick={()=>deleteUserHandler(user)}>delete</button>
           </div>
         </ListGroup.Item> )}
     </ListGroup>   
