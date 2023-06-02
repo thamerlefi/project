@@ -16,6 +16,17 @@ exports.getProducts = async(req,res,next)=>{
     }
 }
 
+// get one product details => /api/products/:id
+exports.getOneProduct = async (req,res,next)=>{
+    try {
+        const product = await Product.findById(req.params.id)
+        if(!product) return next(newError(404,"product not found"))
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(404).json({message: 'product not found'})
+    }
+}
+
 // comment a product
 exports.commentProduct= async(req,res,next)=>{
     try {
@@ -46,17 +57,6 @@ exports.commentProduct= async(req,res,next)=>{
         res.json({ message: 'Comment submitted successfully' });
     } catch (error) {
         next(newError(400,error.message))
-    }
-}
-
-// get one product details => /api/products/:id
-exports.getOneProduct = async (req,res,next)=>{
-    try {
-        const product = await Product.findById(req.params.id)
-        if(!product) return next(newError(404,"product not found"))
-        res.status(200).json(product)
-    } catch (error) {
-        res.status(404).json({message: 'product not found'})
     }
 }
 

@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { logout } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 export default function NavBar() {
   const {user, isLoggedIn} = useSelector(state => state.auth)
+  const shopCart = useSelector(state=> state.shopCart)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const logoutHandler = () => {
@@ -32,7 +32,13 @@ export default function NavBar() {
           <Nav className="">
             {/* ------------------------ cart button ------------------ */}
           <LinkContainer to='/cart'>
-            <Nav.Link >Cart</Nav.Link>
+            <Nav.Link >
+            Cart 
+            {shopCart.cart.length > 0  && <span className="ms-1" 
+            style={{color:"#fff",background:"red",width:"20px",padding:"0px 5px",borderRadius:"50%"}}>
+              {shopCart.cart.length}
+            </span>}
+            </Nav.Link>
           </LinkContainer>
            {
             isLoggedIn ? 

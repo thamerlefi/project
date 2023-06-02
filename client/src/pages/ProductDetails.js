@@ -6,11 +6,14 @@ import { ListGroup } from "react-bootstrap";
 import axios from "axios";
 import { baseURL } from "../baseURL";
 import { toast } from "react-toastify";
+import { addProduct, decCount, deleteProd, incCount } from "../redux/slices/cartSlice";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
   const auth = useSelector((state) => state.auth);
+  const {cart} = useSelector(state => state.shopCart)
+  const cartProd = cart.find(prod=>prod._id === products.product._id)
   const { id } = useParams();
 
   const [product, setProduct] = useState({});
@@ -67,7 +70,18 @@ export default function ProductDetails() {
             <p className="text-primary fs-5">Category :</p>
             <h5>{product.category}</h5>
           </div>
-          <button className="btn btn-success">add to cart</button>
+          { cartProd ?
+            <div>
+            <button className="btn btn-success" onClick={()=>dispatch(decCount(product))}>-</button>
+            <span className="mx-4">{cartProd.count}</span>
+            <button className="btn btn-success me-2" onClick={()=>dispatch(incCount(product))}>+</button>
+            <button className="btn btn-danger" onClick={()=>dispatch(deleteProd(product))}>delete</button>
+          </div> :
+          <button className="btn btn-success"
+            onClick={()=>dispatch(addProduct(product))}
+          >add to cart</button>
+          }
+          
         </div>
         {/* ------------------------- comments */}
       </div>
@@ -88,7 +102,7 @@ export default function ProductDetails() {
             </form>
           ) : (
             <div className="alert alert-warning" role="alert">
-              please login to be able to add a comment !!
+              please <Link to="/login">login</Link> to be able to add a comment !!
             </div>
           )}
           <ListGroup className="my-3">

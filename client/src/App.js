@@ -22,6 +22,7 @@ import AdminDashboard from './components/AdminDashboard';
 import UpdateProduct from './components/UpdateProduct';
 import GoogleMapLocation from './pages/GoogleMap';
 import ProductDetails from './pages/ProductDetails';
+import { getTotal } from './redux/slices/cartSlice';
 // import { getAllProducts } from './redux/slices/productSlice';
 
 
@@ -30,6 +31,7 @@ function App() {
   const dispatch = useDispatch()
   useEffect(()=>{
     dispatch(getUser())
+    dispatch(getTotal())
   },[])
   return (
     <div className="App">
