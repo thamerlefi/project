@@ -62,8 +62,8 @@ export default function NavBar() {
             <NavDropdown title={user && user.lastName} id="navbarScrollingDropdown">
               <LinkContainer to='/profile'>
                 <NavDropdown.Item >
-                  {user.image["secure_url"] !=="" &&
-                  <img className="me-1" style={{width:"30px",borderRadius:"50%"}} src={user.image["secure_url"] } alt="" />}
+                  {user?.image["secure_url"] !=="" &&
+                  <img className="me-1" style={{width:"30px",borderRadius:"50%"}} src={user?.image["secure_url"] } alt="" />}
                   <span >{`${user.firstName} ${user.lastName}`}</span>
                 </NavDropdown.Item >
               </LinkContainer>

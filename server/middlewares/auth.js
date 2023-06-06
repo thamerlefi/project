@@ -7,7 +7,7 @@ const isAuth = async(req,res,next) => {
         const token = req.headers["x-auth"]
         // const token = req.cookies.token
         if(!token) return next(newError(401,'no access please log in'))
-        const userToken = await jwt.verify(token, process.env.JWT_SECRET_KEY,async(err,decoded)=>{
+        const userToken = jwt.verify(token, process.env.JWT_SECRET_KEY,async(err,decoded)=>{
             if(err) return res.status(401).json({message: 'invalid token, you must login first !!', err: err.message})
             const user = await User.findById(decoded.id)
             req.userToken = user

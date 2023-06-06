@@ -176,12 +176,12 @@ exports.userUpdate = async(req,res,next)=>{
 // user profile => /api/user/profile
 exports.profile = async(req,res) =>{
     const userToken = req.userToken
-    res.status(200).json({id: userToken._id, 
-        firstName: userToken.firstName,
-        lastName: userToken.lastName,
-        email: userToken.email,
-        isAdmin: userToken.isAdmin,
-        image: userToken.image
+    res.status(200).json({id: userToken?._id, 
+        firstName: userToken?.firstName,
+        lastName: userToken?.lastName,
+        email: userToken?.email,
+        isAdmin: userToken?.isAdmin,
+        image: userToken?.image
     })
 }
 

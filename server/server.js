@@ -12,6 +12,7 @@ const {newError} = require('./utils/Errors')
 const productRouter = require('./routes/products')
 const userRouter = require('./routes/users')
 const adminRouter = require('./routes/admin');
+const orderRouter = require('./routes/orders')
 
 const app = express()
 
@@ -32,6 +33,9 @@ app.use('/api/user', userRouter)
 
 // admin route
 app.use('/api/admin', adminRouter)
+
+// orders route
+app.use('/api/orders', orderRouter)
 
 // unexpected routes
 app.all('*', (req,res,next)=>{

@@ -23,6 +23,8 @@ import UpdateProduct from './components/UpdateProduct';
 import GoogleMapLocation from './pages/GoogleMap';
 import ProductDetails from './pages/ProductDetails';
 import { getTotal } from './redux/slices/cartSlice';
+import ShippingAdress from './components/ShippingAdress';
+import CheckoutSuccess from './pages/CheckoutSuccess';
 // import { getAllProducts } from './redux/slices/productSlice';
 
 
@@ -51,7 +53,9 @@ function App() {
             <Route path='products/update/:id' element={<UpdateProduct />} />
             <Route path='dashboard' element={<AdminDashboard />} />
           </Route>
-          <Route path='/cart' Component={Cart}/>
+          <Route path='/cart' element={<Cart />}/>
+          <Route path='/payment-success' element={<CheckoutSuccess />}/>
+          <Route path='/shipping-adress' element={<ShippingAdress />}/>
           <Route path='/location' element={<GoogleMapLocation />}/>
           <Route path='*' element={<NotFound />}/>
         </Routes>

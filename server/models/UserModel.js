@@ -5,6 +5,9 @@ const UserSchema = new mongoose.Schema({
     lastName: {type: String, required: true, min: 3},
     email: {type: String,required: true},
     password:{type: String,required: true,min: 6},
+    phone: {
+      type: Number
+    },
     isAdmin :{type: Boolean,default: false,required: true},
     image:{
         type:Object,
@@ -13,6 +16,15 @@ const UserSchema = new mongoose.Schema({
         },
         required: true
     },
+    orders: [
+      { 
+        orderId:{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Order',
+          required: true,
+        }
+      }
+    ] ,
     reviews: [
         {
           productId: {
