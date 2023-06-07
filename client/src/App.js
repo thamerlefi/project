@@ -59,7 +59,6 @@ function App() {
           </Route>
           <Route path='/cart' element={<Cart />}/>
           <Route path='/payment-success' element={<CheckoutSuccess />}/>
-          <Route path='/shipping-adress' element={<ShippingAdress />}/>
           <Route path='/location' element={<GoogleMapLocation />}/>
           <Route path='*' element={<NotFound />}/>
         </Routes>
