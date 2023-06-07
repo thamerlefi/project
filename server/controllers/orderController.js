@@ -1,7 +1,9 @@
 const Order = require('../models/OrderModel');
+const User = require('../models/UserModel');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST)
 
+// create chekout in stripe
 exports.createCheckout = async(req,res) => {
     const line_items = req.body.cart.map(prod =>{
         return {
@@ -77,11 +79,12 @@ exports.createCheckout = async(req,res) => {
       res.json({sessionId: session.id });
 }
 
+// create order in dtabase
 exports.createOrder = async(req,res)=>{
     try {
         
         const sessionId = req.body.sessionId
-        const {cart,total, userId} = req.body
+        const {cart, userId} = req.body
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         if (session.payment_status === 'paid'){
         const products = cart.map(prod=>{
@@ -107,11 +110,62 @@ exports.createOrder = async(req,res)=>{
             }
           })
           await newOrder.save()
+          const user = await User.findById(userId)
+          if(!user) return res.status(404).json({message: "user noot found"})
+          user.orders.push({orderId: newOrder._id})
+          await user.save()
           res.json({message: "order added"})
         }else {
             res.send('Payment failed.');
           }
     } catch (error) {
-        
+        res.status(500).json({message: "internal server error"})
     }
+}
+
+// get all orders
+exports.getAllOrders = async(req,res)=>{
+  try {
+    const orders = await Order.find()
+                    .populate('userId', "firstName lastName image")
+                    .populate("products.productId", "name description image")
+                    .exec()
+    res.json({orders})
+  } catch (error) {
+    res.status(500).json({message: "internal server error"})
+  }
+}
+
+// get one order by id
+exports.getOneOrder= async(req,res)=>{
+  try {
+    const {id} = req.params
+    const order = await Order.findById(id)
+    .populate('userId', "firstName lastName image")
+    .populate("products.productId", "name description price category stock image")
+    .exec()
+    if(!order) return res.status(404).json({message: "order not found"})
+    res.json({order})
+  } catch (error) {
+    res.status(500).json({message: "internal server error"})
+  }
+}
+
+// update one order by id
+exports.updateOrder = async(req, res) =>{
+  try {
+    const {id} = req.params
+    const {action} = req.body
+    const order = await Order.findById(id)
+    if(!order) return res.status(404).json({message: "order not found"})
+    order.status = action
+    await order.save()
+    const updatedOrder = await Order.findById(id)
+    .populate('userId', "firstName lastName image")
+    .populate("products.productId", "name description image")
+    .exec()
+    res.json({updatedOrder})
+  } catch (error) {
+    res.status(500).json({message: "internal server error"})
+  }
 }

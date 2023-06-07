@@ -25,6 +25,8 @@ import ProductDetails from './pages/ProductDetails';
 import { getTotal } from './redux/slices/cartSlice';
 import ShippingAdress from './components/ShippingAdress';
 import CheckoutSuccess from './pages/CheckoutSuccess';
+import AdminOrdersList from './components/AdminOrdersList';
+import AdminOrder from './components/AdminOrder';
 // import { getAllProducts } from './redux/slices/productSlice';
 
 
@@ -51,6 +53,8 @@ function App() {
             <Route path='users' element={<UsersList />} />
             <Route path='products' element={<AdminProducts />} />
             <Route path='products/update/:id' element={<UpdateProduct />} />
+            <Route path='orders' element={<AdminOrdersList />} />
+            <Route path='orders/:orderId' element={<AdminOrder />} />
             <Route path='dashboard' element={<AdminDashboard />} />
           </Route>
           <Route path='/cart' element={<Cart />}/>

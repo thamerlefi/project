@@ -55,7 +55,9 @@ export default function NavBar() {
               <LinkContainer to="/admin/products">
                 <NavDropdown.Item href="#action4">Products List</NavDropdown.Item>
               </LinkContainer>
-              <NavDropdown.Item href="#action4">Orders List</NavDropdown.Item>
+              <LinkContainer to="/admin/orders">
+                <NavDropdown.Item >Orders List</NavDropdown.Item>
+              </LinkContainer>
             </NavDropdown>}
               {/* ----------------------- user dropdown ----------------- */}
             { 

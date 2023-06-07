@@ -73,6 +73,7 @@ export default function Cart() {
                 <td>{prod.subTotal} $</td>
                 <td><button className="btn btn-outline-danger" 
                 onClick={()=>dispatch(deleteProd(prod))} >delete</button></td>
+                
               </tr>
             ))
           }
