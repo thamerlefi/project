@@ -6,11 +6,7 @@ const cloudinary = require('../utils/cloudinaryConfig.js')
 
 // get all users => /api/user/all (only admin)
 exports.getAllUsers = async(req,res) =>  {
-    try {
-        // const users = await User
-        // .find()
-        // res.status(200).json({users}) // original
-        
+    try {   
         res.json(res.pagination)
     } catch (error) {
         res.status(500).json({message: error.message})

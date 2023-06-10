@@ -4,6 +4,12 @@ exports.paginatedResults = (model) => async(req,res,next) => {
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
     let sortBy = req.query.sortBy
+    let filter = req.query.filter 
+    let filterObject = {}
+    if(filter) {
+        const [key,value] = filter.split(',')
+        filterObject= {[key]: value}
+    }
 
     sortBy = sortBy.split(',')                  //
     sortBy[1] = sortBy[1] === "desc" ? 1 : -1   // convert "sortBy=rating,desc" to => {rating: 1}
@@ -15,7 +21,7 @@ exports.paginatedResults = (model) => async(req,res,next) => {
 
     const result = {}
 
-    if (endIndex < await model.countDocuments().exec()){
+    if (endIndex < await model.countDocuments(filterObject).exec()){
         result.next ={
             page: page + 1,
             limit
@@ -29,8 +35,8 @@ exports.paginatedResults = (model) => async(req,res,next) => {
         }
     }
     try {
-        result.list = await model.find().sort(obj).limit(limit).skip(startIndex)
-        const pages = await model.countDocuments().exec() / limit
+        result.list = await model.find(filterObject).sort(obj).limit(limit).skip(startIndex)
+        const pages = await model.countDocuments(filterObject).exec() / limit
         result.pages = Math.ceil(pages)
         res.pagination = result
         next()

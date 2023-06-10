@@ -126,13 +126,24 @@ exports.createOrder = async(req,res)=>{
 // get all orders
 exports.getAllOrders = async(req,res)=>{
   try {
-    const orders = await Order.find()
-                    .populate('userId', "firstName lastName image")
-                    .populate("products.productId", "name description image")
-                    .exec()
-    res.json({orders})
+    // console.log(res.pagination)
+    // const orders = await Order.find()
+    //                 .populate('userId', "firstName lastName image")
+    //                 .populate("products.productId", "name description image")
+    //                 .exec()
+    res.pagination.list = await Promise.all(
+    res.pagination.list.map(async(item)=>{
+      const itemModel = await Order.findById(item._id)
+        .populate('userId', "firstName lastName image")
+        .populate("products.productId", "name description image")
+        .exec()
+          return itemModel
+    })
+    )
+    // if(!orders) return res.status(404).json({message: "order not found"})
+    res.json({orders:res.pagination})
   } catch (error) {
-    res.status(500).json({message: "internal server error"})
+    res.status(500).json({message: "internal server error", error:error.message})
   }
 }
 

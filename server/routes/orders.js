@@ -2,6 +2,8 @@ const express = require('express')
 const isAuth = require('../middlewares/auth')
 const isAdmin = require('../middlewares/IsAdmin')
 const { createCheckout, createOrder, getAllOrders, updateOrder, getOneOrder } = require('../controllers/orderController')
+const { paginatedResults } = require('../utils/paginatedResults')
+const OrderModel = require('../models/OrderModel')
 const router = express.Router()
 
 // create new checkout in strippe => /api/orders/create-checkout
@@ -11,7 +13,7 @@ router.post('/create-checkout', isAuth ,createCheckout)
 router.post('/create-order' ,createOrder)
 
 // get all orders (only admin) => /api/orders/all
-router.get('/all',isAuth, isAdmin, getAllOrders)
+router.get('/all',isAuth, isAdmin, paginatedResults(OrderModel) ,getAllOrders)
 
 // get one order by id (only admin) => /api/orders/:id
 router.get('/:id',isAuth, isAdmin, getOneOrder)
