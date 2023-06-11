@@ -123,14 +123,9 @@ exports.createOrder = async(req,res)=>{
     }
 }
 
-// get all orders
+// get all orders (only admin)
 exports.getAllOrders = async(req,res)=>{
   try {
-    // console.log(res.pagination)
-    // const orders = await Order.find()
-    //                 .populate('userId', "firstName lastName image")
-    //                 .populate("products.productId", "name description image")
-    //                 .exec()
     res.pagination.list = await Promise.all(
     res.pagination.list.map(async(item)=>{
       const itemModel = await Order.findById(item._id)
@@ -178,5 +173,31 @@ exports.updateOrder = async(req, res) =>{
     res.json({updatedOrder})
   } catch (error) {
     res.status(500).json({message: "internal server error"})
+  }
+}
+
+// get user order 
+exports.getUserOrders = async(req,res)=>{
+  try {
+    const userId = req.userToken._id
+    const orders = await Order.find({userId})
+    .populate("products.productId", "name description image price category")
+    if(!orders) return res.status(404).json({message: "order not found"})
+    res.json({orders})
+  } catch (error) {
+    res.status(500).json({message: "internal server error", error: error.message})
+  }
+}
+
+exports.getUserOneOrder = async(req,res)=>{
+  try {
+    // const userId = req.userToken._id
+    const {id} = req.params
+    const order = await Order.findById(id)
+    .populate("products.productId", "name description price category stock image")
+    if(!order) return res.status(404).json({message: "order not found"})
+    res.json({order})
+  } catch (error) {
+    res.status(500).json({message: "internal server error", error: error.message})
   }
 }

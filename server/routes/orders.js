@@ -1,7 +1,7 @@
 const express = require('express')
 const isAuth = require('../middlewares/auth')
 const isAdmin = require('../middlewares/IsAdmin')
-const { createCheckout, createOrder, getAllOrders, updateOrder, getOneOrder } = require('../controllers/orderController')
+const { createCheckout, createOrder, getAllOrders, updateOrder, getOneOrder, getUserOrders, getUserOneOrder } = require('../controllers/orderController')
 const { paginatedResults } = require('../utils/paginatedResults')
 const OrderModel = require('../models/OrderModel')
 const router = express.Router()
@@ -20,5 +20,11 @@ router.get('/:id',isAuth, isAdmin, getOneOrder)
 
 // update order (only admin) => /api/orders/update/:id
 router.put('/update/:id',isAuth, isAdmin ,updateOrder)
+
+// get user all orders => /api/orders/user/orders
+router.get('/user/orders',isAuth, getUserOrders)
+
+// get user one order => /api/orders/user/order/:id
+router.get('/user/order/:id',isAuth, getUserOneOrder)
 
 module.exports = router

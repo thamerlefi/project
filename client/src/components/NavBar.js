@@ -62,7 +62,7 @@ export default function NavBar() {
               {/* ----------------------- user dropdown ----------------- */}
             { 
             <NavDropdown title={user && user.lastName} id="navbarScrollingDropdown">
-              <LinkContainer to='/profile'>
+              <LinkContainer to='/user/profile'>
                 <NavDropdown.Item >
                   {user?.image["secure_url"] !=="" &&
                   <img className="me-1" style={{width:"30px",borderRadius:"50%"}} src={user?.image["secure_url"] } alt="" />}
@@ -70,10 +70,12 @@ export default function NavBar() {
                 </NavDropdown.Item >
               </LinkContainer>
               <NavDropdown.Divider />
-              <LinkContainer to='/profile'>
+              <LinkContainer to='/user/profile'>
                 <NavDropdown.Item >Profile</NavDropdown.Item>
               </LinkContainer>
-              <NavDropdown.Item href="#action3">Orders History</NavDropdown.Item>
+              <LinkContainer to='/user/orders'>
+                <NavDropdown.Item >Orders History</NavDropdown.Item>
+              </LinkContainer>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
             </NavDropdown>}

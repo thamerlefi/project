@@ -23,10 +23,13 @@ import UpdateProduct from './components/UpdateProduct';
 import GoogleMapLocation from './pages/GoogleMap';
 import ProductDetails from './pages/ProductDetails';
 import { getTotal } from './redux/slices/cartSlice';
-import ShippingAdress from './components/ShippingAdress';
+// import ShippingAdress from './components/ShippingAdress';
 import CheckoutSuccess from './pages/CheckoutSuccess';
 import AdminOrdersList from './components/AdminOrdersList';
 import AdminOrder from './components/AdminOrder';
+import UserDash from './pages/UserDash';
+import OrderHistory from './pages/OrderHistory';
+import UserOneOrder from './pages/UserOneOrder';
 // import { getAllProducts } from './redux/slices/productSlice';
 
 
@@ -48,7 +51,11 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/reset-password' element={<ResetPass />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path="/user" element={<UserDash />}>
+            <Route path='profile' element={<Profile />} />
+            <Route path='orders' element={<OrderHistory />} />
+            <Route path='orders/:id' element={<UserOneOrder />} />
+          </Route>
           <Route path='/admin' element={<Admin />} >
             <Route path='users' element={<UsersList />} />
             <Route path='products' element={<AdminProducts />} />
