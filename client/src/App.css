@@ -1,3 +1,77 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+}
+:root{
+    --color-dark: #3b4149;
+    --color-search: #febd69;
+    --color-less-dark: #4c525a;
+    --color-light: #fff
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+}
+p{
+    margin-bottom: 0;
+}
+.form-control:focus {
+    box-shadow: none;
+    border-color: inherit;
+}
+/* ----------------------------- Nav barr ---------------- */
+.header-upper{
+    background-color: var(--color-dark);
+}
+
+.header-upper .input-group-text{
+    background-color: var(--color-search);
+}
+
+.header-bottom{
+    background-color: var(--color-less-dark);
+}
+
+.header-bottom .dropdown button{
+    color: white;
+    font-size: 14px;
+    background-color: transparent;
+    border: none;
+    text-transform: uppercase;
+    border-right: 2px solid #aaa3a3;
+    border-radius: 0;
+}
+.header-bottom .dropdown button:focus{
+    box-shadow: none;
+    background-color: transparent;
+    border-right: 2px solid #aaa3a3;
+}
+.header-bottom .dropdown button::after{
+    margin-left: 25px;
+}
+.header-bottom .dropdown-menu{
+    background-color: var(--color-less-dark);
+    width: 100%;
+    transform: translate3d(0px, 36px, 0px) !important;
+}
+.header-bottom .dropdown-item{
+    color: var(--color-light);
+    padding: 7px 10px;
+    margin-bottom: 3px;
+    border-bottom: 1px solid var(--color-dark);
+}
+.header-bottom .dropdown-item:hover{
+    background-color: transparent;
+    color: var(--color-search);
+}
+
+
+
+/* ------------------------------------------ */
 .dashboard-info{
     justify-content: center;
     gap: 100px;
@@ -6,7 +80,7 @@
     width: 100px;
     height: 100px;
     border-radius: 10px;
-    border: 1px solid #333;
+    border: 1px solid var(--color-dark);
 }
 
 .update-product .col-4 img{
