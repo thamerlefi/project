@@ -9,7 +9,11 @@
     --color-dark: #3b4149;
     --color-search: #febd69;
     --color-less-dark: #4c525a;
-    --color-light: #fff
+    --color-light: #fff;
+    --color-brown: #bf4800
+}
+body{
+    background-color: #ededed;
 }
 
 a {

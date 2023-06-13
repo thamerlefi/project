@@ -16,7 +16,7 @@ export default function ProductsList() {
   
 
   return (
-    <div className='mt-5 row '>
+    <div className='mt-3 row gap-2 container-xxl'>
       {products.list.map(product => <Product key={product._id} product={product} />)}
     </div>
   )

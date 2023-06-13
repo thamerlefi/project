@@ -32,6 +32,7 @@ import AdminOrder from './components/AdminOrder';
 import UserDash from './pages/UserDash';
 import OrderHistory from './pages/OrderHistory';
 import UserOneOrder from './pages/UserOneOrder';
+import OurStore from './pages/OurStore';
 // import { getAllProducts } from './redux/slices/productSlice';
 
 
@@ -46,9 +47,10 @@ function App() {
     <div className="App">
         <ToastContainer position="bottom-center" autoClose={2000}/>
       <NavBar />
-      <Container>
+      <div className='container-xxl'>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/store' element={<OurStore />} />
           <Route path='/:id' element={<ProductDetails />} />
           <Route path='/login' element={<Login />} />
           <Route path='/reset-password' element={<ResetPass />} />
@@ -71,7 +73,7 @@ function App() {
           <Route path='/location' element={<GoogleMapLocation />}/>
           <Route path='*' element={<NotFound />}/>
         </Routes>
-      </Container>
+      </div>
       
     </div>
   );

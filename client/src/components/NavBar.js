@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function NavBar() {
+  const ref = useRef()
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const shopCart = useSelector((state) => state.shopCart);
   const navigate = useNavigate();
@@ -15,7 +16,17 @@ export default function NavBar() {
     navigate("/login");
   };
   const [showMenu, setShowMenu] = useState(false)
-
+  useEffect(()=>{
+    const checkIfClickedOutside= (e)=>{
+      if (showMenu && ref.current && !ref.current.contains(e.target)){
+        setShowMenu(false)
+      }
+    }
+    document.addEventListener("mousedown", checkIfClickedOutside)
+      return ()=>{
+        document.removeEventListener("mousedown", checkIfClickedOutside)
+      }
+  },[showMenu])
   return (
     <>
     {/* ------------------------------------------- Navbar-TOP -------------------------------------------------------------------------- */}
@@ -32,7 +43,7 @@ export default function NavBar() {
             </div>
             {/* ---------------------------------------------- SEARCH ----------------- */}
             <div className="col-sm-4 col-12 upper-elmnts d-flex align-items-center gap-2">
-              <div className="toggle-menu-btn" onClick={()=> setShowMenu(prev=>prev? false : true)}>
+              <div id="btn-show-menu" className="toggle-menu-btn" onClick={()=> setShowMenu(prev=>prev? false : true)}>
                 <i className="fa-solid fa-bars text-white fs-1"></i>  
               </div>
               <div className="input-group">
@@ -110,7 +121,7 @@ export default function NavBar() {
         </div>
       </header>
     {/* ------------------------------------------- Navbar BOTTOM ----------------------------------------------------------------------- */}
-      <header className={`header-bottom py-1 ${showMenu ? "show-menu" : ""}`}  >
+      { <header ref={ref}  className={`header-bottom py-1 ${showMenu ? "show-menu" : ""}`}  >
         <div className="container-xxl">
           <div className="row">
             <div className="col-12">
@@ -186,7 +197,7 @@ export default function NavBar() {
                 <div className="menu-links">
                   <div className="d-flex align-items-center gap-2 gap-md-4 ">
                     <Link to="/" className="text-white">HOME</Link>
-                    <NavLink to="/admin/dashboard" className="text-white">OUR STORE</NavLink>
+                    <Link to="/store" className="text-white">OUR STORE</Link>
                     <NavLink to="/admin/dashboard" className="text-white">CONTACT</NavLink>
                   </div>
                 </div>
@@ -194,7 +205,7 @@ export default function NavBar() {
             </div>
           </div>
         </div>
-      </header>
+      </header>}
     </>
   );
 }
