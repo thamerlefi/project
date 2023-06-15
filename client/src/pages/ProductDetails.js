@@ -1,44 +1,61 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneProduct } from "../redux/slices/productSlice";
 import { ListGroup } from "react-bootstrap";
 import axios from "axios";
 import { baseURL } from "../baseURL";
 import { toast } from "react-toastify";
-import { addProduct, decCount, deleteProd, incCount } from "../redux/slices/cartSlice";
+import {
+  addProduct,
+  decCount,
+  incCount,
+} from "../redux/slices/cartSlice";
+import "../css/ProdDeatils.css";
+import ReactStars from "react-rating-stars-component";
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
   const auth = useSelector((state) => state.auth);
-  const {cart} = useSelector(state => state.shopCart)
-  const cartProd = cart.find(prod=>prod._id === products.product._id)
+  const { cart } = useSelector((state) => state.shopCart);
+  const cartProd = cart.find((prod) => prod._id === products.product._id);
   const { id } = useParams();
+  const {pathname} = useLocation()
 
   const [product, setProduct] = useState({});
   const [comment, setComment] = useState("");
 
-  const commentHandler = async(e) =>{
-    const data = {comment,
-        userId:auth.user.id,
-        firstName: auth.user.firstName,
-        lastName: auth.user.lastName,
-        image: auth.user.image.secure_url
-    }
-    e.preventDefault()
+  const commentHandler = async (e) => {
+    const data = {
+      comment,
+      userId: auth.user.id,
+      firstName: auth.user.firstName,
+      lastName: auth.user.lastName,
+      image: auth.user.image.secure_url,
+    };
+    e.preventDefault();
     try {
-        const res = await axios.post(`${baseURL}api/products/${id}/comment`,data,{headers: {
-            "x-auth" : localStorage.getItem('token')
-        }})
-        toast(res.data.message,  {type: "success"})
-        dispatch(getOneProduct(id))
-        setComment('')
+      const res = await axios.post(
+        `${baseURL}api/products/${id}/comment`,
+        data,
+        {
+          headers: {
+            "x-auth": localStorage.getItem("token"),
+          },
+        }
+      );
+      toast(res.data.message, { type: "success" });
+      dispatch(getOneProduct(id));
+      setComment("");
     } catch (error) {
-        toast(error.response.data.message,{type: "error"})
+      toast(error.response.data.message, { type: "error" });
     }
-  }
-
+  };
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   useEffect(() => {
     dispatch(getOneProduct(id));
   }, []);
@@ -48,82 +65,145 @@ export default function ProductDetails() {
   }, [products.product]);
 
   return (
-    <div>
-      <div className="row">
-        <h1>{product.name}</h1>
-        <div className="col-4">
-          <img
-            style={{ width: "80%", height: 400, objectFit: "cover" }}
-            src={product.image?.secure_url}
-            alt=""
-          />
-        </div>
-        <div className="col-4">
-          <p>{product.description}</p>
-        </div>
-        <div className="col-4 border-start border-1 border-secondary">
-          <div className=" pb-4">
-            <p className="text-primary fs-5">Rating :</p>
-            {/* <Rating movie={product} /> */}
+    <>
+    {/* ----------------------------------------- prod details */}
+      <div className="prod-details p-3 mt-3">
+        <div className="container-xxl">
+          <div className="row">
+            <div className="col-12 col-md-6 img-wrapper">
+              <img src={product.image?.secure_url} alt="" />
+            </div>
+            <div className="col-12 col-md-6 info">
+              <h1 className="prod-title mt-3 mt-md-0 b-bottom">{product.name}</h1>
+              <h2 className="prod-price">${product.price}</h2>
+              <div className="prod-reviews d-flex gap-1 align-items-center">
+                <ReactStars
+                  count={5}
+                  size={18}
+                  value={4.5}
+                  edit={false}
+                  isHalf={true}
+                  activeColor="#ffd700"
+                />
+                <p>(2 reviews)</p>
+              </div>
+              <h1 className="prod-price mt-2">Category:</h1>
+              <p className="prod-categ">{product.category}</p>
+              <div className="d-flex gap-2 align-items-center mt-2">
+                <h1 className="prod-price mt-2">Avaibility:</h1>
+                <p className="prod-categ">
+                  {product.stock > 0
+                    ? `${product.stock} in Stock`
+                    : "out of stock"}
+                </p>
+              </div>
+              <h1 className="prod-price mt-2">Description:</h1>
+              <p className="prod-descr">{product.description}</p>
+              <div className="prod-actions d-flex flex-column flex-sm-row gap-2 mt-2 ">
+                { cartProd ? <div className=" px-3 button d-flex align-items-center justify-content-between">
+                <Link className="fs-4 text-white" onClick={()=>dispatch(decCount(product))}>
+                  {
+                    cartProd.count > 1 ? "-" : <i class="fa-solid fs-5 fa-xmark"></i>
+                  }
+                </Link>
+                <span >{cartProd.count}</span>
+                <Link className="fs-4 text-white" onClick={() => dispatch(incCount(product))}>+</Link>
+                </div> :
+                  <button onClick={()=>dispatch(addProduct(product))} className="button">
+                    Add To cart 
+                  </button>
+                }
+                <button className="button by-now">By Now</button>
+              </div>
+              <div className="d-flex gap-2 align-items-center mt-2">
+                <h1 className="prod-price mt-2">In Cart:</h1>
+                <p className="prod-categ">
+                  {!cartProd?.count ? "0 items" : cartProd?.count ===1 ? "1 item": cartProd.count + " items"} 
+                </p>
+              </div>
+              <div className="">
+                <Link className="mt-3 d-flex gap-2 align-items-center">
+                  <i className="fa-regular  fa-heart fs-6"></i>
+                  <p>add to wishlist</p>
+                </Link>
+              </div>
+            </div>
           </div>
-          <div className="col-4 border-top border-2">
-            <p className="text-primary fs-5">Category :</p>
-            <h5>{product.category}</h5>
-          </div>
-          { cartProd ?
-            <div>
-            <button className="btn btn-success" onClick={()=>dispatch(decCount(product))}>-</button>
-            <span className="mx-4">{cartProd.count}</span>
-            <button className="btn btn-success me-2" onClick={()=>dispatch(incCount(product))}>+</button>
-            <button className="btn btn-danger" onClick={()=>dispatch(deleteProd(product))}>delete</button>
-          </div> :
-          <button className="btn btn-success"
-            onClick={()=>dispatch(addProduct(product))}
-          >add to cart</button>
-          }
-          
         </div>
-        {/* ------------------------- comments */}
       </div>
-      <div className="row">
-        <div className="col-6">
-          <h3>Comments :</h3>
+    {/* ----------------------------------------- reviews */}
+      <div className="prod-reviews mt-4">
+        <h4 className=" ">Reviews</h4>
+        <div className="reviews p-3">
           {auth.isLoggedIn ? (
-            <form className="d-flex" onSubmit={commentHandler}>
-              <input
-              value={comment}
-                className="form-control me-2"
-                placeholder="Write a comment"
-                onChange={(e)=>setComment(e.target.value)}
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Comment
-              </button>
+            <form className="row" onSubmit={commentHandler}>
+              <div className="col-12 col-sm-6 col-md-5">
+                <input
+                  value={comment}
+                  className="form-control "
+                  placeholder="Write a comment"
+                  onChange={(e) => setComment(e.target.value)}
+                />
+              </div>
+              <div className="d-flex gap-2 align-items-center mt-3 mt-sm-0 col-12 col-sm-6 col-md-4">
+                <p className="prod-rating">Rating:</p>
+                <ReactStars
+                  count={5}
+                  size={28}
+                  edit={true}
+                  isHalf={true}
+                  activeColor="#ffd700"
+                />
+              </div>
+              <div className="col-12 col-sm-5 col-md-2 mt-3 mt-md-0">
+                <button className="button">submit</button>
+              </div>
             </form>
           ) : (
             <div className="alert alert-warning" role="alert">
-              please <Link to="/login">login</Link> to be able to add a comment !!
+              please <Link to="/login">login</Link> to be able to add a comment
+              !!
             </div>
           )}
           <ListGroup className="my-3">
-            {(  product.reviews && [...product.reviews].reverse().map(elmnt=>(
+            {product.reviews &&
+              [...product.reviews].reverse().map((elmnt) => (
                 <ListGroup.Item key={elmnt._id} className="d-flex">
-                <div>
-                    <img src={elmnt.user.image} 
-                        style={{width:"30px",height:"30px", borderRadius:"50%"}} alt="" />
-                </div>
-                <div>
-                    <span style={{fontSize:"14px"}} className="ms-2 fw-bolder">{`${elmnt.user?.firstName} ${elmnt.user?.lastName}`}</span>
+                  <div>
+                    <img
+                      src={elmnt.user.image}
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        borderRadius: "50%",
+                      }}
+                      alt=""
+                    />
+                  </div>
+                  <div>
+                    <div className="d-flex gap-2 align-items-center">
+                      <span
+                        style={{ fontSize: "14px" }}
+                        className="ms-2 fw-bolder"
+                      >
+                        {`${elmnt.user?.firstName} ${elmnt.user?.lastName}`}
+                      </span>
+                      <ReactStars
+                        count={5}
+                        size={20}
+                        edit={false}
+                        value={3}
+                        isHalf={true}
+                        activeColor="#ffd700"
+                      />
+                    </div>
                     <p className="ms-2 mb-0">{elmnt.comment}</p>
-                </div>
+                  </div>
                 </ListGroup.Item>
-            ))
-                
-            )}
-            
+              ))}
           </ListGroup>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 import { NavLink } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useEffect, useState, useRef } from "react";
 
@@ -11,6 +11,8 @@ export default function NavBar() {
   const shopCart = useSelector((state) => state.shopCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { pathname } = location;
   const logoutHandler = () => {
     dispatch(logout());
     navigate("/login");
@@ -27,6 +29,10 @@ export default function NavBar() {
         document.removeEventListener("mousedown", checkIfClickedOutside)
       }
   },[showMenu])
+  useEffect(()=>{
+    setShowMenu(false)
+    console.log("pathname changed")
+  },[pathname])
   return (
     <>
     {/* ------------------------------------------- Navbar-TOP -------------------------------------------------------------------------- */}

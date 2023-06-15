@@ -38,7 +38,11 @@ const cartSlice = createSlice({
                 if(prod._id === action.payload._id && prod.count > 1) {
                    prod.count -= 1 
                    prod.subTotal = prod.price * prod.count
-               }    
+               } else if(prod._id === action.payload._id && prod.count === 1){
+                state.cart = state.cart.filter(prod=>prod._id !== action.payload._id)
+                state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )
+                localStorage.setItem("cart", JSON.stringify(state.cart))
+               }
            })
            state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )
            localStorage.setItem("cart", JSON.stringify(state.cart))
