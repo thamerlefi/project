@@ -5,7 +5,7 @@ import ProductsList from '../components/ProductsList'
 export default function Home() {
  
   return (
-    <div className='home  pt-3'>
+    <div className='home container-xxl  pt-3'>
       <BannerProd />
       <ProductsList />
     </div>

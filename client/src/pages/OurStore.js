@@ -18,7 +18,7 @@ export default function OurStore() {
     console.log(newRating);
   };
   return (
-    <div className="mt-4">
+    <div className="mt-4 container-xxl">
       <div className="row">
         {/* -------------------------------------------------- filter side */}
         <div className="col-12 col-md-3 d-md-block d-flex  flex-column flex-sm-row  justify-content-between mb-2 mb-md-0">

@@ -21,7 +21,7 @@ export default function Login() {
         dispatch(login(user))
     }
   return (
-    <div className='container mt-3'>
+    <div className='container-xxl mt-3'>
         <div className="row"> 
             <div className='col-4'>
              

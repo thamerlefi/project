@@ -34,7 +34,7 @@ export default function NavBar() {
     console.log("pathname changed")
   },[pathname])
   return (
-    <>
+    <div className="navbarr">
     {/* ------------------------------------------- Navbar-TOP -------------------------------------------------------------------------- */}
       <header className="header-upper">
         <div className="container-xxl py-3">
@@ -212,6 +212,6 @@ export default function NavBar() {
           </div>
         </div>
       </header>}
-    </>
+    </div>
   );
 }

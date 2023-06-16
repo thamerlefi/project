@@ -67,7 +67,8 @@ export default function ProductDetails() {
   return (
     <>
     {/* ----------------------------------------- prod details */}
-      <div className="prod-details p-3 mt-3">
+    <div className="container-xxl">
+      <div className="prod-details p-3 mt-3 ">
         <div className="container-xxl">
           <div className="row">
             <div className="col-12 col-md-6 img-wrapper">
@@ -203,6 +204,7 @@ export default function ProductDetails() {
               ))}
           </ListGroup>
         </div>
+      </div>
       </div>
     </>
   );

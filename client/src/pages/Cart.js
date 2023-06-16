@@ -41,8 +41,8 @@ export default function Cart() {
   }
 
   return (
-    <div>
-      <div className="text-center my-4">
+    <div className="container-xxl">
+      <div className="text-center my-4 ">
         <h3>your shopping cart</h3>
       </div>
       <table className="table">

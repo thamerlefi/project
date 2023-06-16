@@ -28,8 +28,15 @@ p{
     border-color: inherit;
 }
 /* ---------------------------------------------------------- Nav barr ------------------------------------------------------------ */
+.navbarr{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
 .header-upper{
     background-color: var(--color-dark);
+    
 }
 
 .header-upper .input-group-text{
@@ -105,6 +112,9 @@ p{
 .pages a.active{
     color: #fff;
     background-color: #3b4149;
+}
+.body{
+    margin-top: 100px;
 }
 /* ----------- media ------------*/
 
