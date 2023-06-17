@@ -129,7 +129,7 @@ exports.getAllOrders = async(req,res)=>{
     res.pagination.list = await Promise.all(
     res.pagination.list.map(async(item)=>{
       const itemModel = await Order.findById(item._id)
-        .populate('userId', "firstName lastName image")
+        .populate('userId', "firstName lastName email image")
         .populate("products.productId", "name description image")
         .exec()
           return itemModel

@@ -33,6 +33,7 @@ import UserDash from "./pages/UserDash";
 import OrderHistory from "./pages/OrderHistory";
 import UserOneOrder from "./pages/UserOneOrder";
 import OurStore from "./pages/OurStore";
+import Footer from "./components/Footer";
 // import { getAllProducts } from './redux/slices/productSlice';
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }

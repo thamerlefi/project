@@ -19,7 +19,6 @@ export default function UsersList() {
 
   useEffect(() => {
     getAllUsers(5, 1, sortBy, order);
-    console.log("aa");
   }, [sortBy, order]);
 
   //------------------------------ get all users handler (admin)
@@ -42,6 +41,11 @@ export default function UsersList() {
     } catch (error) {
       dispatch(rejected(error.response.data.message));
     }
+  }
+  //----------------------------------------
+  function isSort(sort, ord) {
+    if (sortBy === sort && order === ord) return "";
+    else return "text-secondary";
   }
 
   // generating an array for all users pages [1,2,3...]
@@ -70,98 +74,90 @@ export default function UsersList() {
     }
   };
 
-  // return (
-  //   <div className='mt-4'>
-  //     {/* ---------------------------- users list */}
-  //     <div className='row mb-3'>
-  //       <div className='col-4'>
-  //         <select onChange={(e)=>{setSortBy(e.target.value)}} className="form-select">
-  //             <option value='createdAt' >sort by</option>
-  //             <option value="createdAt">date</option>
-  //             <option value="firstName">first name</option>
-  //             <option value="lastName">last name</option>
-  //             <option value="isAdmin">role</option>
-  //         </select>
-  //       </div>
-  //       <div className='col-3 mt-1'>
-  //         <input className="form-check-input " type="radio" name="flexRadioDefault" id='flexRadioDefault2'
-  //           value={"asc"}
-  //           checked={order === "asc"}
-  //           onChange={(e)=>setOrder(e.target.value)}
-  //         />
-  //         <label className="form-check-label" htmlFor="flexRadioDefault2">
-  //           Ascendant
-  //         </label>
-  //         <input className="form-check-input ms-3" type="radio" name="flexRadioDefault" id='flexRadioDefault1'
-  //           value={"desc"}
-  //           checked={order === "desc"}
-  //           onChange={(e)=>setOrder(e.target.value)}
-  //         />
-  //         <label className="form-check-label" htmlFor="flexRadioDefault1">
-  //           Descendant
-  //         </label>
-  //       </div>
-  //       <div className='col-3'>
-  //         <input className="form-control me-2" placeholder="Search"/>
-  //       </div>
-  //     </div>
-  //     <div style={{minHeight:"285px"}}>
-  //     <ListGroup >
-  //       {allUsers.map((user,i) =>  <ListGroup.Item key={user._id} className='d-flex justify-content-between'>
-  //         {`${(i+1) + ((activePage - 1) * 5)} - ${user.lastName} ${user.firstName}`}
-  //         <div>
-  //           <span className={`me-2 ${user.isAdmin ? 'text-success': 'text-danger' }`}>{user.isAdmin ? 'admin' : 'user'}</span>
-  //           <button className='btn btn-outline-info me-2'>edit</button>
-  //           <button className='btn btn-outline-danger' onClick={()=>deleteUserHandler(user)}>delete</button>
-  //         </div>
-  //       </ListGroup.Item> )}
-  //   </ListGroup>
-  //   </div>
-  //       {/* ----------------------- pagination buttons  */}
-  //   <div >
-  //       {PagesButtons.map(page => (
-  //         <button key={page}
-  //           className={`btn px-2 py-0 text-primary me-1
-  //                   ${page === activePage ? 'border border-success':''} `}
-  //           onClick={()=>getAllUsers(5,page)}
-  //         >
-  //           {page}
-  //         </button>
-  //       ))}
-  //   </div>
-  //   </div>
-  // )
   return (
-
     <div className="users-list mt-4">
-      <h5 className="border-bottom">Users List</h5>
       <table className="table table-striped custom-table">
-        <thead>
+        <thead className="bg-light">
           <tr>
-            <th scope="col">#</th>
             <th scope="col">
-              Customer <i class="fa-solid fa-arrow-up ms-1"></i><i class="fa-solid fa-arrow-down"></i>
-              </th>
+              <span
+                className="cur-point"
+                onClick={() => {
+                  setSortBy("firstName");
+                  order === "asc" ? setOrder("desc") : setOrder("asc");
+                }}
+              >
+                Customer
+                <i
+                  className={
+                    "fa-solid fa-arrow-up ms-1 " + isSort("firstName", "asc")
+                  }
+                ></i>
+                <i
+                  className={
+                    "fa-solid fa-arrow-down " + isSort("firstName", "desc")
+                  }
+                ></i>
+              </span>
+            </th>
             <th scope="col">
-              Role <i class="fa-solid fa-arrow-up ms-1"></i><i class="fa-solid fa-arrow-down"></i>
-              </th>
+              <span
+                className="cur-point"
+                onClick={() => {
+                  setSortBy("isAdmin");
+                  order === "asc" ? setOrder("desc") : setOrder("asc");
+                }}
+              >
+                Role
+                <i
+                  className={
+                    "fa-solid  fa-arrow-up ms-1 " + isSort("isAdmin", "asc")
+                  }
+                ></i>
+                <i
+                  className={
+                    "fa-solid fa-arrow-down " + isSort("isAdmin", "desc")
+                  }
+                ></i>
+              </span>
+            </th>
             <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
-          {
-            allUsers.map((user,i) =>(
-              <tr key={user._id}>
-            <th scope="row">{i+1}</th>
-            <td>{user.lastName + " "+ user.firstName}</td>
-            <td>{user.isAdmin ? 'admin' : 'user'}</td>
-            <td>
-            <i class="fa-solid fa-trash"></i>
-            </td>
-          </tr>
-            ))
-          }
-          
+          {allUsers.map((user, i) => (
+            <tr key={user._id}>
+              <td>
+                <div className="d-flex align-items-center">
+                  <img
+                    src={user.image.secure_url}
+                    alt=""
+                    style={{ width: "45px", height: "45px" }}
+                    className="rounded-circle"
+                  />
+                  <div className="ms-3">
+                    <p className="fw-bold mb-1">
+                      {user.firstName + " " + user.lastName}
+                    </p>
+                    <p className="text-muted mb-0">{user.email}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <p className={ `badge rounded-pill d-inline ${user.isAdmin ? "bg-success": "bg-danger"}`}>
+                  {user.isAdmin ? "admin" : "user"}
+                </p>
+                </td>
+              <td>
+                <a href="/#" className="text-secondary">
+                  <i
+                    onClick={() => deleteUserHandler(user)}
+                    class="fa-solid fa-trash "
+                  ></i>
+                </a>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

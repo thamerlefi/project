@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../baseURL";
 import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 
 export default function AdminOrdersList() {
   const [orders, setOrders] = useState([]);
@@ -15,7 +16,7 @@ export default function AdminOrdersList() {
   useEffect(() => {
     axios
       .get(
-        `${baseURL}api/orders/all/?limit=${3}&page=${activePage}&sortBy=${sortBy},${order}&filter=${filter}`,
+        `${baseURL}api/orders/all/?limit=${5}&page=${activePage}&sortBy=${sortBy},${order}&filter=${filter}`,
         {
           headers: {
             "x-auth": localStorage.getItem("token"),
@@ -27,7 +28,7 @@ export default function AdminOrdersList() {
         setPages(res.data.orders.pages);
       })
       .catch((er) => console.log(er));
-  }, [activePage,filter]);
+  }, [activePage, filter]);
 
   // generate buttons pages
   let PagesButtons = [];
@@ -79,79 +80,113 @@ export default function AdminOrdersList() {
     return endDt;
   };
   // ---------------------------------------- J--S--X-------
+  //               <button
+  //                 disabled={order.status === "Delivered" ? true : false}
+  //                 onClick={() => updateStatusHandler(order.status, order._id)}
+  //               >
+  //                 {order.status === "Pending"
+  //                   ? "Processing ?"
+  //                   : order.status === "Processing"
+  //                   ? "Shipped ?"
+  //                   : order.status === "Shipped"
+  //                   ? "Delivered ?"
+  //                   : "ended"}
+  //               </button>
+
   return (
-    <div className="mt-3">
-      <div className="row">
-      <div className='col-3 mb-2'>
-          <select onChange={(e)=>{setFilter(e.target.value)}} className="form-select">
-              <option value='' >All Orders</option>
-              <option value="status,Pending">Pending</option>
-              <option value="status,Processing">Processing</option>
-              <option value="status,Shipped">Shipped</option>
-              <option value="status,Delivered">Delivered</option>
+    <>
+      <div className="mt-2 orders-list">
+        <table className="table table-striped align-middle mb-0 bg-white custom-table">
+          <thead className="bg-light">
+            <tr>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order._id}>
+                <td>
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={order.userId.image.secure_url}
+                      alt=""
+                      style={{ width: "45px", height: "45px" }}
+                      className="rounded-circle"
+                    />
+                    <div className="ms-3">
+                      <p className="fw-bold mb-1">
+                        {order.userId.firstName + " " + order.userId.lastName}
+                      </p>
+                      <p className="text-muted mb-0">{order.userId.email}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p className="fw-normal mb-1">
+                    {tranformDate(order.createdAt)}
+                  </p>
+                  {/* <p className="text-muted mb-0">IT department</p> */}
+                </td>
+                <td>
+                  <span
+                    className={`badge rounded-pill d-inline ${
+                      order.status === "Pending"
+                        ? "bg-warning"
+                        : order.status === "Processing"
+                        ? "bg-info"
+                        : order.status === "Delivered"
+                        ? "bg-primary"
+                        : "bg-success"
+                    }`}
+                  >
+                    {order.status}
+                  </span>
+                </td>
+                <td>{order.totalPrice} $</td>
+                <td>
+                  <Link
+                    to={`/admin/orders/${order._id}`}
+                    type="button"
+                    className="btn btn-link btn-sm btn-rounded"
+                  >
+                    Edit
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="section mt-2 d-flex align-items-center justify-content-between">
+        <div>
+          <select
+            onChange={(e) => {
+              setFilter(e.target.value);
+            }}
+            className="form-select py-0 "
+          >
+            <option value="">All Orders</option>
+            <option value="status,Pending">Pending</option>
+            <option value="status,Processing">Processing</option>
+            <option value="status,Shipped">Shipped</option>
+            <option value="status,Delivered">Delivered</option>
           </select>
         </div>
-      </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">#id</th>
-            <th scope="col">Products</th>
-            <th scope="col">user name</th>
-            <th scope="col">Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order._id}>
-              <th scope="row">1</th>
-              <td>
-                {order.products.map((prod) => (
-                  <p key={prod._id} className="mb-0">
-                    # {prod.productId.name}
-                  </p>
-                ))}
-              </td>
-              <td>{order.userId.firstName + " " + order.userId.lastName}</td>
-              <td>{tranformDate(order.createdAt)}</td>
-              <td>{order.status}</td>
-              <td>
-                <button
-                  className="btn btn-outline-primary"
-                  disabled={order.status === "Delivered" ? true : false}
-                  onClick={() => updateStatusHandler(order.status, order._id)}
-                >
-                  {order.status === "Pending"
-                    ? "Processing ?"
-                    : order.status === "Processing"
-                    ? "Shipped ?"
-                    : order.status === "Shipped"
-                    ? "Delivered ?"
-                    : "ended"}
-                </button>
-              </td>
-              <td>
-                <LinkContainer to={`/admin/orders/${order._id}`}>
-                  <button className="btn btn-outline-info">details</button>
-                </LinkContainer>
-              </td>
-            </tr>
+        <div className="pages">
+          {PagesButtons.map((page) => (
+            <Link
+              className={page === activePage ? "active" : ""}
+              onClick={() => setActivePage(page)}
+            >
+              {page}
+            </Link>
           ))}
-        </tbody>
-      </table>
-      {PagesButtons.map((page) => (
-        <button
-          key={page}
-          className={`btn px-2 py-0 text-primary me-1 
-                  ${page === activePage ? "border border-success" : ""} `}
-          onClick={() => setActivePage(page)}
-        >
-          {page}
-        </button>
-      ))}
-    </div>
+        </div>
+      </div>
+    </>
   );
 }

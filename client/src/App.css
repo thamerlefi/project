@@ -32,10 +32,11 @@ p{
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 10;
+    z-index: 100000000;
 }
 .header-upper{
     background-color: var(--color-dark);
+    z-index: 99;
     
 }
 
@@ -116,6 +117,16 @@ p{
 .body{
     margin-top: 100px;
 }
+.section{
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.fade.modal{
+    top: 90px !important;
+    z-index: 1000000000000000 !important;
+}
 /* ----------- media ------------*/
 
 @media (max-width: 576px) {
@@ -174,9 +185,14 @@ p{
         cursor: pointer;
     }
   }
-
+  .cur-point{
+    cursor: pointer;
+  }
 /* ------------------------------------------------------------------- FOOTER ---------------------------------------------------------------- */
-
+.footer{
+    position: relative;
+    z-index: 10000 !important;
+}
 
 /* ------------------------------------------ */
 .dashboard-info{
