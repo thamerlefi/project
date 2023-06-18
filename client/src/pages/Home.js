@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className='home container-xxl  pt-3'>
       <BannerProd />
-      <ProductsList />
+      {/* <ProductsList /> */}
     </div>
   )
 }

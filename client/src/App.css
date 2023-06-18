@@ -6,11 +6,16 @@
     font-family: 'Rubik', sans-serif;
 }
 :root{
-    --color-dark: #3b4149;
+    --color-dark: #293847;
     --color-search: #febd69;
-    --color-less-dark: #4c525a;
+    --color-less-dark: #334455;
     --color-light: #fff;
     --color-brown: #bf4800
+}
+.body{
+    min-height: calc(100vh - 106px);
+    margin-top: 115px !important;
+
 }
 body{
     background-color: #ededed;
@@ -35,17 +40,20 @@ p{
     z-index: 100000000;
 }
 .header-upper{
-    background-color: var(--color-dark);
+    /* background-color: var(--color-dark); */
+    background-color: #293847   ;
     z-index: 99;
     
 }
 
 .header-upper .input-group-text{
-    background-color: var(--color-search);
+    /* background-color: var(--color-search); */
+    background-color: #fff;
 }
 
 .header-bottom{
-    background-color: var(--color-less-dark);
+    /* background-color: var(--color-less-dark); */
+    background-color: #334455;
 }
 
 .header-bottom .dropdown button{
@@ -190,12 +198,13 @@ p{
   }
 /* ------------------------------------------------------------------- FOOTER ---------------------------------------------------------------- */
 .footer{
+    background-color: var(--color-dark);
     position: relative;
     z-index: 10000 !important;
 }
 
 /* ------------------------------------------ */
-.dashboard-info{
+/* .dashboard-info{
     justify-content: center;
     gap: 100px;
 }
@@ -208,4 +217,4 @@ p{
 
 .update-product .col-4 img{
     width: 250px;
-}
+} */

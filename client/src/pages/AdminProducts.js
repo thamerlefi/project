@@ -102,10 +102,10 @@ export default function AdminProducts() {
   return (
     // ------------------ add new product button
     <div className="mt-3 ">
-      <div className="row align-items-center mb-3">
-        <Button className="col-2" onClick={handleShow}>
-          add new product
-        </Button>
+      <div className=" mb-3">
+        <button className="newProd" onClick={handleShow}>
+        <i class="fa-solid fa-plus"></i>
+        </button>
         {/* <div className='col-3'>
           <select onChange={(e)=>{setSortBy(e.target.value)}} className="form-select">
               <option value='createdAt' >sort by</option>

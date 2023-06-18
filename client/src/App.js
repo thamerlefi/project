@@ -55,7 +55,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPass />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/cart" element={<Cart />} />
+          {/* <Route path="/cart" element={<Cart />} /> */}
           <Route path="/payment-success" element={<CheckoutSuccess />} />
           <Route path="/location" element={<GoogleMapLocation />} />
           <Route path="/user" element={<UserDash />}>

@@ -1,73 +1,85 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { getUser, login, reset } from '../redux/slices/authSlice'
-import { LinkContainer } from 'react-router-bootstrap'
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { getUser, login, reset } from "../redux/slices/authSlice";
+import { LinkContainer } from "react-router-bootstrap";
+import "../css/login.css";
 
 export default function Login() {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const {isLoading, isError,isSuccess, message, isLoggedIn} = useSelector(state => state.auth)
-   
-    useEffect(()=>{
-        if(isLoggedIn) navigate('/')
-        else dispatch(reset())
-    },[isLoggedIn])
-    const user = {email, password}
-    const loginHandler =(e)=> {
-        e.preventDefault()
-        dispatch(login(user))
-    }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { isLoading, isError, isSuccess, message, isLoggedIn } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isLoggedIn) navigate("/");
+    else dispatch(reset());
+  }, [isLoggedIn]);
+  const user = { email, password };
+  const loginHandler = (e) => {
+    e.preventDefault();
+    dispatch(login(user));
+  };
+  
   return (
-    <div className='container-xxl mt-3'>
-        <div className="row"> 
-            <div className='col-4'>
-             
-            <form>
-                <h3>Sign In</h3>
-                <div className="mb-3">
-                <label>Email address</label>
-                <input
-                    type="email"
-                    className="form-control"
-                    placeholder="Enter email"
-                    onChange={(e)=>setEmail(e.target.value)}
-                />
-                </div>
-                <div className="mb-3">
-                <label>Password</label>
-                <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Enter password"
-                    onChange={(e)=>setPassword(e.target.value)}
-                />
-                </div>
-                <div className="mb-3">
-                <div className="custom-control custom-checkbox">
-                    <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id="customCheck1"
-                    />
-                    <label className="custom-control-label" htmlFor="customCheck1">
-                    Remember me
-                    </label>
-                </div>
-                </div>
-                <div className="d-grid">
-                <button type="submit" className="btn btn-primary" onClick={loginHandler}>
-                    {isLoading ? 'pending...': 'login' }
-                </button>
-                </div>
-                <LinkContainer to='/reset-password'>
-                    <a href='/#' className="forgot-password text-right">Forgot password?</a>
-                </LinkContainer>
-            </form>
-            </div>  
+    <div className="container-xxl d-flex align-items-center" style={{height:"calc(100vh - 106px)"}}>
+       
+      <div className="row login">
+        <div className="col-12 col-md-6 p-0 img">
+          <img
+            src="img/4.jpg"
+            alt=""
+          />
         </div>
+        <div className="col-12 col-md-6 px-3 px-md-5 pt-3 ">
+          <h4 className="text-center">Login</h4>
+          <form className="d-flex login-card flex-column">
+            <div>
+              <label className="mb-2">Email</label>
+              <input
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="email"
+                className="form-control mb-4"
+              />
+            </div>
+            <div>
+              <label className="mb-2">Password</label>
+              <input
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="password"
+                className="form-control"
+              />
+              <Link to="/reset-password" className="mt-2 d-block text-center">
+                Forgot your Password ?
+              </Link>
+            </div>
+
+            <button
+              onClick={loginHandler}
+              type="submit"
+              className="btn btn-dark mt-2"
+            >
+              {isLoading ? (
+                <div className="spinner-border spinner-border-sm" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              ) : (
+                "SIGN IN"
+              )}
+            </button>
+            <div className="or text-center mt-2"></div>
+            <p className="text-center or-p">OR</p>
+            <Link to="/register" className="btn btn-outline-dark mt-3">
+              CREATE AN ACCOUNT
+            </Link>
+          </form>
+        </div>
+      </div>
     </div>
-  )
+  );
 }

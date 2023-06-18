@@ -4,9 +4,10 @@ import { logout } from "../redux/slices/authSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useEffect, useState, useRef } from "react";
+import Cart from "../pages/Cart";
 
 export default function NavBar() {
-  const ref = useRef()
+  const ref = useRef();
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const shopCart = useSelector((state) => state.shopCart);
   const navigate = useNavigate();
@@ -17,25 +18,25 @@ export default function NavBar() {
     dispatch(logout());
     navigate("/login");
   };
-  const [showMenu, setShowMenu] = useState(false)
-  useEffect(()=>{
-    const checkIfClickedOutside= (e)=>{
-      if (showMenu && ref.current && !ref.current.contains(e.target)){
-        setShowMenu(false)
+  const [showMenu, setShowMenu] = useState(false);
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (showMenu && ref.current && !ref.current.contains(e.target)) {
+        setShowMenu(false);
       }
-    }
-    document.addEventListener("mousedown", checkIfClickedOutside)
-      return ()=>{
-        document.removeEventListener("mousedown", checkIfClickedOutside)
-      }
-  },[showMenu])
-  useEffect(()=>{
-    setShowMenu(false)
-    console.log("pathname changed")
-  },[pathname])
+    };
+    document.addEventListener("mousedown", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [showMenu]);
+  useEffect(() => {
+    setShowMenu(false);
+    console.log("pathname changed");
+  }, [pathname]);
   return (
     <div className="navbarr">
-    {/* ------------------------------------------- Navbar-TOP -------------------------------------------------------------------------- */}
+      {/* ------------------------------------------- Navbar-TOP -------------------------------------------------------------------------- */}
       <header className="header-upper">
         <div className="container-xxl py-3">
           <div className="row align-items-center">
@@ -49,8 +50,12 @@ export default function NavBar() {
             </div>
             {/* ---------------------------------------------- SEARCH ----------------- */}
             <div className="col-sm-4 col-12 upper-elmnts d-flex align-items-center gap-2">
-              <div id="btn-show-menu" className="toggle-menu-btn" onClick={()=> setShowMenu(prev=>prev? false : true)}>
-                <i className="fa-solid fa-bars text-white fs-1"></i>  
+              <div
+                id="btn-show-menu"
+                className="toggle-menu-btn"
+                onClick={() => setShowMenu((prev) => (prev ? false : true))}
+              >
+                <i className="fa-solid fa-bars text-white fs-1"></i>
               </div>
               <div className="input-group">
                 <input
@@ -76,23 +81,41 @@ export default function NavBar() {
                 </div>
                 {/* ------------------------- cart icon ------- */}
                 <div>
-                  <Link to="/cart">
+                  <a
+                    data-bs-toggle="offcanvas"
+                    href="#offcanvasExample8"
+                    role="button"
+                    aria-controls="offcanvasExample8"
+                  >
                     <i className="fa-sharp fa-solid text-white fa-cart-shopping fs-4"></i>
-                    {shopCart.cart.length > 0  && <span className="ms-0"
-                    style={{color:"#fff",background:"red",width:"20px",padding:"0px 5px",borderRadius:"50%"}}>
-                    {shopCart.cart.length}
-                    </span>}
-                  </Link>
+                    {shopCart.cart.length > 0 && (
+                      <span
+                        className="ms-0"
+                        style={{
+                          color: "#fff",
+                          background: "red",
+                          width: "20px",
+                          padding: "0px 5px",
+                          borderRadius: "50%",
+                        }}
+                      >
+                        {shopCart.cart.length}
+                      </span>
+                    )}
+                  </a>
+                  <Cart />
                 </div>
                 {/* ------------------------- user icon ------- */}
-                { !isLoggedIn ? <div>
-                  <Link to="/login">
-                    <i className="fa-regular fa-user text-white fs-4"></i>
-                  </Link>
-                </div> :
-                    // ---------- user dropdown ----------
-                <div>
-                  <div className="dropdown user-dropdown">
+                {!isLoggedIn ? (
+                  <div>
+                    <Link to="/login">
+                      <i className="fa-regular fa-user text-white fs-4"></i>
+                    </Link>
+                  </div>
+                ) : (
+                  // ---------- user dropdown ----------
+                  <div>
+                    <div className="dropdown user-dropdown">
                       <button
                         className="btn p-0  dropdown-toggle"
                         type="button"
@@ -100,118 +123,157 @@ export default function NavBar() {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        <img  style={{width:"30px",borderRadius:"50%", border:"2px solid #fff"}} src={user?.image["secure_url"] } alt="" />
+                        <img
+                          style={{
+                            width: "30px",
+                            borderRadius: "50%",
+                            border: "2px solid #fff",
+                          }}
+                          src={user?.image["secure_url"]}
+                          alt=""
+                        />
                       </button>
                       <ul
                         className="dropdown-menu pb-0"
                         aria-labelledby="dropdownMenuButton1"
                       >
-                        <li>{<Link className="dropdown-item" >{`${user.firstName} ${user.lastName}`}</Link>}</li>
                         <li>
-                          <Link to='/user/profile' className="dropdown-item">Profile</Link>
+                          {
+                            <Link className="dropdown-item">{`${user.firstName} ${user.lastName}`}</Link>
+                          }
                         </li>
                         <li>
-                          <Link to='/user/orders' className="dropdown-item">Orders History</Link>
+                          <Link to="/user/profile" className="dropdown-item">
+                            Profile
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/user/orders" className="dropdown-item">
+                            Orders History
+                          </Link>
                         </li>
                         <li onClick={logoutHandler} className="border-top">
                           <Link className="dropdown-item">
-                          <i class="fa-solid fa-right-from-bracket"></i> Logout
+                            <i class="fa-solid fa-right-from-bracket"></i>{" "}
+                            Logout
                           </Link>
                         </li>
                       </ul>
+                    </div>
                   </div>
-                </div>}
+                )}
               </div>
             </div>
           </div>
         </div>
       </header>
-    {/* ------------------------------------------- Navbar BOTTOM ----------------------------------------------------------------------- */}
-      { <header ref={ref}  className={`header-bottom py-1 ${showMenu ? "show-menu" : ""}`}  >
-        <div className="container-xxl">
-          <div className="row">
-            <div className="col-12">
-              <div className="menu-bottom d-flex align-items-center gap-4">
-                <div>
-                  <div className="dropdown">
-                    <button
-                      className="btn btn-secondary dropdown-toggle"
-                      type="button"
-                      id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i class="fa-solid fa-list me-2"></i>
-                      Shop Categories
-                    </button>
-                    <ul
-                      className="dropdown-menu"
-                      aria-labelledby="dropdownMenuButton1"
-                    >
-                      <li>
-                        <Link className="dropdown-item">Action</Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item">Another action</Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item">
-                          Something else here
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                {user?.isAdmin && <div>
-                  <div className="dropdown">
-                    <button
-                      className="btn btn-secondary dropdown-toggle"
-                      type="button"
-                      id="dropdownMenuButton1"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <i class="fa-solid fa-lock  me-3"></i>
-                      ADMIN
-                    </button>
-                    <ul
-                      className="dropdown-menu admin-dropdown-menu"
-                      aria-labelledby="dropdownMenuButton1"
-                    >
-                      <li >
-                        <Link to="/admin/dashboard" className="dropdown-item">
-                          <i class="fa-solid fa-chart-line"></i> Dashboard
+      {/* ------------------------------------------- Navbar BOTTOM ----------------------------------------------------------------------- */}
+      {
+        <header
+          ref={ref}
+          className={`header-bottom py-1 ${showMenu ? "show-menu" : ""}`}
+        >
+          <div className="container-xxl">
+            <div className="row">
+              <div className="col-12">
+                <div className="menu-bottom d-flex align-items-center gap-4">
+                  <div>
+                    <div className="dropdown">
+                      <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <i class="fa-solid fa-list me-2"></i>
+                        Shop Categories
+                      </button>
+                      <ul
+                        className="dropdown-menu"
+                        aria-labelledby="dropdownMenuButton1"
+                      >
+                        <li>
+                          <Link className="dropdown-item">Action</Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item">Another action</Link>
+                        </li>
+                        <li>
+                          <Link className="dropdown-item">
+                            Something else here
                           </Link>
-                      </li>
-                      <li>
-                        <Link to="/admin/users" className="dropdown-item">
-                        <i class="fa-solid fa-users"></i> Users
-                          </Link>
-                      </li>
-                      <li>
-                        <Link to="/admin/products" className="dropdown-item">
-                        <i class="fa-solid fa-sitemap"></i> Products</Link>
-                      </li>
-                      <li>
-                        <Link to="/admin/orders" className="dropdown-item">
-                        <i class="fa-solid fa-pen"></i> Orders</Link>
-                      </li>
-                    </ul>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </div>}
-                {/* --------------- nav bottom menu links ------ */}
-                <div className="menu-links">
-                  <div className="d-flex align-items-center gap-2 gap-md-4 ">
-                    <Link to="/" className="text-white">HOME</Link>
-                    <Link to="/store" className="text-white">OUR STORE</Link>
-                    <NavLink to="/admin/dashboard" className="text-white">CONTACT</NavLink>
+                  {user?.isAdmin && (
+                    <div>
+                      <div className="dropdown">
+                        <button
+                          className="btn btn-secondary dropdown-toggle"
+                          type="button"
+                          id="dropdownMenuButton1"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <i class="fa-solid fa-lock  me-3"></i>
+                          ADMIN
+                        </button>
+                        <ul
+                          className="dropdown-menu admin-dropdown-menu"
+                          aria-labelledby="dropdownMenuButton1"
+                        >
+                          <li>
+                            <Link
+                              to="/admin/dashboard"
+                              className="dropdown-item"
+                            >
+                              <i class="fa-solid fa-chart-line"></i> Dashboard
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/admin/users" className="dropdown-item">
+                              <i class="fa-solid fa-users"></i> Users
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/admin/products"
+                              className="dropdown-item"
+                            >
+                              <i class="fa-solid fa-sitemap"></i> Products
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="/admin/orders" className="dropdown-item">
+                              <i class="fa-solid fa-pen"></i> Orders
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                  {/* --------------- nav bottom menu links ------ */}
+                  <div className="menu-links">
+                    <div className="d-flex align-items-center gap-2 gap-md-4 ">
+                      <Link to="/" className="text-white">
+                        HOME
+                      </Link>
+                      <Link to="/store" className="text-white">
+                        OUR STORE
+                      </Link>
+                      <NavLink to="/admin/dashboard" className="text-white">
+                        CONTACT
+                      </NavLink>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </header>}
+        </header>
+      }
     </div>
   );
 }

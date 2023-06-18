@@ -47,6 +47,20 @@ const cartSlice = createSlice({
            state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )
            localStorage.setItem("cart", JSON.stringify(state.cart))
         },
+        updateQuantity: (state, action) =>{
+            state.cart.map(prod=>{
+                if(prod._id === action.payload._id && action.payload.quantity > 0) {
+                   prod.count = action.payload.quantity 
+                   prod.subTotal = prod.price * prod.count
+               } else if(prod._id === action.payload._id && action.payload.quantity === 0){
+                state.cart = state.cart.filter(prod=>prod._id !== action.payload._id)
+                state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )
+                localStorage.setItem("cart", JSON.stringify(state.cart))
+               }
+           })
+           state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )
+           localStorage.setItem("cart", JSON.stringify(state.cart))
+        },
         deleteProd: (state,action)=>{
             state.cart = state.cart.filter(prod=>prod._id !== action.payload._id)
             state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )
@@ -63,5 +77,5 @@ const cartSlice = createSlice({
     }
 })
 
-export const {addProduct, incCount, decCount, deleteProd, clearCart, getTotal} = cartSlice.actions
+export const {addProduct, incCount, decCount, deleteProd, clearCart, updateQuantity,getTotal} = cartSlice.actions
 export default cartSlice.reducer

@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <div className='footer'>
    
-<footer className="text-center text-lg-start bg-dark text-muted mt-2">
+<footer className="text-center text-lg-start  text-muted mt-2">
  
   <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
    
