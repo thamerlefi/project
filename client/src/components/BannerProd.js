@@ -1,55 +1,60 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../css/bannerProd.css";
+import { useSelector } from "react-redux";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+
 export default function BannerProd() {
+  const { products } = useSelector((state) => state.products);
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: false,
+    pauseOnFocus: true,
+    pauseOnDotsHover: true,
+    appendDots: (dots) => {
+      return <ul style={{ margin: "0px" }}>{dots}</ul>;
+    },
+  };
+
   return (
     <div className="banner-prod row py-2">
-      <div className="part mb-4 mb-md-0  col-12 col-md-6">
-        <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
-          <div className="carousel-indicators">
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="0"
-              className="active"
-              aria-current="true"
-              aria-label="Slide 1"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="1"
-              aria-label="Slide 2"
-            ></button>
-          </div>
-          <div className="carousel-inner">
-            <div className="carousel-item active">
-              <img className="img-fluid rounded-3 d-block w-100" src={require('../img/main-banner.jpg')}  alt="..." />
-            </div>
-            <div className="carousel-item">
-              <img className="img-fluid rounded-3 d-block w-100" src={require('../img/main-banner-1.jpg')}  alt="..." />
-            </div>
-          </div>
-          <button
-            className="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="prev"
-          >
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Previous</span>
-          </button>
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="next"
-          >
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Next</span>
-          </button>
-        </div>
+      <div className="part mb-4 mb-md-0  col-11 ">
+        <Slider {...settings}>
+          {products.list.map(
+            (prod, i) =>
+              i < 6 &&
+              i > 2 && (
+                <div
+                  className={`d-flex justify-content-between align-items-center `}
+                  key={prod._id}
+                >
+                  <div className="p-5 ">
+                    <h1 className="">50% Off your first Shoppping</h1>
+                    <h3 className="my-4">{prod.name}</h3>
+                    <button className="button" style={{ background: "tomato" }}>
+                      Bye Now
+                    </button>
+                  </div>
+                  <div style={{ width: "35%" }}>
+                    <img
+                      src={prod.image.secure_url}
+                      alt=""
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+                </div>
+              )
+          )}
+        </Slider>
       </div>
-      <div className="part  col-12 col-md-6 d-flex flex-column justify-content-between gap-4 gap-md-0">
+      {/* <div className="part  col-12 col-md-6 d-flex flex-column justify-content-between gap-4 gap-md-0">
         <div className="row ">
             <div className="col-6">
                 <img className="img-fluid rounded-3" src={require('../img/catbanner-01.jpg')} style={{width:"100%"}} alt="" />
@@ -66,7 +71,7 @@ export default function BannerProd() {
             <img className="img-fluid rounded-3"  src={require('../img/catbanner-04.jpg')} style={{width:"100%"}} alt="" />
             </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

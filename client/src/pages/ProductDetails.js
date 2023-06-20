@@ -13,6 +13,11 @@ import {
 } from "../redux/slices/cartSlice";
 import "../css/ProdDeatils.css";
 import ReactStars from "react-rating-stars-component";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import Product from "../components/Product";
+
 
 export default function ProductDetails() {
   const dispatch = useDispatch();
@@ -58,11 +63,51 @@ export default function ProductDetails() {
   }, [pathname]);
   useEffect(() => {
     dispatch(getOneProduct(id));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     setProduct(products.product);
   }, [products.product]);
+
+  
+    const settings = {
+      dots: false,
+      infinite: true,
+      slidesToShow: 5,
+      slidesToScroll: 2,
+      autoplay: false,
+      speed: 1000,
+      nextArrow: <SlickNext />,
+      prevArrow: <SlickPrev />,
+      pauseOnHover: true,
+      initialSlide: 0,
+      responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 1,
+              infinite: true,
+              dots: true
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+              initialSlide: 1
+            }
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1
+            }
+          }
+        ]
+    }
 
   return (
     <>
@@ -206,6 +251,39 @@ export default function ProductDetails() {
         </div>
       </div>
       </div>
+    {/* ----------------------------------------- reecommanded products */}
+    <div className='list m-auto  container-xxl row my-5'>
+    <h4 className=" ">Recommended Products</h4>
+      <Slider {...settings} >
+        {
+            products.products.list.map(prod =>(
+               <div className='px-2'>
+                   <Product col={"aa"} product={prod}/>
+               </div>
+                
+            ))
+        }
+        </Slider>
+      </div>
     </>
   );
+}
+
+function SlickNext(props){
+  const {onClick} = props
+
+  return <div className='cntrl-btn' onClick={onClick}>
+    <button className='next'>
+      <i className='fa fa-long-arrow-alt-right'></i>
+    </button>
+  </div>
+}
+function SlickPrev(props){
+  const {onClick} = props
+
+  return <div className='cntrl-btn' onClick={onClick}>
+    <button className='prev'>
+      <i className='fa fa-long-arrow-alt-left'></i>
+    </button>
+  </div>
 }
