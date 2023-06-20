@@ -29,8 +29,8 @@ export default function BannerProd() {
         <Slider {...settings}>
           {products.list.map(
             (prod, i) =>
-              i < 6 &&
-              i > 2 && (
+              i < 7 &&
+              i > 3 && (
                 <div
                   className={`d-flex justify-content-between align-items-center `}
                   key={prod._id}

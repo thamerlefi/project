@@ -35,7 +35,7 @@ export default function Product({ product, col }) {
           <ReactStars
             count={5}
             size={18}
-            value={4.5}
+            value={product.rating}
             edit={false}
             isHalf={true}
             activeColor="#ffd700"

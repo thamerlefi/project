@@ -1,17 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/ourStore.css";
 import ReactStars from "react-rating-stars-component";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/slices/productSlice";
 import Product from "../components/Product";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { baseURL } from "../baseURL";
 
 export default function OurStore() {
+  const [randomProds, setRandomProds] = useState([])
   const dispatch = useDispatch();
   useEffect(() => {
     const limit = 10,
       page = 1;
     dispatch(getAllProducts({ limit, page }));
+    axios.get(baseURL + "api/products/random/?size=3")
+    .then(res=> setRandomProds(res.data.randomProducts))
+    .catch(err => console.log(err))
   }, []);
   const { products } = useSelector((state) => state.products);
   const ratingChanged = (newRating) => {
@@ -72,9 +78,9 @@ export default function OurStore() {
           {/* ----------------------------- random product */}
           <div className="random-products filter-prod mt-2 d-none d-md-block">
             <h3>Random Products</h3>
-            {products.list.map((product, i) => (
+            {randomProds.map((product) => (
               <>
-                {i < 3 && (
+                { (
                   <div className="d-flex pt-1 border-bottom " key={product._id}>
                     <div className="w-25">
                       <img

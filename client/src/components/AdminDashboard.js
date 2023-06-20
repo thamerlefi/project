@@ -8,6 +8,8 @@ import { AdminChart } from "./AdminChart";
 export default function AdminDashboard() {
   const [users, setUsers] = useState(0);
   const [products, setProducts] = useState(0);
+  const [orders, setOrders] = useState(0);
+  const [wallet, setWallet] = useState(0);
 
   useEffect(() => {
     getDashInfo();
@@ -22,6 +24,8 @@ export default function AdminDashboard() {
       });
       setProducts(res.data.products);
       setUsers(res.data.users);
+      setOrders(res.data.orders);
+      setWallet(res.data.walletBalance);
     } catch (error) {}
   }
 
@@ -61,7 +65,7 @@ export default function AdminDashboard() {
           <div className="d-flex gap-2 align-items-center">
           <i class="fa-solid text-white fa-pen me-2 fs-2"></i>
             <div>
-              <h5 className="text-white">{7}</h5>
+              <h5 className="text-white">{orders}</h5>
               <h4 className="text-white">Orders</h4>
             </div>
           </div>
@@ -74,7 +78,7 @@ export default function AdminDashboard() {
           <div className="d-flex gap-2 align-items-center">
           <i class="fa-solid fa-wallet text-white fs-2"></i>
             <div>
-              <h5 className="text-white">{1427} $</h5>
+              <h5 className="text-white">{wallet} $</h5>
               <h5 className="text-white">Wallet balance</h5>
             </div>
           </div>

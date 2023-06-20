@@ -20,6 +20,7 @@ import Product from "../components/Product";
 
 
 export default function ProductDetails() {
+  const [starsKey, setStarsKey] = useState(Math.random());
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
   const auth = useSelector((state) => state.auth);
@@ -30,6 +31,8 @@ export default function ProductDetails() {
 
   const [product, setProduct] = useState({});
   const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
+  const [randomProds, setRandomProds] = useState([])
 
   const commentHandler = async (e) => {
     const data = {
@@ -38,9 +41,11 @@ export default function ProductDetails() {
       firstName: auth.user.firstName,
       lastName: auth.user.lastName,
       image: auth.user.image.secure_url,
+      rating
     };
     e.preventDefault();
     try {
+      if (rating === 0) return toast("Rating is required" ,{type: "error"})
       const res = await axios.post(
         `${baseURL}api/products/${id}/comment`,
         data,
@@ -53,6 +58,7 @@ export default function ProductDetails() {
       toast(res.data.message, { type: "success" });
       dispatch(getOneProduct(id));
       setComment("");
+      setRating(0)
     } catch (error) {
       toast(error.response.data.message, { type: "error" });
     }
@@ -63,10 +69,14 @@ export default function ProductDetails() {
   }, [pathname]);
   useEffect(() => {
     dispatch(getOneProduct(id));
+    axios.get(baseURL + "api/products/random/?size=10")
+    .then(res=> setRandomProds(res.data.randomProducts))
+    .catch(err => console.log(err))
   }, [id]);
 
   useEffect(() => {
     setProduct(products.product);
+    setStarsKey(Math.random())
   }, [products.product]);
 
   
@@ -108,6 +118,9 @@ export default function ProductDetails() {
           }
         ]
     }
+    const ratingChanged = (newRating) => {
+      setRating(newRating)
+    }
 
   return (
     <>
@@ -124,14 +137,15 @@ export default function ProductDetails() {
               <h2 className="prod-price">${product.price}</h2>
               <div className="prod-reviews d-flex gap-1 align-items-center">
                 <ReactStars
+                  key={starsKey} 
                   count={5}
                   size={18}
-                  value={4.5}
+                  value={product.rating}
                   edit={false}
                   isHalf={true}
                   activeColor="#ffd700"
-                />
-                <p>(2 reviews)</p>
+                /> 
+                <p>({product.numOfReviews} reviews)</p>
               </div>
               <h1 className="prod-price mt-2">Category:</h1>
               <p className="prod-categ">{product.category}</p>
@@ -194,9 +208,12 @@ export default function ProductDetails() {
               <div className="d-flex gap-2 align-items-center mt-3 mt-sm-0 col-12 col-sm-6 col-md-4">
                 <p className="prod-rating">Rating:</p>
                 <ReactStars
+                key={starsKey} 
                   count={5}
                   size={28}
                   edit={true}
+                  value={rating}
+                  onChange={ratingChanged}
                   isHalf={true}
                   activeColor="#ffd700"
                 />
@@ -238,7 +255,7 @@ export default function ProductDetails() {
                         count={5}
                         size={20}
                         edit={false}
-                        value={3}
+                        value={elmnt.rating}
                         isHalf={true}
                         activeColor="#ffd700"
                       />
@@ -251,15 +268,16 @@ export default function ProductDetails() {
         </div>
       </div>
       </div>
-    {/* ----------------------------------------- reecommanded products */}
+    {/* ----------------------------------------- recommanded products */}
     <div className='list m-auto  container-xxl row my-5'>
     <h4 className=" ">Recommended Products</h4>
       <Slider {...settings} >
         {
-            products.products.list.map(prod =>(
-               <div className='px-2'>
-                   <Product col={"aa"} product={prod}/>
-               </div>
+            randomProds.map(prod =>(
+              // prod._id !== product._id &&
+                <div className='px-2'>
+                  <Product col={"aa"} product={prod}/>
+                </div>
                 
             ))
         }

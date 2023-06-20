@@ -1,13 +1,21 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Product from './Product';
+import axios from 'axios';
+import { baseURL } from '../baseURL';
+import { toast } from 'react-toastify';
 
 
 export default function PopularProd() {
-    const { products } = useSelector((state) => state.products);
+  const [products, setProducts] = useState([])
+  useEffect(()=>{
+    axios.get(baseURL+ `api/products/?limit=${8}&page=${1}&sortBy=${"numOfReviews"},${"asc"}`)
+    .then(res=> setProducts(res.data.pagination.list))
+    .catch(err => toast(err.response.data.message,{type: "error"}))
+  },[])
+
     const settings = {
       dots: false,
       infinite: true,
@@ -55,7 +63,7 @@ export default function PopularProd() {
       <div className='list m-auto  container row mt-5'>
       <Slider {...settings} >
         {
-            products.list.map(prod =>(
+            products.map(prod =>(
                <div className='px-2'>
                    <Product col={"aa"} product={prod}/>
                </div>

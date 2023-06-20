@@ -31,7 +31,7 @@ exports.getOneProduct = async (req,res,next)=>{
 exports.commentProduct= async(req,res,next)=>{
     try {
         const { productId } = req.params;
-        const { userId, firstName, lastName, image, comment } = req.body;
+        const { userId, firstName, lastName, image, comment, rating } = req.body;
         const product = await Product.findById(productId);
         if(!product) return res.status(404).json({ error: 'Product not found' });
         const newComment = {
@@ -40,18 +40,22 @@ exports.commentProduct= async(req,res,next)=>{
                 firstName,
                 lastName,
                 image,
-            
             },
-            comment
+            comment,
+            rating
         };
         product.reviews.push(newComment);
+        product.numOfReviews += 1;
+        product.rating = product.reviews.reduce((acc,item)=> acc + item.rating ,0) / product.numOfReviews
         await product.save();
+        
         
         const user = await UserModel.findById(userId);
         if(!user) return res.status(404).json({ error: 'User not found' });
         user.reviews.push({
             productId,
-            comment
+            comment,
+            rating
         });
         await user.save();
         res.json({ message: 'Comment submitted successfully' });
@@ -108,5 +112,16 @@ exports.deleteProduct= async(req,res)=>{
         res.status(200).json({message: 'product deleted', product: deletedProduct})
     } catch (error) {
         res.status(400).json({message: error.message})
+    }
+}
+
+// get random products
+exports.getRandomProducts = async(req,res)=>{
+    const size = parseInt(req.query.size) || 10
+    try {
+        const randomProducts = await Product.aggregate([{$sample: {size}}])
+        res.json({randomProducts})
+    } catch (error) {
+        res.status(500).json({message: error.message})
     }
 }

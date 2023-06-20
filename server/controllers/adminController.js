@@ -1,5 +1,6 @@
 const User = require('../models/UserModel.js')
 const Product = require('../models/ProductModel')
+const Order = require('../models/OrderModel.js')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const cloudinary = require('../utils/cloudinaryConfig.js')
@@ -43,7 +44,9 @@ exports.adminPage = async(req,res) => {
     try {
         const users = await User.find()
         const products = await Product.find()
-        res.json({users: users.length, products:products.length})
+        const orders = await Order.find()
+        const walletBalance = orders.reduce((acc,item) => acc + item.totalPrice,0) 
+        res.json({users: users.length, products:products.length, orders: orders.length, walletBalance})
     } catch (error) {
         
     }
