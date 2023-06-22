@@ -173,7 +173,7 @@ export default function ProductDetails() {
                     Add To cart 
                   </button>
                 }
-                <button className="button by-now">By Now</button>
+                <button className="button by-now">Buy Now</button>
               </div>
               <div className="d-flex gap-2 align-items-center mt-2">
                 <h1 className="prod-price mt-2">In Cart:</h1>

@@ -39,7 +39,7 @@ export default function BannerProd() {
                     <h1 className="">50% Off your first Shoppping</h1>
                     <h3 className="my-4">{prod.name}</h3>
                     <button className="button" style={{ background: "tomato" }}>
-                      Bye Now
+                      Buy Now
                     </button>
                   </div>
                   <div style={{ width: "35%" }}>

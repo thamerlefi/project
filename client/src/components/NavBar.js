@@ -5,11 +5,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useEffect, useState, useRef } from "react";
 import Cart from "../pages/Cart";
+import { clearProdSearch, getAllProducts, getProdSearch } from "../redux/slices/productSlice";
 
 export default function NavBar() {
+  window.addEventListener("scroll",()=>{
+    const headerBottom = document.querySelector('.header-bottom')
+    const headerTop = document.querySelector('.header-upper')
+    headerBottom.classList.toggle("hide", window.scrollY > 100)
+    headerTop.classList.toggle("opacity", window.scrollY > 100)
+  })
   const ref = useRef();
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const shopCart = useSelector((state) => state.shopCart);
+  const {prodSearch} = useSelector(state=>state.products)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -19,6 +27,12 @@ export default function NavBar() {
     navigate("/login");
   };
   const [showMenu, setShowMenu] = useState(false);
+  const [prodSrch, setProdSearch] = useState("");
+  const searchHandler = (e)=>{
+    e.preventDefault()
+    dispatch(getProdSearch(prodSrch))
+    if (prodSrch) navigate('/store')
+  }
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (showMenu && ref.current && !ref.current.contains(e.target)) {
@@ -32,7 +46,6 @@ export default function NavBar() {
   }, [showMenu]);
   useEffect(() => {
     setShowMenu(false);
-    console.log("pathname changed");
   }, [pathname]);
   return (
     <div className="navbarr">
@@ -57,18 +70,26 @@ export default function NavBar() {
               >
                 <i className="fa-solid fa-bars text-white fs-1"></i>
               </div>
-              <div className="input-group">
+              <form className="input-group" onSubmit={searchHandler}>
                 <input
                   type="text"
+                  value={prodSrch}
                   className="form-control p-1"
                   placeholder="Search Product..."
                   aria-label="Search Product..."
                   aria-describedby="basic-addon2"
+                  onChange={(e)=>setProdSearch(e.target.value.split(' ').join('+'))}
                 />
-                <span className="input-group-text" id="basic-addon2">
+                {!prodSearch ? <span onClick={searchHandler} className="input-group-text search" id="basic-addon2">
                   <BsSearch />
+                </span> :
+                <span onClick={()=>{
+                  dispatch(clearProdSearch())
+                  setProdSearch('')}} className="input-group-text search" id="basic-addon2">
+                  <i className="fa-solid   fa-xmark" ></i>
                 </span>
-              </div>
+                }
+              </form>
             </div>
             {/* ---------------------------------------------- LINKS ----------------- */}
             <div className="col-sm-5 col-6 upper-elmnts">

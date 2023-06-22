@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
     products: {
@@ -14,15 +15,18 @@ const initialState = {
     isSuccess: false,
     isError: false,
     message: "",
+    prodSearch: "",
     product: {}
 }
 
 // ------- get all products
 export const getAllProducts = createAsyncThunk("product/getAll",async(data,{rejectWithValue})=>{
-    const {limit,page,sortBy,order} = data
+    const {limit,page,sortBy,order,minPrice,maxPrice,minRating,search} = data
     try {
         const res = await axios.get(baseURL + 
-            `api/products/?limit=${limit}&page=${page}&sortBy=${sortBy},${order}`)
+            `api/products/?limit=${limit}&page=${page}&sortBy=${sortBy},${order}
+            ${minPrice ? "&minPrice=" + minPrice : ""}${maxPrice ? "&maxPrice=" + maxPrice : ""}
+            ${minRating ? "&minRating=" + minRating : ""}${search ? "&search=" + search : ""}`)
         return res.data
     } catch (error) {
         return rejectWithValue(error.response.data.message)
@@ -65,6 +69,12 @@ const productSlice = createSlice({
         },
         fulfilled: (state) => {
             return {...state, isLoading: false,isSuccess: true,isError: false }
+        },
+        getProdSearch: (state, action)=>{
+            return {...state, prodSearch: action.payload}
+        },
+        clearProdSearch: (state)=> {
+            return {...state, prodSearch: ""}
         }
     },
     extraReducers: (builder) => {
@@ -109,5 +119,5 @@ const productSlice = createSlice({
     }
 })
 
-export const {pending,fulfilled,rejected} = productSlice.actions
+export const {pending,fulfilled,rejected,getProdSearch,clearProdSearch} = productSlice.actions
 export default productSlice.reducer

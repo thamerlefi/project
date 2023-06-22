@@ -96,7 +96,7 @@ export default function Cart() {
           </div>
           <div className="text-center mt-3">
             {cart.length !==0 && (isLoggedIn ? <button onClick={checkoutHandler} className="bye-now">
-              {isLoading ? "pending..." : "BYE NOW"}
+              {isLoading ? "pending..." : "BUY NOW"}
               </button> : 
               <span className="alert alert-warning " disabled>please <Link to="/login">login</Link> first</span>)
               }

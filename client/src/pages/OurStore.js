@@ -10,15 +10,17 @@ import { baseURL } from "../baseURL";
 
 export default function OurStore() {
   const [randomProds, setRandomProds] = useState([])
+  const {prodSearch} = useSelector(state=>state.products)
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log(prodSearch)
     const limit = 10,
       page = 1;
-    dispatch(getAllProducts({ limit, page }));
+    dispatch(getAllProducts({ limit, page,search:prodSearch }));
     axios.get(baseURL + "api/products/random/?size=3")
     .then(res=> setRandomProds(res.data.randomProducts))
     .catch(err => console.log(err))
-  }, []);
+  }, [prodSearch]);
   const { products } = useSelector((state) => state.products);
   const ratingChanged = (newRating) => {
     console.log(newRating);
@@ -94,7 +96,7 @@ export default function OurStore() {
                       <ReactStars
                         count={5}
                         size={18}
-                        value={4.5}
+                        value={product.rating}
                         edit={false}
                         isHalf={true}
                         activeColor="#ffd700"

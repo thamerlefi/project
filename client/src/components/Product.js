@@ -54,7 +54,7 @@ export default function Product({ product, col }) {
           ) : (
             <div className="position-absolute btn-action cart-action-2">
               <Link onClick={() => dispatch(decCount(product))}>
-                {cartProd.count > 1 ? "-" : <i class="fa-solid   fa-xmark"></i>}
+                {cartProd.count > 1 ? "-" : <i className="fa-solid   fa-xmark"></i>}
               </Link>
               <span >{cartProd.count}</span>
               <Link onClick={() => dispatch(incCount(product))}>+</Link>
