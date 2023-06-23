@@ -7,24 +7,62 @@ import Product from "../components/Product";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../baseURL";
+import RangeSlider from 'react-range-slider-input';
+import 'react-range-slider-input/dist/style.css';
 
 export default function OurStore() {
-  const [randomProds, setRandomProds] = useState([])
-  const {prodSearch} = useSelector(state=>state.products)
+  const [starsKey, setStarsKey] = useState(Math.random());
+  const [randomProds, setRandomProds] = useState([]);
+  const categ = ["Laptop", "Phone", "Camera", "Accessories"];
+  const [categories, setCategories] = useState([]);
+  const [maxPrice, setMaxPrice] = useState(null);
+  const [minPrice, setMinPrice] = useState(null);
+  const [minRating, setMinRating] = useState(null);
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setCategories((prevCategories) => [...prevCategories, value]);
+    } else {
+      setCategories((prevCategories) =>
+        prevCategories.filter((category) => category !== value)
+      );
+    }
+  };
+
+  const { prodSearch } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log(prodSearch)
-    const limit = 10,
+    const limit = 8,
       page = 1;
-    dispatch(getAllProducts({ limit, page,search:prodSearch }));
-    axios.get(baseURL + "api/products/random/?size=3")
-    .then(res=> setRandomProds(res.data.randomProducts))
-    .catch(err => console.log(err))
-  }, [prodSearch]);
+    dispatch(
+      getAllProducts({
+        limit,
+        page,
+        search: prodSearch,
+        categories,
+        minPrice,
+        maxPrice,
+        minRating,
+        sortBy: "createdAt",
+        order: "asc"
+      })
+    );
+    axios
+      .get(baseURL + "api/products/random/?size=3")
+      .then((res) => setRandomProds(res.data.randomProducts))
+      .catch((err) => console.log(err));
+  }, [prodSearch, categories, minPrice, maxPrice, minRating]);
   const { products } = useSelector((state) => state.products);
   const ratingChanged = (newRating) => {
-    console.log(newRating);
+    setMinRating(newRating);
   };
+
+   // generate buttons pages
+   let PagesButtons = [];
+   for (let i = 1; i <= products.pages; i++) {
+     PagesButtons.push(i);
+   }
+
   return (
     <div className="mt-4 container-xxl">
       <div className="row">
@@ -34,15 +72,32 @@ export default function OurStore() {
           <div className="filter-prod">
             <h3>Shop By Categories</h3>
             <ul>
-              <li>Laptop</li>
-              <li>Phone</li>
-              <li>Camera</li>
-              <li>Accessories</li>
+              {categ.map((elmnt) => (
+                <li key={elmnt}>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={elmnt}
+                      checked={categories.find((cat) => cat === elmnt)}
+                      onChange={handleCheckboxChange}
+                      id={"flexCheckDefault" + elmnt}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor={"flexCheckDefault" + elmnt}
+                    >
+                      {elmnt}
+                    </label>
+                  </div>
+                </li>
+              ))}
             </ul>
           </div>
           {/* ----------------------------- filter by */}
           <div className="filter-prod mt-2 mt-sm-0 mt-md-2">
             <h3>Filter By</h3>
+            {/* ---------------------- price */}
             <div className="">
               <h4 className="sub-title mt-3">Price ($)</h4>
               <div className="d-flex align-items-center gap-1 row ">
@@ -52,29 +107,44 @@ export default function OurStore() {
                     className="form-control"
                     id="floatingInput"
                     placeholder="name@example.com"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(e.target.value)}
                   />
                   <label htmlFor="floatingInput">From</label>
                 </div>
+                <RangeSlider
+                min={0}
+                max={2000}
+                onInput={(tr)=>{
+                  setMinPrice(tr[0])
+                  setMaxPrice(tr[1])
+                }}
+              />
                 <div className="form-floating mb-3 col-4 col-md-5">
                   <input
                     type="number"
                     className="form-control"
                     id="floatingInput"
                     placeholder="name@example.com"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(e.target.value)}
                   />
                   <label htmlFor="floatingInput">To</label>
                 </div>
               </div>
             </div>
+            {/* ---------------------- rating */}
             <div className=" align-items-center">
-            <h4 className="sub-title mt-2">Rating</h4>
-            <ReactStars
-              count={5}
-              onChange={ratingChanged}
-              size={28}
-              isHalf={true}
-              activeColor="#ffd700"
-            />
+              <h4 className="sub-title mt-2">Rating</h4>
+              <ReactStars
+                key={starsKey}
+                count={5}
+                onChange={ratingChanged}
+                size={28}
+                value={minRating}
+                isHalf={true}
+                activeColor="#ffd700"
+              />
             </div>
           </div>
           {/* ----------------------------- random product */}
@@ -82,7 +152,7 @@ export default function OurStore() {
             <h3>Random Products</h3>
             {randomProds.map((product) => (
               <>
-                { (
+                {
                   <div className="d-flex pt-1 border-bottom " key={product._id}>
                     <div className="w-25">
                       <img
@@ -104,7 +174,7 @@ export default function OurStore() {
                       <p>${product.price}</p>
                     </div>
                   </div>
-                )}
+                }
               </>
             ))}
           </div>
@@ -114,8 +184,8 @@ export default function OurStore() {
           {/* ------------ sort  */}
           <div className="filter-sort-grid ">
             <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-center gap-3">
-                <p>SortBy:</p>
+              <div className="d-flex flex-wrap align-items-center gap-3">
+                {/* <p>SortBy:</p>
                 <select
                   className="form-control form-select"
                   style={{ width: "auto" }}
@@ -126,7 +196,51 @@ export default function OurStore() {
                   <option value="rating">Rating</option>
                   <option value="category">Category</option>
                   <option value="stock">Count in Stock</option>
-                </select>
+                </select> */}
+                <p>Filter By:</p>
+                {categories.map((cat) => (
+                  <div className="filter-small" key={cat}>
+                    {cat}{" "}
+                    <i
+                      onClick={() => {
+                        setCategories((prev) =>
+                          prev.filter((category) => category !== cat)
+                        );
+                      }}
+                      className="fa-solid fa-xmark"
+                    ></i>
+                  </div>
+                ))}
+                {minPrice >= 0 && maxPrice ? (
+                  <div>
+                    <span className="filter-small">
+                      {minPrice}
+                      {"-"}
+                      {maxPrice}$
+                      <i
+                        onClick={() => {
+                          setMinPrice("");
+                          setMaxPrice("");
+                        }}
+                        className="fa-solid fa-xmark"
+                      ></i>
+                    </span>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {minRating && (
+                  <div className="filter-small">
+                    {"Rating > " + minRating}
+                    <i
+                      onClick={() => {
+                        setMinRating(null);
+                        setStarsKey(Math.random());
+                      }}
+                      className="fa-solid fa-xmark"
+                    ></i>
+                  </div>
+                )}
               </div>
               <div className="d-flex align-items-center gap-2">
                 {/* <p className="total-products">6 products</p> */}
@@ -150,11 +264,24 @@ export default function OurStore() {
           <div className="filter-sort-grid mt-2 d-flex align-items-center justify-content-center justify-content-sm-between ">
             <p className="d-none d-sm-block p-opacity">Showing 8 of 19</p>
             <div className="pages">
-              <Link className="me-2 ">{"<"}</Link>
-              <Link className="me-2 ">1</Link>
-              <Link className="me-1 active">2</Link>
-              <Link className="me-1">3</Link>
-              <Link className="me-1">{">"}</Link>
+              {/* <Link className="me-2 ">{"<"}</Link> */}
+              {PagesButtons.map((page) => (
+            <Link
+              key={page}
+              className={`me-1 
+                  ${
+                    page === products.activePage
+                      ? "active"
+                      : ""
+                  } `}
+              onClick={() => 
+                 dispatch(getAllProducts({ limit: 8, page, sortBy:"createdAt", order:"asc" }))
+              }
+            >
+              {page}
+            </Link>
+          ))}
+              
             </div>
           </div>
         </div>

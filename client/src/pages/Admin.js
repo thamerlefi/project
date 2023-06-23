@@ -10,38 +10,38 @@ export default function Admin() {
       <div className=" d-flex flex-column ">
         <div
           className="offcanvas offcanvas-start side-bar-nav "
-          tabindex="-1"
+          tabIndex="-1"
           id="offcanvasExample"
           aria-labelledby="offcanvasExampleLabel"
         >
           <div className="offcanvas-header d-flex flex-column align-items-center">
             <Link
               to="/admin/dashboard"
-              className={active === "dash" && "active"}
+              className={active === "dash" ? "active": ""}
               onClick={() => setActive("dash")}
             >
-              <i class="fa-solid fa-chart-line me-2"></i> Dashboard
+              <i className="fa-solid fa-chart-line me-2"></i> Dashboard
             </Link>
             <Link
               to="/admin/users"
-              className={active === "cust" && "active"}
+              className={active === "cust" ? "active": ""}
               onClick={() => setActive("cust")}
             >
-              <i class="fa-solid fa-users me-2"></i> Users
+              <i className="fa-solid fa-users me-2"></i> Users
             </Link>
             <Link
               to="/admin/products"
-              className={active === "prod" && "active"}
+              className={active === "prod" ? "active": ""}
               onClick={() => setActive("prod")}
             >
-              <i class="fa-solid fa-sitemap me-2"></i> Products
+              <i className="fa-solid fa-sitemap me-2"></i> Products
             </Link>
             <Link
               to="/admin/orders"
-              className={active === "ord" && "active"}
+              className={active === "ord" ? "active": ""}
               onClick={() => setActive("ord")}
             >
-              <i class="fa-solid fa-pen me-2"></i> Orders
+              <i className="fa-solid fa-pen me-2"></i> Orders
             </Link>
             <button
               type="button"

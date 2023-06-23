@@ -54,7 +54,7 @@ export default function Cart() {
     <>
       <div
         className="offcanvas offcanvas-end cart"
-        tabindex="-1"
+        tabIndex="-1"
         id="offcanvasExample8"
         aria-labelledby="offcanvasExampleLabel"
       >
@@ -87,7 +87,7 @@ export default function Cart() {
               <i
               style={{position:"absolute", right:"10px", bottom:"10px"}}
               onClick={()=>dispatch(deleteProd(prod))}
-                    class="fa-solid fa-trash cur-point"
+                    className="fa-solid fa-trash cur-point"
                   ></i>
             </div>
           ))}

@@ -71,7 +71,7 @@ p{
         position: relative;
         left: -100%;
         opacity: 0;
-        transition: 0.4s;
+        transition: 0.5s;
     }
 }
 .header-bottom{
@@ -80,7 +80,7 @@ p{
     position: relative;
         left: 0;
         opacity: 1;
-    transition: 0.4s;
+    transition: 0.2s;
 }
 
 .header-bottom .dropdown button{

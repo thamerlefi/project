@@ -175,7 +175,7 @@ export default function NavBar() {
                         </li>
                         <li onClick={logoutHandler} className="border-top">
                           <Link className="dropdown-item">
-                            <i class="fa-solid fa-right-from-bracket"></i>{" "}
+                            <i className="fa-solid fa-right-from-bracket"></i>{" "}
                             Logout
                           </Link>
                         </li>
@@ -207,7 +207,7 @@ export default function NavBar() {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        <i class="fa-solid fa-list me-2"></i>
+                        <i className="fa-solid fa-list me-2"></i>
                         Shop Categories
                       </button>
                       <ul
@@ -238,7 +238,7 @@ export default function NavBar() {
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
                         >
-                          <i class="fa-solid fa-lock  me-3"></i>
+                          <i className="fa-solid fa-lock  me-3"></i>
                           ADMIN
                         </button>
                         <ul
@@ -250,12 +250,12 @@ export default function NavBar() {
                               to="/admin/dashboard"
                               className="dropdown-item"
                             >
-                              <i class="fa-solid fa-chart-line"></i> Dashboard
+                              <i className="fa-solid fa-chart-line"></i> Dashboard
                             </Link>
                           </li>
                           <li>
                             <Link to="/admin/users" className="dropdown-item">
-                              <i class="fa-solid fa-users"></i> Users
+                              <i className="fa-solid fa-users"></i> Users
                             </Link>
                           </li>
                           <li>
@@ -263,12 +263,12 @@ export default function NavBar() {
                               to="/admin/products"
                               className="dropdown-item"
                             >
-                              <i class="fa-solid fa-sitemap"></i> Products
+                              <i className="fa-solid fa-sitemap"></i> Products
                             </Link>
                           </li>
                           <li>
                             <Link to="/admin/orders" className="dropdown-item">
-                              <i class="fa-solid fa-pen"></i> Orders
+                              <i className="fa-solid fa-pen"></i> Orders
                             </Link>
                           </li>
                         </ul>

@@ -12,6 +12,7 @@ exports.getProducts = async(req,res,next)=>{
         const categories = await Product.distinct('category');
         res.status(200).json({pagination:res.pagination,categories})
     } catch (error) {
+        console.log(error.message)
         res.status(400).json({message: error.message})
     }
 }

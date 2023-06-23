@@ -35,7 +35,7 @@ export default function AdminProducts() {
   const [order, setOrder] = useState("asc");
 
   useEffect(() => {
-    dispatch(getAllProducts({ limit: 5, page: 1, sortBy, order }));
+    dispatch(getAllProducts({ limit: 5, page: 1, sortBy, order,categories:[] }));
   }, [sortBy, order]);
 
   // generate buttons pages
@@ -104,80 +104,11 @@ export default function AdminProducts() {
     <div className="mt-3 ">
       <div className=" mb-3">
         <button className="newProd" onClick={handleShow}>
-        <i class="fa-solid fa-plus"></i>
+          <i className="fa-solid fa-plus"></i>
         </button>
-        {/* <div className='col-3'>
-          <select onChange={(e)=>{setSortBy(e.target.value)}} className="form-select">
-              <option value='createdAt' >sort by</option>
-              <option value="createdAt">date</option>
-              <option value="name">Name</option>
-              <option value="price">Price</option>
-              <option value="rating">Rating</option>
-              <option value="category">Category</option>
-              <option value="stock">Count in Stock</option>
-          </select>
-        </div> */}
-        {/* <div className='col-3'>
-          <input className="form-check-input" type="radio" name="flexRadioDefault" id='flexRadioDefault2'
-            value={"asc"}
-            checked={order === "asc"}
-            onChange={(e)=>setOrder(e.target.value)}
-          />
-          <label className="form-check-label" htmlFor="flexRadioDefault2">
-            Ascendant
-          </label>
-          <input className="form-check-input ms-3" type="radio" name="flexRadioDefault" id='flexRadioDefault1'
-            value={"desc"}
-            checked={order === "desc"}
-            onChange={(e)=>setOrder(e.target.value)}
-          />
-          <label className="form-check-label" htmlFor="flexRadioDefault1">
-            Descendant
-          </label>
-        </div>
-        <div className='col-3'>
-          <input className="form-control me-2" placeholder="Search"/>
-        </div> */}
       </div>
       <div className="mt-2 prod-list">
         {/* ------------------------- products list */}
-        {/* <div style={{ minHeight: "285px" }}>
-          <ListGroup>
-            {products.products.list.map((product) => (
-              <ListGroup.Item
-                className="d-flex justify-content-between"
-                key={product._id}
-              >
-                <div>
-                  <img
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      marginRight: "20px",
-                    }}
-                    src={product.image.secure_url}
-                    alt=""
-                  />
-                  {`${product.name} :  ${product.price} $ (${product.stock})`}
-                </div>
-
-                <div>
-                  <LinkContainer to={`/admin/products/update/${product._id}`}>
-                    <button className="btn btn-outline-warning me-2">
-                      edit
-                    </button>
-                  </LinkContainer>
-                  <button
-                    onClick={() => deleteProductHandler(product._id)}
-                    className="btn btn-outline-danger"
-                  >
-                    delete
-                  </button>
-                </div>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </div> */}
 
         <table className="table table-striped custom-table">
           <thead className="bg-light">
@@ -261,7 +192,9 @@ export default function AdminProducts() {
                     />
                     <div className="ms-3">
                       <p className="fw-bold mb-1">
-                        {`${prod.name.slice(0,20)}${prod.name.length > 20 ? "..." : ""}`}
+                        {`${prod.name.slice(0, 20)}${
+                          prod.name.length > 20 ? "..." : ""
+                        }`}
                       </p>
                       <p className="text-muted mb-0">{prod.category}</p>
                     </div>
@@ -274,13 +207,13 @@ export default function AdminProducts() {
                     onClick={() => deleteProductHandler(prod._id)}
                     className="text-secondary me-4"
                   >
-                    <i class="fa-solid fa-trash "></i>
+                    <i className="fa-solid fa-trash "></i>
                   </Link>
                   <Link
                     to={`/admin/products/update/${prod._id}`}
                     className="text-secondary"
                   >
-                    <i class="fa-solid fa-pen-to-square"></i>
+                    <i className="fa-solid fa-pen-to-square"></i>
                   </Link>
                 </td>
               </tr>
