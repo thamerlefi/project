@@ -26,7 +26,6 @@
 
 
 
-
 /* ----------------------------------------------- dashboard */
 .admin-dash {
    
@@ -50,7 +49,8 @@
 }
 
 /* ----------------------------------------------------------------- users list */
-.users-list, .prod-list{
+.users-list, .prod-list
+{
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -65,7 +65,7 @@
 .users-list table,
 .prod-list table,
 .orders-list table{
-    min-width: 450px;
+    min-width: 500px;
 }
 .newProd{
     width: 40px;
@@ -82,7 +82,24 @@
     background-color: transparent;
     color: #222;
 }
-
+.cus-section{
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+    min-height: 70vh;
+}
+.link{
+    border: none;
+    background-color: #222;
+    color: #fff;
+    padding: 4px 6px;
+    border-radius: 7px;
+    font-weight: 400;
+}
+.link:hover{
+    background-color: tomato;
+}
 /* ------------------------------------------------------------------------------------------- */
 @media (min-width: 992px) {
     .offcanvas-backdrop::before{
@@ -97,9 +114,24 @@
         top: 106px !important;
         position: fixed !important;
         z-index: 8 !important;
+        transition: 0.5s;
+    }
+    .to-top{
+        top: 55px !important;
+        transition: 0.5s;
     }
     .dash-main{
         margin-left: 220px;
     }
     
+}
+@media (max-width: 768px) {
+    .admin-dash .part-1 div.part{
+        width: 49%;
+    }
+}
+@media (max-width: 568px) {
+    .admin-dash .part-1 div.part{
+        width: 100%;
+    }
 }

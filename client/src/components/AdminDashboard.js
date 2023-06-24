@@ -12,10 +12,12 @@ export default function AdminDashboard() {
   const [wallet, setWallet] = useState(0);
 
   useEffect(() => {
+    
     getDashInfo();
   }, []);
 
   async function getDashInfo() {
+   
     try {
       const res = await axios.get(baseURL + "api/admin", {
         headers: {
@@ -32,9 +34,9 @@ export default function AdminDashboard() {
   return (
     <div className="mt-3 admin-dash pe-0">
       {/* ----------------------------------- part-1 */}
-      <div className="d-flex gap-2 part-1">
+      <div className="row gap-2 part-1">
         <div
-          className="part"
+          className="part col-12 "
           style={{ background: "linear-gradient(45deg, #ff009d, #e7645b)" }}
         >
           <div className="d-flex gap-2 align-items-center">
@@ -46,7 +48,7 @@ export default function AdminDashboard() {
           </div>
         </div>
         <div
-          className="part"
+          className="part col-12"
           style={{ background: "linear-gradient(45deg, #491ba0, #af5be7)" }}
         >
           <div className="d-flex gap-2 align-items-center">
@@ -58,7 +60,7 @@ export default function AdminDashboard() {
           </div>
         </div>
         <div
-          className="part"
+          className="part col-12"
           style={{ background: "linear-gradient(45deg, #1b76a0, #5ba8e7)" }}
         >
           
@@ -71,7 +73,7 @@ export default function AdminDashboard() {
           </div>
         </div>
         <div
-          className="part"
+          className="part col-12"
           style={{ background: "linear-gradient(45deg, #c9bd19, #d1c95b)" }}
         >
           
@@ -86,10 +88,10 @@ export default function AdminDashboard() {
       </div>
       {/* ----------------------------------- part-2 */}
       <div className="row gap-5 mt-4 ps-2 part-2">
-        <div className="col-7 border part">
+        <div className="col-12 col-md-7 border part">
           <AdminChart />
         </div>
-        <div className="col-4 part p-0">
+        <div className="col-12 col-md-4 part p-0">
         <CategChart />
         </div>
       </div>

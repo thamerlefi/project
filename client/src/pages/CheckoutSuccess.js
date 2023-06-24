@@ -14,6 +14,7 @@ export default function CheckoutSuccess() {
 
   useEffect(()=>{
     const sessionId = localStorage.getItem('sessionId')
+    console.log(sessionId)
     if(sessionId){
       axios.post(`${baseURL}api/orders/create-order`,{
         sessionId,

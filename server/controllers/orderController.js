@@ -1,5 +1,6 @@
 const Order = require('../models/OrderModel');
 const User = require('../models/UserModel');
+const Product = require('../models/ProductModel');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST)
 
@@ -86,6 +87,7 @@ exports.createOrder = async(req,res)=>{
         const sessionId = req.body.sessionId
         const {cart, userId} = req.body
         const session = await stripe.checkout.sessions.retrieve(sessionId);
+        console.log(session.payment_status)
         if (session.payment_status === 'paid'){
         const products = cart.map(prod=>{
             return {
@@ -147,7 +149,7 @@ exports.getOneOrder= async(req,res)=>{
   try {
     const {id} = req.params
     const order = await Order.findById(id)
-    .populate('userId', "firstName lastName image")
+    .populate('userId', "firstName lastName email image")
     .populate("products.productId", "name description price category stock image")
     .exec()
     if(!order) return res.status(404).json({message: "order not found"})
@@ -199,5 +201,44 @@ exports.getUserOneOrder = async(req,res)=>{
     res.json({order})
   } catch (error) {
     res.status(500).json({message: "internal server error", error: error.message})
+  }
+}
+
+// get the number of orders for each category
+exports.getNumOrdersByCateg =  async (req, res) => {
+  try {
+    const result = await Product.aggregate([
+      {
+        $lookup: {
+          from: 'orders',
+          localField: '_id',
+          foreignField: 'products.productId',
+          as: 'orders'
+        }
+      },
+      {
+        $unwind: '$orders'
+      },
+      {
+        $group: {
+          _id: '$category',
+          orderCount: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // If there are no products or orders, return an empty result
+    if (result.length === 0) {
+      return res.json([]);
+    }
+    let resu=[]
+    result.map(cat =>{
+      // resu[cat._id] = cat.orderCount
+      resu.push([cat._id, cat.orderCount])
+    })
+    res.json(resu);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error',er:error });
   }
 }

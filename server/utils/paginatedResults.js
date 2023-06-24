@@ -34,11 +34,12 @@ exports.paginatedResults = (model) => async (req, res, next) => {
     filterObject.category = { $in: categories.split(',') }
   }
 
+  // if (sortBy){ 
   sortBy = sortBy.split(","); //
   sortBy[1] = sortBy[1] === "desc" ? 1 : -1; // convert "sortBy=rating,desc" to => {rating: 1}
   const obj = {}; //
   obj[sortBy[0]] = sortBy[1]; //
-
+// } else obj= {"createdAt":1}
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
 
@@ -63,7 +64,9 @@ exports.paginatedResults = (model) => async (req, res, next) => {
       .sort(obj)
       .limit(limit)
       .skip(startIndex);
-    const pages = (await model.countDocuments(filterObject).exec()) / limit;
+    const total =   await model.countDocuments(filterObject).exec()
+    const pages = total/ limit
+    result.total= total
     result.pages = Math.ceil(pages);
     res.pagination = result;
     next();

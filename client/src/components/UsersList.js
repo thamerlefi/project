@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { baseURL } from "../baseURL";
 import { fulfilled, pending, rejected } from "../redux/slices/authSlice";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function UsersList() {
   const dispatch = useDispatch();
@@ -73,8 +74,10 @@ export default function UsersList() {
       toast(error.response.data.message, { type: "error" });
     }
   };
+  
 
   return (
+    <>
     <div className="users-list mt-4">
       <table className="table table-striped custom-table">
         <thead className="bg-light">
@@ -161,5 +164,18 @@ export default function UsersList() {
         </tbody>
       </table>
     </div>
+    <div className="section mt-2 d-flex align-items-center justify-content-end">
+      <div className="pages">
+      {PagesButtons.map((page) => (
+            <Link
+              className={page === activePage ? "active" : ""}
+              onClick={() => setActivePage(page)}
+            >
+              {page}
+            </Link>
+          ))}
+      </div>
+    </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 const express = require('express')
 const isAuth = require('../middlewares/auth')
 const isAdmin = require('../middlewares/IsAdmin')
-const { createCheckout, createOrder, getAllOrders, updateOrder, getOneOrder, getUserOrders, getUserOneOrder } = require('../controllers/orderController')
+const { createCheckout, createOrder, getAllOrders, updateOrder, getOneOrder, getUserOrders, getUserOneOrder, getNumOrdersByCateg } = require('../controllers/orderController')
 const { paginatedResults } = require('../utils/paginatedResults')
 const OrderModel = require('../models/OrderModel')
 const router = express.Router()
@@ -15,6 +15,8 @@ router.post('/create-order' ,createOrder)
 // get all orders (only admin) => /api/orders/all
 router.get('/all',isAuth, isAdmin, paginatedResults(OrderModel) ,getAllOrders)
 
+router.get('/order-count-by-category',isAuth,isAdmin ,getNumOrdersByCateg)
+
 // get one order by id (only admin) => /api/orders/:id
 router.get('/:id',isAuth, isAdmin, getOneOrder)
 
@@ -26,5 +28,6 @@ router.get('/user/orders',isAuth, getUserOrders)
 
 // get user one order => /api/orders/user/order/:id
 router.get('/user/order/:id',isAuth, getUserOneOrder)
+
 
 module.exports = router

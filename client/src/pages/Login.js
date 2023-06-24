@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getUser, login, reset } from "../redux/slices/authSlice";
-import { LinkContainer } from "react-router-bootstrap";
+import {  login, reset } from "../redux/slices/authSlice";
+import Spinner from "../components/Spinner"
 import "../css/login.css";
 
 export default function Login() {
@@ -65,9 +65,7 @@ export default function Login() {
               className="btn btn-dark mt-2"
             >
               {isLoading ? (
-                <div className="spinner-border spinner-border-sm" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
+                <Spinner size="sm"/>
               ) : (
                 "SIGN IN"
               )}

@@ -11,8 +11,8 @@ export default function NavBar() {
   window.addEventListener("scroll",()=>{
     const headerBottom = document.querySelector('.header-bottom')
     const headerTop = document.querySelector('.header-upper')
-    headerBottom.classList.toggle("hide", window.scrollY > 100)
-    headerTop.classList.toggle("opacity", window.scrollY > 100)
+    headerBottom.classList.toggle("hide", window.scrollY > 60)
+    headerTop.classList.toggle("opacity", window.scrollY > 60)
   })
   const ref = useRef();
   const { user, isLoggedIn } = useSelector((state) => state.auth);
@@ -160,7 +160,7 @@ export default function NavBar() {
                       >
                         <li>
                           {
-                            <Link className="dropdown-item">{`${user.firstName} ${user.lastName}`}</Link>
+                            <Link className="dropdown-item">{`${user?.firstName} ${user?.lastName}`}</Link>
                           }
                         </li>
                         <li>

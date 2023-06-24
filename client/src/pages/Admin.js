@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link, Outlet } from "react-router-dom";
 import "../css/adminDash.css";
 
 export default function Admin() {
   const [active, setActive] = useState("dash");
+  useEffect(()=>{
+    const scrollListener= (()=>{
+      const adminSide = document.querySelector('.side-bar-nav')
+    adminSide.classList.toggle("to-top", window.scrollY > 60)
+    })
+    window.addEventListener("scroll",scrollListener)
+    return ()=>{
+      window.removeEventListener('scroll', scrollListener)
+    }
+  },[])
   return (
     <div className="">
       <div className=" d-flex flex-column ">

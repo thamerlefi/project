@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, ListGroup, Modal } from "react-bootstrap";
+import { Button, ListGroup, Modal, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fulfilled,
@@ -35,7 +35,9 @@ export default function AdminProducts() {
   const [order, setOrder] = useState("asc");
 
   useEffect(() => {
-    dispatch(getAllProducts({ limit: 5, page: 1, sortBy, order,categories:[] }));
+    dispatch(
+      getAllProducts({ limit: 5, page: 1, sortBy, order, categories: [] })
+    );
   }, [sortBy, order]);
 
   // generate buttons pages
@@ -107,136 +109,132 @@ export default function AdminProducts() {
           <i className="fa-solid fa-plus"></i>
         </button>
       </div>
-      <div className="mt-2 prod-list">
+      <div className="">
         {/* ------------------------- products list */}
-
-        <table className="table table-striped custom-table">
-          <thead className="bg-light">
-            <tr>
-              <th scope="col-3">
-                <span
-                  className="cur-point"
-                  onClick={() => {
-                    setSortBy("name");
-                    order === "asc" ? setOrder("desc") : setOrder("asc");
-                  }}
-                >
-                  Product
-                  <i
-                    className={
-                      "fa-solid fa-arrow-up ms-1 " + isSort("name", "asc")
-                    }
-                  ></i>
-                  <i
-                    className={
-                      "fa-solid fa-arrow-down " + isSort("name", "desc")
-                    }
-                  ></i>
-                </span>
-              </th>
-              <th scope="col-3">
-                <span
-                  className="cur-point"
-                  onClick={() => {
-                    setSortBy("price");
-                    order === "asc" ? setOrder("desc") : setOrder("asc");
-                  }}
-                >
-                  Price
-                  <i
-                    className={
-                      "fa-solid  fa-arrow-up ms-1 " + isSort("price", "asc")
-                    }
-                  ></i>
-                  <i
-                    className={
-                      "fa-solid fa-arrow-down " + isSort("price", "desc")
-                    }
-                  ></i>
-                </span>
-              </th>
-              <th scope="col-3">
-                <span
-                  className="cur-point"
-                  onClick={() => {
-                    setSortBy("stock");
-                    order === "asc" ? setOrder("desc") : setOrder("asc");
-                  }}
-                >
-                  In Stock
-                  <i
-                    className={
-                      "fa-solid  fa-arrow-up ms-1 " + isSort("stock", "asc")
-                    }
-                  ></i>
-                  <i
-                    className={
-                      "fa-solid fa-arrow-down " + isSort("stock", "desc")
-                    }
-                  ></i>
-                </span>
-              </th>
-              <th scope="col-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.products.list.map((prod) => (
-              <tr key={prod._id}>
-                <td>
-                  <div className="d-flex align-items-center ">
-                    <img
-                      src={prod.image.secure_url}
-                      alt=""
-                      style={{ width: "45px", height: "45px" }}
-                      className="rounded-circle"
-                    />
-                    <div className="ms-3">
-                      <p className="fw-bold mb-1">
-                        {`${prod.name.slice(0, 20)}${
-                          prod.name.length > 20 ? "..." : ""
-                        }`}
-                      </p>
-                      <p className="text-muted mb-0">{prod.category}</p>
-                    </div>
-                  </div>
-                </td>
-                <td>{prod.price} $</td>
-                <td>{prod.stock} </td>
-                <td>
-                  <Link
-                    onClick={() => deleteProductHandler(prod._id)}
-                    className="text-secondary me-4"
+        <div className="prod-list mt-2">
+          <table className="table table-striped custom-table  ">
+            <thead className="bg-light">
+              <tr>
+                <th scope="col-3">
+                  <span
+                    className="cur-point"
+                    onClick={() => {
+                      setSortBy("name");
+                      order === "asc" ? setOrder("desc") : setOrder("asc");
+                    }}
                   >
-                    <i className="fa-solid fa-trash "></i>
-                  </Link>
-                  <Link
-                    to={`/admin/products/update/${prod._id}`}
-                    className="text-secondary"
+                    Product
+                    <i
+                      className={
+                        "fa-solid fa-arrow-up ms-1 " + isSort("name", "asc")
+                      }
+                    ></i>
+                    <i
+                      className={
+                        "fa-solid fa-arrow-down " + isSort("name", "desc")
+                      }
+                    ></i>
+                  </span>
+                </th>
+                <th scope="col-3">
+                  <span
+                    className="cur-point"
+                    onClick={() => {
+                      setSortBy("price");
+                      order === "asc" ? setOrder("desc") : setOrder("asc");
+                    }}
                   >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </Link>
-                </td>
+                    Price
+                    <i
+                      className={
+                        "fa-solid  fa-arrow-up ms-1 " + isSort("price", "asc")
+                      }
+                    ></i>
+                    <i
+                      className={
+                        "fa-solid fa-arrow-down " + isSort("price", "desc")
+                      }
+                    ></i>
+                  </span>
+                </th>
+                <th scope="col-3">
+                  <span
+                    className="cur-point"
+                    onClick={() => {
+                      setSortBy("stock");
+                      order === "asc" ? setOrder("desc") : setOrder("asc");
+                    }}
+                  >
+                    In Stock
+                    <i
+                      className={
+                        "fa-solid  fa-arrow-up ms-1 " + isSort("stock", "asc")
+                      }
+                    ></i>
+                    <i
+                      className={
+                        "fa-solid fa-arrow-down " + isSort("stock", "desc")
+                      }
+                    ></i>
+                  </span>
+                </th>
+                <th scope="col-3">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div>
+            </thead>
+            <tbody>
+              {products.products.list.map((prod) => (
+                <tr key={prod._id}>
+                  <td>
+                    <div className="d-flex align-items-center ">
+                      <img
+                        src={prod.image.secure_url}
+                        alt=""
+                        style={{ width: "45px", height: "45px" }}
+                        className="rounded-circle"
+                      />
+                      <div className="ms-3">
+                        <p className="fw-bold mb-1">
+                          {`${prod.name.slice(0, 20)}${
+                            prod.name.length > 20 ? "..." : ""
+                          }`}
+                        </p>
+                        <p className="text-muted mb-0">{prod.category}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{prod.price} $</td>
+                  <td>{prod.stock} </td>
+                  <td>
+                    <Link
+                      onClick={() => deleteProductHandler(prod._id)}
+                      className="text-secondary me-4"
+                    >
+                      <i className="fa-solid fa-trash "></i>
+                    </Link>
+                    <Link
+                      to={`/admin/products/update/${prod._id}`}
+                      className="text-secondary"
+                    >
+                      <i className="fa-solid fa-pen-to-square"></i>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="section mt-2 d-flex align-items-center justify-content-end pages">
           {PagesButtons.map((page) => (
-            <button
+            <Link
               key={page}
-              className={`btn px-2 py-0 text-primary me-1 
-                  ${
-                    page === products.products.activePage
-                      ? "border border-success"
-                      : ""
-                  } `}
+              className={`
+                  ${page === products.products.activePage ? "active" : ""} `}
               onClick={() =>
                 dispatch(getAllProducts({ limit: 5, page, sortBy, order }))
               }
             >
               {page}
-            </button>
+            </Link>
           ))}
         </div>
 
@@ -300,9 +298,9 @@ export default function AdminProducts() {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={addProductHandler}>
-              {products.isLoading ? "pending..." : "add"}
-            </Button>
+            <button className="button" onClick={addProductHandler}>
+              {products.isLoading ? <Spinner size="sm" /> : "add"}
+            </button>
           </Modal.Footer>
         </Modal>
       </div>

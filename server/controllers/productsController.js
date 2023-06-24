@@ -10,7 +10,18 @@ exports.getProducts = async(req,res,next)=>{
     try {
         res.pagination.activePage = +req.query.page
         const categories = await Product.distinct('category');
-        res.status(200).json({pagination:res.pagination,categories})
+        const result = await Product.aggregate([
+            {
+              $group: {
+                _id: null,
+                minPrice: { $min: '$price' },
+                maxPrice: { $max: '$price' }
+              }
+            }
+          ]);
+        //   if (result.length === 0) return res.json({ minPrice: 0, maxPrice: 0 });
+          const { minPrice, maxPrice } = result[0];
+        res.status(200).json({pagination:res.pagination,categories, minPrice, maxPrice})
     } catch (error) {
         console.log(error.message)
         res.status(400).json({message: error.message})

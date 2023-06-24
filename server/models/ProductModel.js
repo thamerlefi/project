@@ -88,6 +88,10 @@ const ProductSchema = new mongoose.Schema({
             }
         }
     ],
+    selling:{
+        type: Number,
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now

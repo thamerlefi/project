@@ -7,14 +7,17 @@ import Product from "../components/Product";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../baseURL";
-import RangeSlider from 'react-range-slider-input';
-import 'react-range-slider-input/dist/style.css';
+import RangeSlider from "react-range-slider-input";
+import "react-range-slider-input/dist/style.css";
 
 export default function OurStore() {
   const [starsKey, setStarsKey] = useState(Math.random());
   const [randomProds, setRandomProds] = useState([]);
   const categ = ["Laptop", "Phone", "Camera", "Accessories"];
   const [categories, setCategories] = useState([]);
+  const { products, miniPrice, maxiPrice } = useSelector(
+    (state) => state.products
+  );
   const [maxPrice, setMaxPrice] = useState(null);
   const [minPrice, setMinPrice] = useState(null);
   const [minRating, setMinRating] = useState(null);
@@ -44,24 +47,27 @@ export default function OurStore() {
         maxPrice,
         minRating,
         sortBy: "createdAt",
-        order: "asc"
+        order: "asc",
       })
     );
+    
     axios
       .get(baseURL + "api/products/random/?size=3")
       .then((res) => setRandomProds(res.data.randomProducts))
       .catch((err) => console.log(err));
   }, [prodSearch, categories, minPrice, maxPrice, minRating]);
-  const { products } = useSelector((state) => state.products);
   const ratingChanged = (newRating) => {
     setMinRating(newRating);
   };
-
-   // generate buttons pages
-   let PagesButtons = [];
-   for (let i = 1; i <= products.pages; i++) {
-     PagesButtons.push(i);
-   }
+  useEffect(()=>{
+    setMaxPrice(maxiPrice);
+    setMinPrice(miniPrice);
+  },[maxiPrice])
+  // generate buttons pages
+  let PagesButtons = [];
+  for (let i = 1; i <= products.pages; i++) {
+    PagesButtons.push(i);
+  }
 
   return (
     <div className="mt-4 container-xxl">
@@ -112,14 +118,7 @@ export default function OurStore() {
                   />
                   <label htmlFor="floatingInput">From</label>
                 </div>
-                <RangeSlider
-                min={0}
-                max={2000}
-                onInput={(tr)=>{
-                  setMinPrice(tr[0])
-                  setMaxPrice(tr[1])
-                }}
-              />
+
                 <div className="form-floating mb-3 col-4 col-md-5">
                   <input
                     type="number"
@@ -131,11 +130,24 @@ export default function OurStore() {
                   />
                   <label htmlFor="floatingInput">To</label>
                 </div>
+                <div style={{width:"100%"}}>
+
+                <RangeSlider
+                  min={miniPrice}
+                  max={maxiPrice}
+                  value={[minPrice, maxPrice]}
+                  defaultValue={[minPrice, maxPrice]}
+                  onInput={(tr) => {
+                    setMinPrice(tr[0]);
+                    setMaxPrice(tr[1]);
+                  }}
+                />
+                </div>
               </div>
             </div>
             {/* ---------------------- rating */}
-            <div className=" align-items-center">
-              <h4 className="sub-title mt-2">Rating</h4>
+            <div className=" align-items-center ">
+              <h4 className="sub-title mt-4">Rating</h4>
               <ReactStars
                 key={starsKey}
                 count={5}
@@ -211,7 +223,9 @@ export default function OurStore() {
                     ></i>
                   </div>
                 ))}
-                {minPrice >= 0 && maxPrice ? (
+                {minPrice === miniPrice && maxPrice === maxiPrice ? (
+                  ""
+                ) : (
                   <div>
                     <span className="filter-small">
                       {minPrice}
@@ -219,15 +233,13 @@ export default function OurStore() {
                       {maxPrice}$
                       <i
                         onClick={() => {
-                          setMinPrice("");
-                          setMaxPrice("");
+                          setMinPrice(miniPrice);
+                          setMaxPrice(maxiPrice);
                         }}
                         className="fa-solid fa-xmark"
                       ></i>
                     </span>
                   </div>
-                ) : (
-                  ""
                 )}
                 {minRating && (
                   <div className="filter-small">
@@ -262,26 +274,28 @@ export default function OurStore() {
             ))}
           </div>
           <div className="filter-sort-grid mt-2 d-flex align-items-center justify-content-center justify-content-sm-between ">
-            <p className="d-none d-sm-block p-opacity">Showing 8 of 19</p>
+            <p className="d-none d-sm-block p-opacity">Showing 8 of {products?.total}</p>
             <div className="pages">
               {/* <Link className="me-2 ">{"<"}</Link> */}
               {PagesButtons.map((page) => (
-            <Link
-              key={page}
-              className={`me-1 
-                  ${
-                    page === products.activePage
-                      ? "active"
-                      : ""
-                  } `}
-              onClick={() => 
-                 dispatch(getAllProducts({ limit: 8, page, sortBy:"createdAt", order:"asc" }))
-              }
-            >
-              {page}
-            </Link>
-          ))}
-              
+                <Link
+                  key={page}
+                  className={`me-1 
+                  ${page === products.activePage ? "active" : ""} `}
+                  onClick={() =>
+                    dispatch(
+                      getAllProducts({
+                        limit: 8,
+                        page,
+                        sortBy: "createdAt",
+                        order: "asc",
+                      })
+                    )
+                  }
+                >
+                  {page}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

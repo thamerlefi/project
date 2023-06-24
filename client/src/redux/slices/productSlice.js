@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseURL } from "../../baseURL";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 const initialState = {
   products: {
@@ -17,6 +16,8 @@ const initialState = {
   message: "",
   prodSearch: "",
   product: {},
+  miniPrice: 0,
+  maxiPrie:0
 };
 
 // ------- get all products
@@ -134,6 +135,8 @@ const productSlice = createSlice({
           isError: false,
           products: action.payload.pagination,
           categories: action.payload.categories,
+          miniPrice: action.payload.minPrice,
+          maxiPrice: action.payload.maxPrice,
         };
       })
       .addCase(getAllProducts.rejected, (state, action) => {

@@ -36,38 +36,7 @@ export default function AdminOrdersList() {
     PagesButtons.push(i);
   }
 
-  //------------------------- update Status function
-  const updateStatusHandler = (status, id) => {
-    let action =
-      status === "Pending"
-        ? "Processing"
-        : status === "Processing"
-        ? "Shipped"
-        : status === "Shipped"
-        ? "Delivered"
-        : null;
-    axios
-      .put(
-        `${baseURL}api/orders/update/${id}`,
-        { action },
-        {
-          headers: {
-            "x-auth": localStorage.getItem("token"),
-          },
-        }
-      )
-      .then((res) =>
-        setOrders((prev) => {
-          return prev.map((order) => {
-            if (order._id === id) {
-              order = res.data.updatedOrder;
-            }
-            return order;
-          });
-        })
-      )
-      .catch((er) => console.log(er));
-  };
+  
 
   const tranformDate = (date) => {
     let endDt = "",
@@ -153,7 +122,7 @@ export default function AdminOrdersList() {
                     type="button"
                     className="btn btn-link btn-sm btn-rounded"
                   >
-                    Edit
+                    <i className="fa-solid fs-6 fa-pen-to-square"></i> 
                   </Link>
                 </td>
               </tr>

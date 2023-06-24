@@ -52,6 +52,9 @@ export default function BannerProd() {
                 </div>
               )
           )}
+          {/* <div>
+            <img src="img/lapcat.jpg" alt="" style={{width:"100%"}}/>
+          </div> */}
         </Slider>
       </div>
       {/* <div className="part  col-12 col-md-6 d-flex flex-column justify-content-between gap-4 gap-md-0">
