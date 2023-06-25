@@ -1,3 +1,11 @@
+
+.rem-wish{
+    top: 8px;
+    right: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #70706c;
+}
 .product-card{
     padding: 15px;
     width: "217px" !important;

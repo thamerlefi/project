@@ -23,7 +23,7 @@ export default function LatestProd() {
         {
             products.map(prod =>(
                 
-                    <Product col={"custom-col"} product={prod}/>
+                    <Product key={prod._id} col={"custom-col"} product={prod}/>
                 
             ))
         }

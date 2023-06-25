@@ -40,7 +40,7 @@ export default function AdminDashboard() {
           style={{ background: "linear-gradient(45deg, #ff009d, #e7645b)" }}
         >
           <div className="d-flex gap-2 align-items-center">
-            <i class="fa-solid text-white fa-users me-2 fs-2"></i>
+            <i className="fa-solid text-white fa-users me-2 fs-2"></i>
             <div>
               <h5 className="text-white">{users}</h5>
               <h4 className="text-white">Customers</h4>
@@ -52,7 +52,7 @@ export default function AdminDashboard() {
           style={{ background: "linear-gradient(45deg, #491ba0, #af5be7)" }}
         >
           <div className="d-flex gap-2 align-items-center">
-            <i class="fa-solid text-white fa-sitemap me-2 fs-2"></i>
+            <i className="fa-solid text-white fa-sitemap me-2 fs-2"></i>
             <div>
               <h5 className="text-white">{products}</h5>
               <h4 className="text-white">Products</h4>
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
         >
           
           <div className="d-flex gap-2 align-items-center">
-          <i class="fa-solid text-white fa-pen me-2 fs-2"></i>
+          <i className="fa-solid text-white fa-pen me-2 fs-2"></i>
             <div>
               <h5 className="text-white">{orders}</h5>
               <h4 className="text-white">Orders</h4>
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
         >
           
           <div className="d-flex gap-2 align-items-center">
-          <i class="fa-solid fa-wallet text-white fs-2"></i>
+          <i className="fa-solid fa-wallet text-white fs-2"></i>
             <div>
               <h5 className="text-white">{wallet} $</h5>
               <h5 className="text-white">Wallet balance</h5>

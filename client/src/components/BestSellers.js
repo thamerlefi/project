@@ -56,7 +56,7 @@ export default function BestSellers() {
       <Slider {...settings} >
         {
             products.list.map(prod =>(
-               <div className='px-2'>
+               <div key={prod._id} className='px-2'>
                    <Product col={"aa"} product={prod}/>
                </div>
                 

@@ -85,7 +85,7 @@ export default function OurStore() {
                       className="form-check-input"
                       type="checkbox"
                       value={elmnt}
-                      checked={categories.find((cat) => cat === elmnt)}
+                      checked={categories.includes(elmnt)}
                       onChange={handleCheckboxChange}
                       id={"flexCheckDefault" + elmnt}
                     />
@@ -113,7 +113,7 @@ export default function OurStore() {
                     className="form-control"
                     id="floatingInput"
                     placeholder="name@example.com"
-                    value={minPrice}
+                    value={minPrice ||0}
                     onChange={(e) => setMinPrice(e.target.value)}
                   />
                   <label htmlFor="floatingInput">From</label>
@@ -125,7 +125,7 @@ export default function OurStore() {
                     className="form-control"
                     id="floatingInput"
                     placeholder="name@example.com"
-                    value={maxPrice}
+                    value={maxPrice ||0}
                     onChange={(e) => setMaxPrice(e.target.value)}
                   />
                   <label htmlFor="floatingInput">To</label>
@@ -133,9 +133,9 @@ export default function OurStore() {
                 <div style={{width:"100%"}}>
 
                 <RangeSlider
-                  min={miniPrice}
-                  max={maxiPrice}
-                  value={[minPrice, maxPrice]}
+                  min={miniPrice ||0}
+                  max={maxiPrice ||0}
+                  value={[minPrice ||0, maxPrice ||0]}
                   defaultValue={[minPrice, maxPrice]}
                   onInput={(tr) => {
                     setMinPrice(tr[0]);
@@ -163,9 +163,9 @@ export default function OurStore() {
           <div className="random-products filter-prod mt-2 d-none d-md-block">
             <h3>Random Products</h3>
             {randomProds.map((product) => (
-              <>
+              <div key={product._id}>
                 {
-                  <div className="d-flex pt-1 border-bottom " key={product._id}>
+                  <div className="d-flex pt-1 border-bottom " >
                     <div className="w-25">
                       <img
                         src={product.image.secure_url}
@@ -187,7 +187,7 @@ export default function OurStore() {
                     </div>
                   </div>
                 }
-              </>
+              </div>
             ))}
           </div>
         </div>

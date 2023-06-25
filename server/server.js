@@ -17,7 +17,7 @@ const orderRouter = require('./routes/orders')
 const app = express()
 
 // middlewares
-app.use(express.json())
+app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
 require('dotenv').config()

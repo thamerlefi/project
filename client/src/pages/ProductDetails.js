@@ -17,9 +17,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Product from "../components/Product";
+import { addToWish } from "../redux/slices/wishSlice";
 
 
 export default function ProductDetails() {
+
   const [starsKey, setStarsKey] = useState(Math.random());
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
@@ -33,6 +35,9 @@ export default function ProductDetails() {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [randomProds, setRandomProds] = useState([])
+
+  const { wishList } = useSelector((state) => state.wishList);
+  const wishProd = wishList.find((prod) => prod._id === product._id);
 
   const commentHandler = async (e) => {
     const data = {
@@ -67,6 +72,7 @@ export default function ProductDetails() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+  
   useEffect(() => {
     dispatch(getOneProduct(id));
     axios.get(baseURL + "api/products/random/?size=10")
@@ -163,7 +169,7 @@ export default function ProductDetails() {
                 { cartProd ? <div className=" px-3 button d-flex align-items-center justify-content-between">
                 <Link className="fs-4 text-white" onClick={()=>dispatch(decCount(product))}>
                   {
-                    cartProd.count > 1 ? "-" : <i class="fa-solid fs-5 fa-xmark"></i>
+                    cartProd.count > 1 ? "-" : <i className="fa-solid fs-5 fa-xmark"></i>
                   }
                 </Link>
                 <span >{cartProd.count}</span>
@@ -182,9 +188,11 @@ export default function ProductDetails() {
                 </p>
               </div>
               <div className="">
-                <Link className="mt-3 d-flex gap-2 align-items-center">
+                <Link className="mt-3 d-flex gap-2 align-items-center"
+                  onClick={()=>dispatch(addToWish(product))}
+                >
                   <i className="fa-regular  fa-heart fs-6"></i>
-                  <p>add to wishlist</p>
+                  <p>{!wishProd ? "add to": "remove from "} wishlist</p>
                 </Link>
               </div>
             </div>
@@ -275,7 +283,7 @@ export default function ProductDetails() {
         {
             randomProds.map(prod =>(
               // prod._id !== product._id &&
-                <div className='px-2'>
+                <div key={prod._id} className='px-2'>
                   <Product col={"aa"} product={prod}/>
                 </div>
                 

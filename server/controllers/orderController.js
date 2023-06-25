@@ -169,8 +169,8 @@ exports.updateOrder = async(req, res) =>{
     order.status = action
     await order.save()
     const updatedOrder = await Order.findById(id)
-    .populate('userId', "firstName lastName image")
-    .populate("products.productId", "name description image")
+    .populate('userId', "firstName lastName email image")
+    .populate("products.productId", "name description price category stock image")
     .exec()
     res.json({updatedOrder})
   } catch (error) {

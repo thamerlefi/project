@@ -233,6 +233,26 @@ p{
     z-index: 10000 !important;
 }
 
+.too-top{
+    display: none;
+    cursor: pointer;
+    position: sticky;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    border-radius: 50%;
+    color: #fff;
+    background-color: #febd69;
+    margin-left: auto;
+    right: 20px;
+    bottom: 20px;
+    z-index: 100000000000000000000000000000000;
+}
+.too-top:hover{
+    background-color: black;
+}
+
 /* ------------------------------------------ */
 /* .dashboard-info{
     justify-content: center;

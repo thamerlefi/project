@@ -155,7 +155,7 @@ export default function UsersList() {
                 <a href="/#" className="text-secondary">
                   <i
                     onClick={() => deleteUserHandler(user)}
-                    class="fa-solid fa-trash "
+                    className="fa-solid fa-trash "
                   ></i>
                 </a>
               </td>
@@ -168,6 +168,7 @@ export default function UsersList() {
       <div className="pages">
       {PagesButtons.map((page) => (
             <Link
+            key={page}
               className={page === activePage ? "active" : ""}
               onClick={() => setActivePage(page)}
             >

@@ -9,11 +9,14 @@ import {
 } from "../redux/slices/cartSlice";
 import "../css/productCard.css";
 import ReactStars from "react-rating-stars-component";
+import { addToWish, deleteFromWish } from "../redux/slices/wishSlice";
 
-export default function Product({ product, col }) {
+export default function Product({ product, col, inWish }) {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.shopCart);
+  const { wishList } = useSelector((state) => state.wishList);
   const cartProd = cart.find((prod) => prod._id === product._id);
+  const wishProd = wishList.find((prod) => prod._id === product._id);
 
   return (
     <div
@@ -62,14 +65,22 @@ export default function Product({ product, col }) {
           )}
         </div>
       </div>
-      <div className="action-bar position-absolute ">
+      { inWish ?
+        <i className="fa-solid position-absolute rem-wish fa-xmark"  
+          onClick={()=>dispatch(deleteFromWish(product))}
+        ></i>:
+        <div className="action-bar position-absolute ">
         <div className="d-flex flex-column gap-2 align-items-center">
-          <i className="fa-regular  fa-heart fs-6"></i>
+          <i className={`fa-regular fa-heart fs-6 ${wishProd ? "text-danger" : ""}`}
+            onClick={()=>dispatch(addToWish(product))}
+          ></i>
           <Link to={"/" + product._id}>
-            <i class="fa-solid fa-eye fs-6"></i>
+            <i className="fa-solid fa-eye fs-6"></i>
           </Link>
         </div>
       </div>
+      }
     </div>
   );
 }
+

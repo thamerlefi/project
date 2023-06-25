@@ -148,6 +148,7 @@ export default function AdminOrdersList() {
         <div className="pages">
           {PagesButtons.map((page) => (
             <Link
+              key={page}
               className={page === activePage ? "active" : ""}
               onClick={() => setActivePage(page)}
             >

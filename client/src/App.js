@@ -34,17 +34,22 @@ import OrderHistory from "./pages/OrderHistory";
 import UserOneOrder from "./pages/UserOneOrder";
 import OurStore from "./pages/OurStore";
 import Footer from "./components/Footer";
+import WishList from "./pages/WishList";
 // import { getAllProducts } from './redux/slices/productSlice';
 
 function App() {
   // const {isLoggedIn} = useSelector(state => state.auth)
+  window.addEventListener("scroll", () => {
+    const toTop = document.querySelector(".too-top");
+    toTop.classList.toggle("d-block", window.scrollY > 60);
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUser());
     dispatch(getTotal());
   }, []);
   return (
-    <div className="App">
+    <div className="App position-relative">
       <ToastContainer position="bottom-center" autoClose={2000} />
       <NavBar />
       <div className="body">
@@ -55,6 +60,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPass />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/wish-list" element={<WishList />} />
           {/* <Route path="/cart" element={<Cart />} /> */}
           <Route path="/payment-success" element={<CheckoutSuccess />} />
           <Route path="/location" element={<GoogleMapLocation />} />
@@ -71,9 +77,16 @@ function App() {
             <Route path="orders/:orderId" element={<AdminOrder />} />
             <Route path="dashboard" element={<AdminDashboard />} />
           </Route>
-
           <Route path="*" element={<NotFound />} />
         </Routes>
+      </div>
+      <div
+        className="too-top "
+        onClick={() => {
+          window.scrollTo(0, 0);
+        }}
+      >
+        <i className="fa-solid me-1 fa-arrow-up ms-1"></i>
       </div>
       <Footer />
     </div>

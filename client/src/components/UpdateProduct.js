@@ -102,6 +102,7 @@ export default function UpdateProduct() {
         </div>
         <input
           type="file"
+          value={""}
           onChange={uploadImgHandler}
           accept="image/"
           className="form-control mt-1"

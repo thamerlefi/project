@@ -17,7 +17,6 @@ export default function AdminOrder() {
       .then((res) => setOrder(res.data.order))
       .catch((er) => console.log(er));
   }, []);
-  console.log(order);
   return (
     <div className=" cus-section">
       <div className="border-bottom d-flex align-items-center gap-3 flex-wrap py-1">

@@ -47,7 +47,7 @@ export default function OrderDetails({order, isAdmin, setOrder }) {
               }`}
             >
               {order.status}
-              {order.status === "Delivered" && <i class="fa-solid ms-1 fa-check"></i>}
+              {order.status === "Delivered" && <i className="fa-solid ms-1 fa-check"></i>}
             </span>
           </div>
           {isAdmin && (
@@ -65,7 +65,7 @@ export default function OrderDetails({order, isAdmin, setOrder }) {
                   ? "Delivered"
                   : "ended"}
                 {
-                 <i class="fa-solid ms-1 fa-arrow-right"></i>}
+                 <i className="fa-solid ms-1 fa-arrow-right"></i>}
               </button>}
             </div>
           )}

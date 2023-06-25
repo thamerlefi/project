@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function OrderHistory() {
   const [userOrders, setUserOrders] = useState([]);
-  console.log(userOrders)
+  
   useEffect(() => {
     axios
       .get(`${baseURL}api/orders/user/orders`, {
@@ -129,7 +129,7 @@ export default function OrderHistory() {
                     type="button"
                     className="btn btn-link btn-sm btn-rounded"
                   >
-                    <i class="fa-solid fa-eye fs-6"></i>
+                    <i className="fa-solid fa-eye fs-6"></i>
                   </Link>
                 </td>
               </tr>

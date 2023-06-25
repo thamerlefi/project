@@ -59,11 +59,11 @@ export default function Profile() {
             </div>
             <div className="d-none d-md-block mt-4">
               <h5>
-                <i class="fa-solid fa-user"></i>{" "}
+                <i className="fa-solid fa-user"></i>{" "}
                 {auth.user?.firstName + " " + auth.user?.lastName}
               </h5>
               <h6>
-                <i class="fa-solid fa-envelope"></i> {auth.user?.email}
+                <i className="fa-solid fa-envelope"></i> {auth.user?.email}
               </h6>
             </div>
           </div>

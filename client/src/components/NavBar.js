@@ -96,7 +96,7 @@ export default function NavBar() {
               <div className="header-upper-links d-flex align-items-center justify-content-center gap-5">
                 {/* ------------------------- whish icon ------ */}
                 <div>
-                  <Link>
+                  <Link to="/wish-list">
                     <i className="fa-regular  fa-heart text-white fs-4"></i>
                   </Link>
                 </div>

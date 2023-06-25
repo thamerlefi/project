@@ -64,7 +64,7 @@ export default function PopularProd() {
       <Slider {...settings} >
         {
             products.map(prod =>(
-               <div className='px-2'>
+               <div key={prod._id} className='px-2'>
                    <Product col={"aa"} product={prod}/>
                </div>
                 
