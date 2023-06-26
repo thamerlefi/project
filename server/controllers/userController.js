@@ -42,13 +42,13 @@ exports.resetPassword = async(req,res,next) => {
     try {
         const {id,token} = req.params
         const oldUser = await User.findById(id)
-        if(!oldUser) return next(newError(404, 'user not found'))
+        if(!oldUser) res.render("fullScreenError",{redirect:false,errMsg:"user not found !!!"} )
         const secret = process.env.JWT_SECRET_KEY + oldUser.password
         const resetToken =  jwt.verify(token, secret)
-        if (!resetToken) return next(newError(400, 'invalid or expired token'))
-        res.render("resetPassword", {email: oldUser.email})
+        if (!resetToken) res.render("fullScreenError",{redirect:false,errMsg:"invalid or expired token"} )
+        res.render("resetPassword", {errMsg:"",email: oldUser.email})
     } catch (error) {
-        return next(newError(500, "something wrong"))
+        res.render("fullScreenError",{redirect:false,errMsg:"invalid or expired token"} )
     }
 }
 
@@ -57,18 +57,19 @@ exports.resetPasswordPost = async(req,res,next) => {
     try {
         const {id,token} = req.params
         const oldUser = await User.findById(id)
-        if(!oldUser) return next(newError(404, 'user not found'))
+        if(!oldUser) return res.render("fullScreenError",{redirect:false,errMsg:"user not found"} )
         const secret = process.env.JWT_SECRET_KEY + oldUser.password
         const resetToken =  jwt.verify(token, secret)
-        if (!resetToken) return next(newError(400, 'invalid or expired token'))
+        if (!resetToken) return res.render("fullScreenError",{redirect:false,errMsg:"invalid or expired token"} )
         if(req.body.password.trim() === "" || req.body.password !== req.body.confirm){
-            return next(newError(400, 'passwords not matches'))
+           return res.render("resetPassword",{errMsg:"passwords not matches",email: oldUser.email} )
+           
         } 
         req.body.password = await bcrypt.hash(req.body.password,10)
         await User.findByIdAndUpdate(id, {password: req.body.password})
-        res.send('<h1>your password is updated successfuly</h1>')
+        res.render("fullScreenError",{redirect:true ,errMsg:"your password is updated successfuly"} )
     } catch (error) {
-        return next(newError(500, "something wrong"))
+        return next(newError(500, error.msg))
     }
 }
 
@@ -86,7 +87,7 @@ exports.userRegister = async(req,res,next)=>{
         }
         const user = await User.create(req.body)
         const token =  jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY,{
-            expiresIn: "1h"
+            expiresIn: "1day"
         })
         res.status(201).json({token, user: {
             id: user._id,

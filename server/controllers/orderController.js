@@ -72,7 +72,7 @@ exports.createCheckout = async(req,res) => {
         line_items,
         mode: 'payment',
         success_url: `${process.env.CLIENT_URL}/payment-success`,
-        cancel_url: `${process.env.CLIENT_URL}/cart`,
+        cancel_url: `${process.env.CLIENT_URL}/`,
       });
         
     
@@ -80,7 +80,7 @@ exports.createCheckout = async(req,res) => {
       res.json({sessionId: session.id });
 }
 
-// create order in dtabase
+// create order in database
 exports.createOrder = async(req,res)=>{
     try {
         
@@ -116,6 +116,18 @@ exports.createOrder = async(req,res)=>{
           if(!user) return res.status(404).json({message: "user noot found"})
           user.orders.push({orderId: newOrder._id})
           await user.save()
+          const productsInCart = cart.map(prod=>prod._id)
+          const updatedProds = await Product.find({_id: {$in: productsInCart}})
+          
+          updatedProds.map(async(prod) => {
+            prod.selling ++
+            cartProd = cart.find(cartProd => cartProd._id === prod._id.toString())
+            
+            prod.stock = prod.stock -cartProd.count
+            if (prod.stock < 0) prod.stock = 0 
+            await prod.save()
+          })
+          // console.log(updatedProds)
           res.json({message: "order added"})
         }else {
             res.send('Payment failed.');

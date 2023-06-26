@@ -48,19 +48,6 @@ export default function AdminOrdersList() {
     endDt = hr + "-" + dt;
     return endDt;
   };
-  // ---------------------------------------- J--S--X-------
-  //               <button
-  //                 disabled={order.status === "Delivered" ? true : false}
-  //                 onClick={() => updateStatusHandler(order.status, order._id)}
-  //               >
-  //                 {order.status === "Pending"
-  //                   ? "Processing ?"
-  //                   : order.status === "Processing"
-  //                   ? "Shipped ?"
-  //                   : order.status === "Shipped"
-  //                   ? "Delivered ?"
-  //                   : "ended"}
-  //               </button>
 
   return (
     <>
@@ -134,6 +121,7 @@ export default function AdminOrdersList() {
         <div>
           <select
             onChange={(e) => {
+              setActivePage(1)
               setFilter(e.target.value);
             }}
             className="form-select py-0 "

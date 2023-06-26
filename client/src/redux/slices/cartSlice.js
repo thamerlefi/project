@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const cartSlice = createSlice({
     name: "shopCart",
@@ -12,13 +13,22 @@ const cartSlice = createSlice({
             if(targetProd){
                  state.cart.map(prod=>{
                      if(prod._id === targetProd._id) {
-                        prod.count += 1 
-                        prod.subTotal = prod.price * prod.count
+                        if (targetProd.stock===0) {
+                            toast(`Sorry, this product is out of stock !!` ,{type: "error"})
+                        }
+                     else {
+                         prod.count += 1 
+                         prod.subTotal = prod.price * prod.count
+                     }
                     }    
                 })
             } else {
-                const newProd = {...action.payload,count: 1, subTotal: action.payload.price}
-                state.cart.push(newProd)
+                if (action.payload.stock===0) {
+                    toast(`Sorry, this product is out of stock !!` ,{type: "error"})
+                } else {
+                    const newProd = {...action.payload,count: 1, subTotal: action.payload.price}
+                    state.cart.push(newProd)
+                }
             }
             state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )
             localStorage.setItem("cart", JSON.stringify(state.cart))
@@ -26,8 +36,10 @@ const cartSlice = createSlice({
         incCount: (state,action)=>{
             state.cart.map(prod=>{
                 if(prod._id === action.payload._id) {
-                   prod.count += 1 
-                   prod.subTotal = prod.price * prod.count
+                    if(prod.count < prod.stock ){
+                        prod.count += 1 
+                        prod.subTotal = prod.price * prod.count
+                    } else  toast(`sorry, we only have ${prod.stock} pieces left` ,{type: "error"})
                }    
            })
            state.total = state.cart.reduce((acc,item)=> acc + item.subTotal, 0 )

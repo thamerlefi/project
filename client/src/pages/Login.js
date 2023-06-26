@@ -26,11 +26,10 @@ export default function Login() {
   
   return (
     <div className="container-xxl d-flex align-items-center" style={{height:"calc(100vh - 106px)"}}>
-       
       <div className="row login">
         <div className="col-12 col-md-6 p-0 img">
           <img
-            src="img/4.jpg"
+            src="img/login.jpg"
             alt=""
           />
         </div>

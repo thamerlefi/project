@@ -10,7 +10,7 @@ import BestSellers from '../components/BestSellers'
 export default function Home() {
  
   return (
-    <div className='home container-xxl  pt-3'>
+    <div className='home container-xxl  pt-'>
       <BannerProd />
       <LatestProd />
       <FeateredProd />

@@ -15,7 +15,7 @@ export default function OurStore() {
   const [randomProds, setRandomProds] = useState([]);
   const categ = ["Laptop", "Phone", "Camera", "Accessories"];
   const [categories, setCategories] = useState([]);
-  const { products, miniPrice, maxiPrice } = useSelector(
+  const { products, miniPrice, maxiPrice, isLoading } = useSelector(
     (state) => state.products
   );
   const [maxPrice, setMaxPrice] = useState(null);
@@ -50,7 +50,7 @@ export default function OurStore() {
         order: "asc",
       })
     );
-    
+
     axios
       .get(baseURL + "api/products/random/?size=3")
       .then((res) => setRandomProds(res.data.randomProducts))
@@ -59,10 +59,10 @@ export default function OurStore() {
   const ratingChanged = (newRating) => {
     setMinRating(newRating);
   };
-  useEffect(()=>{
+  useEffect(() => {
     setMaxPrice(maxiPrice);
     setMinPrice(miniPrice);
-  },[maxiPrice])
+  }, [maxiPrice]);
   // generate buttons pages
   let PagesButtons = [];
   for (let i = 1; i <= products.pages; i++) {
@@ -113,7 +113,7 @@ export default function OurStore() {
                     className="form-control"
                     id="floatingInput"
                     placeholder="name@example.com"
-                    value={minPrice ||0}
+                    value={minPrice || 0}
                     onChange={(e) => setMinPrice(e.target.value)}
                   />
                   <label htmlFor="floatingInput">From</label>
@@ -125,23 +125,22 @@ export default function OurStore() {
                     className="form-control"
                     id="floatingInput"
                     placeholder="name@example.com"
-                    value={maxPrice ||0}
+                    value={maxPrice || 0}
                     onChange={(e) => setMaxPrice(e.target.value)}
                   />
                   <label htmlFor="floatingInput">To</label>
                 </div>
-                <div style={{width:"100%"}}>
-
-                <RangeSlider
-                  min={miniPrice ||0}
-                  max={maxiPrice ||0}
-                  value={[minPrice ||0, maxPrice ||0]}
-                  defaultValue={[minPrice, maxPrice]}
-                  onInput={(tr) => {
-                    setMinPrice(tr[0]);
-                    setMaxPrice(tr[1]);
-                  }}
-                />
+                <div style={{ width: "100%" }}>
+                  <RangeSlider
+                    min={miniPrice || 0}
+                    max={maxiPrice || 0}
+                    value={[minPrice || 0, maxPrice || 0]}
+                    defaultValue={[minPrice, maxPrice]}
+                    onInput={(tr) => {
+                      setMinPrice(tr[0]);
+                      setMaxPrice(tr[1]);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -165,7 +164,7 @@ export default function OurStore() {
             {randomProds.map((product) => (
               <div key={product._id}>
                 {
-                  <div className="d-flex pt-1 border-bottom " >
+                  <div className="d-flex pt-1 border-bottom ">
                     <div className="w-25">
                       <img
                         src={product.image.secure_url}
@@ -265,16 +264,28 @@ export default function OurStore() {
             </div>
           </div>
           {/* ------------ prod list */}
-          <div
-            className="products-list row mt-2 gap-2"
-            style={{ width: "100%" }}
-          >
-            {products.list.map((prod) => (
-              <Product col="custom-col " product={prod} key={prod._id} />
-            ))}
-          </div>
+          {!isLoading ? (
+            <div
+              className="products-list row mt-2 gap-2"
+              style={{ width: "100%" }}
+            >
+              {products.list.map((prod) => (
+                <Product col="custom-col " product={prod} key={prod._id} />
+              ))}
+            </div>
+          ) : (
+            <div
+              className="spinner-border loading-store "
+              style={{ width: "3rem", height: "3rem" }}
+              role="status"
+            >
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          )}
           <div className="filter-sort-grid mt-2 d-flex align-items-center justify-content-center justify-content-sm-between ">
-            <p className="d-none d-sm-block p-opacity">Showing 8 of {products?.total}</p>
+            <p className="d-none d-sm-block p-opacity">
+              Showing 8 of {products?.total}
+            </p>
             <div className="pages">
               {/* <Link className="me-2 ">{"<"}</Link> */}
               {PagesButtons.map((page) => (

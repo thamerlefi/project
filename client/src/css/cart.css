@@ -3,7 +3,11 @@
 }
 .cart .bye-now{
     border: none;
-    padding: 10px 15px ;
+    /* padding: 10px 15px ; */
+    width: 90px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
     font-weight: 400;
     color: #fff;
     background-color: tomato;

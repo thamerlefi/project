@@ -1,12 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Product from './Product';
+import axios from 'axios';
+import { baseURL } from '../baseURL';
+import { toast } from 'react-toastify';
 
 export default function BestSellers() {
-    const { products } = useSelector((state) => state.products);
+    
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        baseURL +
+          `api/products/?limit=${8}&page=${1}&sortBy=${"selling"},${"asc"}`
+      )
+      .then((res) => setProducts(res.data.pagination.list))
+      .catch((err) => toast(err.response.data.message, { type: "error" }));
+  }, []);
+  
     const settings = {
       dots: false,
       infinite: true,
@@ -55,7 +69,7 @@ export default function BestSellers() {
       <div className='list m-auto  container row mt-5'>
       <Slider {...settings} >
         {
-            products.list.map(prod =>(
+            products.map(prod =>(
                <div key={prod._id} className='px-2'>
                    <Product col={"aa"} product={prod}/>
                </div>

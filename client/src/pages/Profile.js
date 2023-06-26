@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner"
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -126,8 +127,9 @@ export default function Profile() {
               </Form.Group>
 
               <Button variant="primary" type="submit">
-                {auth.isLoading ? "pending..." : "update"}
+                {auth.isLoading ? <Spinner size="sm" /> : "update"}
               </Button>
+              
             </Form>
           </div>
         </div>

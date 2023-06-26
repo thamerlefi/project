@@ -1,19 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/bannerProd.css";
 import { useSelector } from "react-redux";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import axios from "axios";
+import { baseURL } from "../baseURL";
+import { toast } from "react-toastify";
 
 export default function BannerProd() {
-  const { products } = useSelector((state) => state.products);
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        baseURL +
+          `api/products/?limit=${4}&page=${1}&sortBy=${"numOfReviews"},${"asc"}`
+      )
+      .then((res) => setProducts(res.data.pagination.list))
+      .catch((err) => toast(err.response.data.message, { type: "error" }));
+  }, []);
   const settings = {
     dots: true,
     infinite: true,
     speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+      prevArrow: "",
     autoplaySpeed: 4000,
     pauseOnHover: false,
     pauseOnFocus: true,
@@ -25,33 +37,28 @@ export default function BannerProd() {
 
   return (
     <div className="banner-prod row py-2">
-      <div className="part mb-4 mb-md-0  col-11 ">
+      <div className="part mb-4 mb-md-0 ">
         <Slider {...settings}>
-          {products.list.map(
-            (prod, i) =>
-              i < 7 &&
-              i > 3 && (
-                <div
-                  className={`d-flex justify-content-between align-items-center `}
-                  key={prod._id}
-                >
-                  <div className="p-5 ">
-                    <h1 className="">50% Off your first Shoppping</h1>
-                    <h3 className="my-4">{prod.name}</h3>
-                    <button className="button" style={{ background: "tomato" }}>
-                      Buy Now
-                    </button>
-                  </div>
-                  <div style={{ width: "35%" }}>
-                    <img
-                      src={prod.image.secure_url}
-                      alt=""
-                      style={{ width: "100%" }}
-                    />
-                  </div>
-                </div>
-              )
-          )}
+          {products.map((prod) => (
+            <div className={`prod-slick`} key={prod._id}>
+              <div className="p-5 col-8">
+                <h1 style={{color:"#324d67"}}>{prod.name}</h1>
+                <p className="my-4 d-none d-md-block description">
+                  {prod.description.slice(0, 350)}
+                </p>
+                <button className="button text-center" style={{ background: "#f02d34" }}>
+                  Buy Now
+                </button>
+              </div>
+              <div className="col-4 text-end" >
+                <img
+                  src={prod.image.secure_url}
+                  alt=""
+                  style={{ width: "100%",height:"80%" }}
+                />
+              </div>
+            </div>
+          ))}
           {/* <div>
             <img src="img/lapcat.jpg" alt="" style={{width:"100%"}}/>
           </div> */}

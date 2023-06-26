@@ -19,8 +19,8 @@ export default function UsersList() {
   const [order, setOrder] = useState("asc");
 
   useEffect(() => {
-    getAllUsers(5, 1, sortBy, order);
-  }, [sortBy, order]);
+    getAllUsers(5, activePage, sortBy, order);
+  }, [sortBy, order,activePage]);
 
   //------------------------------ get all users handler (admin)
   async function getAllUsers(limit, page, sortBy, order) {

@@ -10,6 +10,7 @@ import { baseURL } from "../baseURL";
 import { pending } from "../redux/slices/authSlice";
 import { loadStripe } from "@stripe/stripe-js";
 import { clientSecretStripe } from "../utils/clientSecretStrippe";
+import Spinner from "../components/Spinner"
 import "../css/cart.css";
 
 const stripePromise = loadStripe(clientSecretStripe);
@@ -96,7 +97,7 @@ export default function Cart() {
           </div>
           <div className="text-center mt-3">
             {cart.length !==0 && (isLoggedIn ? <button onClick={checkoutHandler} className="bye-now">
-              {isLoading ? "pending..." : "BUY NOW"}
+              {isLoading ? <Spinner size="sm"/> : "BUY NOW"}
               </button> : 
               <span className="alert alert-warning " disabled>please <Link to="/login">login</Link> first</span>)
               }

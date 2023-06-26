@@ -5,7 +5,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useEffect, useState, useRef } from "react";
 import Cart from "../pages/Cart";
-import { clearProdSearch, getAllProducts, getProdSearch } from "../redux/slices/productSlice";
+import { clearProdSearch, getProdSearch } from "../redux/slices/productSlice";
+
 
 export default function NavBar() {
   window.addEventListener("scroll",()=>{
@@ -15,24 +16,34 @@ export default function NavBar() {
     headerTop.classList.toggle("opacity", window.scrollY > 60)
   })
   const ref = useRef();
-  const { user, isLoggedIn } = useSelector((state) => state.auth);
-  const shopCart = useSelector((state) => state.shopCart);
-  const {prodSearch} = useSelector(state=>state.products)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
+  // -------------------- redux states
+  const { user, isLoggedIn } = useSelector((state) => state.auth);
+  const shopCart = useSelector((state) => state.shopCart);
+  const {wishList} = useSelector((state) => state.wishList);
+  const {prodSearch} = useSelector(state=>state.products)
+
+  // -------------------- states
+  const [showMenu, setShowMenu] = useState(false);
+  const [prodSrch, setProdSearch] = useState("");
+  
+  // ---------------------------- functions
   const { pathname } = location;
   const logoutHandler = () => {
     dispatch(logout());
     navigate("/login");
   };
-  const [showMenu, setShowMenu] = useState(false);
-  const [prodSrch, setProdSearch] = useState("");
+  
   const searchHandler = (e)=>{
     e.preventDefault()
-    dispatch(getProdSearch(prodSrch))
+    dispatch(getProdSearch(prodSrch.trim().split(' ').join('+')))
     if (prodSrch) navigate('/store')
   }
+
+  // -------------------- use effect
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (showMenu && ref.current && !ref.current.contains(e.target)) {
@@ -44,9 +55,11 @@ export default function NavBar() {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
   }, [showMenu]);
+
   useEffect(() => {
     setShowMenu(false);
   }, [pathname]);
+  // ----------------------------------------- JSX
   return (
     <div className="navbarr">
       {/* ------------------------------------------- Navbar-TOP -------------------------------------------------------------------------- */}
@@ -78,7 +91,7 @@ export default function NavBar() {
                   placeholder="Search Product..."
                   aria-label="Search Product..."
                   aria-describedby="basic-addon2"
-                  onChange={(e)=>setProdSearch(e.target.value.split(' ').join('+'))}
+                  onChange={(e)=>setProdSearch(e.target.value)}
                 />
                 {!prodSearch ? <span onClick={searchHandler} className="input-group-text search" id="basic-addon2">
                   <BsSearch />
@@ -99,6 +112,20 @@ export default function NavBar() {
                   <Link to="/wish-list">
                     <i className="fa-regular  fa-heart text-white fs-4"></i>
                   </Link>
+                  {wishList.length > 0 && (
+                      <span
+                        className="ms-0"
+                        style={{
+                          color: "#fff",
+                          background: "red",
+                          width: "20px",
+                          padding: "0px 5px",
+                          borderRadius: "50%",
+                        }}
+                      >
+                        {wishList.length}
+                      </span>
+                    )}
                 </div>
                 {/* ------------------------- cart icon ------- */}
                 <div>
