@@ -4,9 +4,11 @@ import { baseURL } from "../baseURL";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import HelmetTitle from "../components/HelmetTitle";
+import { Spinner } from "react-bootstrap";
 
 export default function OrderHistory() {
   const [userOrders, setUserOrders] = useState([]);
+  const [pending, setPending] = useState(true);
   
   useEffect(() => {
     axios
@@ -15,7 +17,10 @@ export default function OrderHistory() {
           "x-auth": localStorage.getItem("token"),
         },
       })
-      .then((res) => setUserOrders(res.data.orders));
+      .then((res) => {
+        setUserOrders(res.data.orders)
+        setPending(false)
+      });
   }, []);
   const tranformDate = (date) => {
     let endDt = "",
@@ -27,43 +32,7 @@ export default function OrderHistory() {
     endDt = hr + "-" + dt;
     return endDt;
   };
-  // return (
-  //   <div>
-  //     <table className="table">
-  //       <thead>
-  //         <tr>
-  //           <th scope="col">#</th>
-  //           <th scope="col">Products</th>
-  //           <th scope="col">Date</th>
-  //           <th scope="col">Total Price</th>
-  //           <th scope="col">Status</th>
-  //           <th scope="col"></th>
-  //         </tr>
-  //       </thead>
-  //       <tbody>
-  //         {userOrders.map((order) => (
-  //           <tr key={order._id}>
-  //             <th scope="row">1</th>
-  //             <td>
-  //               {
-  //               order.products.map(prod=><p className="mb-0" key={prod.productId._id}>
-  //                                               # {prod.productId.name}
-  //                                       </p>)}
-  //             </td>
-  //             <td>{tranformDate(order.createdAt)}</td>
-  //             <td>{order.totalPrice} $</td>
-  //             <td>{order.status}</td>
-  //             <td>
-  //               <LinkContainer to={`/user/orders/${order._id}`}>
-  //                   <button className="btn btn-outline-info">details</button>
-  //               </LinkContainer>
-  //             </td>
-  //           </tr>
-  //         ))}
-  //       </tbody>
-  //     </table>
-  //   </div>
-  // );
+ 
   return (
     <>
       <HelmetTitle title="Tech-Shop | Orders History" />
@@ -71,7 +40,14 @@ export default function OrderHistory() {
         <table className="table table-striped align-middle mb-0 bg-white custom-table">
           <thead className="bg-light">
             <tr>
-              <th>Products</th>
+              <th className="position-relative">
+                Products
+                {
+                  pending && <div className="position-absolute" style={{top:"8px", left:"120px"}}>
+                  <Spinner size="sm" />
+                </div>
+                }
+              </th>
               <th>Date</th>
               <th>Status</th>
               <th>Price</th>

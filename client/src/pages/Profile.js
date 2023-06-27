@@ -128,9 +128,9 @@ export default function Profile() {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit">
+              <button className="button" type="submit">
                 {auth.isLoading ? <Spinner size="sm" /> : "update"}
-              </Button>
+              </button>
               
             </Form>
           </div>

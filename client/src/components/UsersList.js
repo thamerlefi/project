@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { ListGroup } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import {  Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { baseURL } from "../baseURL";
 import { fulfilled, pending, rejected } from "../redux/slices/authSlice";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ import HelmetTitle from "./HelmetTitle";
 
 export default function UsersList() {
   const dispatch = useDispatch();
+  const {isLoading} = useSelector(state=>state.auth)
 
   const [allUsers, setAllUsers] = useState([]);
   const [pages, setPages] = useState(1);
@@ -84,7 +85,7 @@ export default function UsersList() {
       <table className="table table-striped custom-table">
         <thead className="bg-light">
           <tr>
-            <th scope="col">
+            <th scope="col" className="position-relative">
               <span
                 className="cur-point"
                 onClick={() => {
@@ -103,6 +104,11 @@ export default function UsersList() {
                     "fa-solid fa-arrow-down " + isSort("firstName", "desc")
                   }
                 ></i>
+                {
+                  isLoading ? <div className="position-absolute" style={{top:"8px", left:"120px"}}>
+                  <Spinner size="sm" />
+                </div> : ""
+                }
               </span>
             </th>
             <th scope="col">

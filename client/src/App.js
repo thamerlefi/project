@@ -52,7 +52,6 @@ function App() {
     dispatch(getTotal());
   }, []);
   useEffect(()=>{
-    console.log("aa")
     if (location.pathname !== '/store') {
       dispatch(clearCateg());
     }

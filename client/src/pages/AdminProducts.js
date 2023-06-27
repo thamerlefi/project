@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, ListGroup, Modal, Spinner } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fulfilled,
@@ -7,7 +7,6 @@ import {
   pending,
   rejected,
 } from "../redux/slices/productSlice";
-import { LinkContainer } from "react-router-bootstrap";
 import axios from "axios";
 import { baseURL } from "../baseURL";
 import { toast } from "react-toastify";
@@ -19,8 +18,8 @@ import HelmetTitle from "../components/HelmetTitle";
 export default function AdminProducts() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
-  const {cart} = useSelector((state) => state.shopCart);
-  const {wishList} = useSelector((state) => state.wishList);
+  const { cart } = useSelector((state) => state.shopCart);
+  const { wishList } = useSelector((state) => state.wishList);
 
   //------------- modal states
   const [show, setShow] = useState(false);
@@ -97,10 +96,10 @@ export default function AdminProducts() {
           "x-auth": localStorage.getItem("token"),
         },
       });
-      const prodInCart = cart.find(prod=>prod._id === id);
-      if (prodInCart) dispatch(deleteProd(prodInCart))
-      const prodInWish = wishList.find(prod=>prod._id === id);
-      if (prodInWish) dispatch(deleteFromWish(prodInCart))
+      const prodInCart = cart.find((prod) => prod._id === id);
+      if (prodInCart) dispatch(deleteProd(prodInCart));
+      const prodInWish = wishList.find((prod) => prod._id === id);
+      if (prodInWish) dispatch(deleteFromWish(prodInCart));
       toast(res.data.message, { type: "success" });
       dispatch(getAllProducts({ limit: 5, page: 1, sortBy, order }));
       return res.data;
@@ -125,7 +124,7 @@ export default function AdminProducts() {
           <table className="table table-striped custom-table  ">
             <thead className="bg-light">
               <tr>
-                <th scope="col-3">
+                <th scope="col-3" className="position-relative">
                   <span
                     className="cur-point"
                     onClick={() => {
@@ -144,6 +143,13 @@ export default function AdminProducts() {
                         "fa-solid fa-arrow-down " + isSort("name", "desc")
                       }
                     ></i>
+                    {products.isLoading ? (
+                      <div className="position-absolute" style={{top:"8px", left:"120px"}}>
+                        <Spinner size="sm" />
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </span>
                 </th>
                 <th scope="col-3">

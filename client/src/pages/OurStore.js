@@ -4,21 +4,22 @@ import ReactStars from "react-rating-stars-component";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCateg, getAllProducts } from "../redux/slices/productSlice";
 import Product from "../components/Product";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link,  } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../baseURL";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
-import {LinkContainer} from "react-router-bootstrap"
+import { LinkContainer } from "react-router-bootstrap";
 import HelmetTitle from "../components/HelmetTitle";
+import NotFound from "./NotFound";
 
 export default function OurStore() {
   const [starsKey, setStarsKey] = useState(Math.random());
   const [randomProds, setRandomProds] = useState([]);
   const categ = ["Laptop", "Phone", "Camera", "Accessories"];
-  const { products, miniPrice, maxiPrice, isLoading,currCateg } = useSelector(
+  const { products, miniPrice, maxiPrice, isLoading, currCateg } = useSelector(
     (state) => state.products
-    );
+  );
   const [categories, setCategories] = useState(currCateg ? [currCateg] : []);
   const [maxPrice, setMaxPrice] = useState(maxiPrice);
   const [minPrice, setMinPrice] = useState(miniPrice);
@@ -33,15 +34,10 @@ export default function OurStore() {
       );
     }
   };
-  const navigate = useLocation()
   const { prodSearch } = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
-  
-
-
   useEffect(() => {
-    // if (currCateg) setCategories([currCateg])
     const limit = 8,
       page = 1;
     dispatch(
@@ -62,11 +58,8 @@ export default function OurStore() {
       .get(baseURL + "api/products/random/?size=3")
       .then((res) => setRandomProds(res.data.randomProducts))
       .catch((err) => console.log(err));
-
-     
   }, [prodSearch, categories, minPrice, maxPrice, minRating]);
 
- 
   const ratingChanged = (newRating) => {
     setMinRating(newRating);
   };
@@ -149,7 +142,7 @@ export default function OurStore() {
                     value={[minPrice || 0, maxPrice || 0]}
                     defaultValue={[minPrice, maxPrice]}
                     onInput={(tr) => {
-                      dispatch(clearCateg())
+                      dispatch(clearCateg());
                       setMinPrice(tr[0]);
                       setMaxPrice(tr[1]);
                     }}
@@ -176,29 +169,30 @@ export default function OurStore() {
             <h3>Random Products</h3>
             {randomProds.map((product) => (
               <div key={product._id}>
-                { <LinkContainer className="cur-point" to={`/${product._id}`}>
-                  <div className="d-flex pt-1 border-bottom ">
-                    <div className="w-25">
-                      <img
-                        src={product.image.secure_url}
-                        alt=""
-                        style={{ width: "100%" }}
-                      />
+                {
+                  <LinkContainer className="cur-point" to={`/${product._id}`}>
+                    <div className="d-flex pt-1 border-bottom ">
+                      <div className="w-25">
+                        <img
+                          src={product.image.secure_url}
+                          alt=""
+                          style={{ width: "100%" }}
+                        />
+                      </div>
+                      <div className="w-75 ms-2">
+                        <h5 style={{ fontSize: 14 }}>{product.name}</h5>
+                        <ReactStars
+                          count={5}
+                          size={18}
+                          value={product.rating}
+                          edit={false}
+                          isHalf={true}
+                          activeColor="#ffd700"
+                        />
+                        <p>${product.price}</p>
+                      </div>
                     </div>
-                    <div className="w-75 ms-2">
-                      <h5 style={{ fontSize: 14 }}>{product.name}</h5>
-                      <ReactStars
-                        count={5}
-                        size={18}
-                        value={product.rating}
-                        edit={false}
-                        isHalf={true}
-                        activeColor="#ffd700"
-                      />
-                      <p>${product.price}</p>
-                    </div>
-                  </div>
-                </LinkContainer>
+                  </LinkContainer>
                 }
               </div>
             ))}
@@ -279,7 +273,10 @@ export default function OurStore() {
           </div>
           {/* ------------ prod list */}
           {!isLoading ? (
-            <div
+            
+              products.list.length === 0 ?
+              <NotFound msg="No Product Found" mt="15px"/> :
+              <div
               className="products-list row mt-2 gap-2"
               style={{ width: "100%" }}
             >
@@ -287,6 +284,8 @@ export default function OurStore() {
                 <Product col="custom-col " product={prod} key={prod._id} />
               ))}
             </div>
+            
+            
           ) : (
             <div
               className="spinner-border loading-store "
