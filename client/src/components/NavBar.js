@@ -5,7 +5,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { useEffect, useState, useRef } from "react";
 import Cart from "../pages/Cart";
-import { clearProdSearch, getProdSearch } from "../redux/slices/productSlice";
+import { clearProdSearch, editCateg, getProdSearch } from "../redux/slices/productSlice";
+import axios from "axios";
+import { baseURL } from "../baseURL";
 
 
 export default function NavBar() {
@@ -24,11 +26,12 @@ export default function NavBar() {
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const shopCart = useSelector((state) => state.shopCart);
   const {wishList} = useSelector((state) => state.wishList);
-  const {prodSearch} = useSelector(state=>state.products)
+  const {prodSearch, products} = useSelector(state=>state.products)
 
   // -------------------- states
   const [showMenu, setShowMenu] = useState(false);
   const [prodSrch, setProdSearch] = useState("");
+  const [categories, setCategories] = useState([]);
   
   // ---------------------------- functions
   const { pathname } = location;
@@ -43,7 +46,18 @@ export default function NavBar() {
     if (prodSrch) navigate('/store')
   }
 
+  const categHandler =(categ)=>{
+    dispatch(editCateg(categ))
+    navigate('/store')
+  }
+
   // -------------------- use effect
+  useEffect(()=>{
+    axios.get(baseURL + "api/products/categories")
+    .then(res => setCategories(res.data.categories))
+    .catch(err =>console.log(err.message))
+  },[])
+
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       if (showMenu && ref.current && !ref.current.contains(e.target)) {
@@ -241,17 +255,14 @@ export default function NavBar() {
                         className="dropdown-menu"
                         aria-labelledby="dropdownMenuButton1"
                       >
-                        <li>
-                          <Link className="dropdown-item">Action</Link>
+                        {
+                          categories?.map(categ =>(    
+                        <li key={categ} onClick={()=>categHandler(categ)}>
+                          <Link  className="dropdown-item">{categ}</Link>
                         </li>
-                        <li>
-                          <Link className="dropdown-item">Another action</Link>
-                        </li>
-                        <li>
-                          <Link className="dropdown-item">
-                            Something else here
-                          </Link>
-                        </li>
+                          ))
+                        }
+                        
                       </ul>
                     </div>
                   </div>
@@ -311,9 +322,9 @@ export default function NavBar() {
                       <Link to="/store" className="text-white">
                         OUR STORE
                       </Link>
-                      <NavLink to="/admin/dashboard" className="text-white">
-                        CONTACT
-                      </NavLink>
+                      <Link to="/about" className="text-white">
+                        ABOUT US
+                      </Link>
                     </div>
                   </div>
                 </div>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { baseURL } from "../baseURL";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function OrderHistory() {
   const [userOrders, setUserOrders] = useState([]);
@@ -65,6 +66,7 @@ export default function OrderHistory() {
   // );
   return (
     <>
+      <HelmetTitle title="Tech-Shop | Orders History" />
       <div className="mt-2 orders-list">
         <table className="table table-striped align-middle mb-0 bg-white custom-table">
           <thead className="bg-light">

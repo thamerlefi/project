@@ -2,24 +2,26 @@ import React, { useEffect, useState } from "react";
 import "../css/ourStore.css";
 import ReactStars from "react-rating-stars-component";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProducts } from "../redux/slices/productSlice";
+import { clearCateg, getAllProducts } from "../redux/slices/productSlice";
 import Product from "../components/Product";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../baseURL";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
+import {LinkContainer} from "react-router-bootstrap"
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function OurStore() {
   const [starsKey, setStarsKey] = useState(Math.random());
   const [randomProds, setRandomProds] = useState([]);
   const categ = ["Laptop", "Phone", "Camera", "Accessories"];
-  const [categories, setCategories] = useState([]);
-  const { products, miniPrice, maxiPrice, isLoading } = useSelector(
+  const { products, miniPrice, maxiPrice, isLoading,currCateg } = useSelector(
     (state) => state.products
-  );
-  const [maxPrice, setMaxPrice] = useState(null);
-  const [minPrice, setMinPrice] = useState(null);
+    );
+  const [categories, setCategories] = useState(currCateg ? [currCateg] : []);
+  const [maxPrice, setMaxPrice] = useState(maxiPrice);
+  const [minPrice, setMinPrice] = useState(miniPrice);
   const [minRating, setMinRating] = useState(null);
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -31,10 +33,15 @@ export default function OurStore() {
       );
     }
   };
-
+  const navigate = useLocation()
   const { prodSearch } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+
+  
+
+
   useEffect(() => {
+    // if (currCateg) setCategories([currCateg])
     const limit = 8,
       page = 1;
     dispatch(
@@ -55,7 +62,11 @@ export default function OurStore() {
       .get(baseURL + "api/products/random/?size=3")
       .then((res) => setRandomProds(res.data.randomProducts))
       .catch((err) => console.log(err));
+
+     
   }, [prodSearch, categories, minPrice, maxPrice, minRating]);
+
+ 
   const ratingChanged = (newRating) => {
     setMinRating(newRating);
   };
@@ -71,6 +82,7 @@ export default function OurStore() {
 
   return (
     <div className="mt-4 container-xxl">
+      <HelmetTitle title="Tech-Shop | Store" />
       <div className="row">
         {/* -------------------------------------------------- filter side */}
         <div className="col-12 col-md-3 d-md-block d-flex  flex-column flex-sm-row  justify-content-between mb-2 mb-md-0">
@@ -137,6 +149,7 @@ export default function OurStore() {
                     value={[minPrice || 0, maxPrice || 0]}
                     defaultValue={[minPrice, maxPrice]}
                     onInput={(tr) => {
+                      dispatch(clearCateg())
                       setMinPrice(tr[0]);
                       setMaxPrice(tr[1]);
                     }}
@@ -163,7 +176,7 @@ export default function OurStore() {
             <h3>Random Products</h3>
             {randomProds.map((product) => (
               <div key={product._id}>
-                {
+                { <LinkContainer className="cur-point" to={`/${product._id}`}>
                   <div className="d-flex pt-1 border-bottom ">
                     <div className="w-25">
                       <img
@@ -185,6 +198,7 @@ export default function OurStore() {
                       <p>${product.price}</p>
                     </div>
                   </div>
+                </LinkContainer>
                 }
               </div>
             ))}

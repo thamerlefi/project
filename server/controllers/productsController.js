@@ -1,5 +1,6 @@
 const cloudinary = require('../utils/cloudinaryConfig.js')
 const Product = require('../models/ProductModel')
+const Order = require('../models/OrderModel.js')
 const { newError } = require('../utils/Errors.js');
 const UserModel = require('../models/UserModel.js');
 
@@ -25,6 +26,16 @@ exports.getProducts = async(req,res,next)=>{
     } catch (error) {
         console.log(error.message)
         res.status(400).json({message: error.message})
+    }
+}
+
+//get all categories
+exports.getAllCategs = async(req,res)=>{
+    try {
+        const categories = await Product.distinct('category');
+        res.json({categories});
+    } catch (error) {
+        res.status(500).json({message: error.message})
     }
 }
 
@@ -121,6 +132,7 @@ exports.deleteProduct= async(req,res)=>{
         if (!product) return res.status(404).json({message: 'product not found'})
         cloudinary.uploader.destroy(product.image.public_id)
         const deletedProduct = await Product.findByIdAndDelete(req.params.id)
+        await Order.deleteMany({ 'products.productId': deletedProduct._id });
         res.status(200).json({message: 'product deleted', product: deletedProduct})
     } catch (error) {
         res.status(400).json({message: error.message})

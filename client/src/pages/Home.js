@@ -6,12 +6,16 @@ import "../css/home.css"
 import FeateredProd from '../components/FeateredProd'
 import PopularProd from '../components/PopularProd'
 import BestSellers from '../components/BestSellers'
+import Feateres from '../components/Feateres'
+import HelmetTitle from '../components/HelmetTitle'
 
 export default function Home() {
  
   return (
     <div className='home container-xxl  pt-'>
+      <HelmetTitle title="Tech-Shop | Home" />
       <BannerProd />
+      <Feateres />
       <LatestProd />
       <FeateredProd />
       <div className='banner my-5'>

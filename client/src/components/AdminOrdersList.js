@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { baseURL } from "../baseURL";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
+import HelmetTitle from "./HelmetTitle";
 
 export default function AdminOrdersList() {
   const [orders, setOrders] = useState([]);
@@ -51,6 +52,7 @@ export default function AdminOrdersList() {
 
   return (
     <>
+      <HelmetTitle title="Dashboard | Orders" />
       <div className="mt-2 orders-list">
         <table className="table table-striped align-middle mb-0 bg-white custom-table">
           <thead className="bg-light">

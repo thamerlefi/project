@@ -7,6 +7,7 @@ import { fulfilled } from "../redux/slices/authSlice";
 import Spinner from "../components/Spinner";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function ResetPass() {
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ export default function ResetPass() {
       className="container-xxl d-flex align-items-center"
       style={{ height: "calc(100vh - 106px)" }}
     >
+      <HelmetTitle title="Tech-Shop | Reset Password" />
       <div className="row login">
         <div className="col-12 col-md-6 p-0 img">
           <img src="img/4.jpg" alt="" />

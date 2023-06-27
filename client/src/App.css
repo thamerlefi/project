@@ -5,12 +5,19 @@
     box-sizing: border-box;
     font-family: 'Rubik', sans-serif;
 }
+
 :root{
     --color-dark: #293847;
     --color-search: #febd69;
     --color-less-dark: #334455;
     --color-light: #fff;
     --color-brown: #bf4800
+}
+/* 
+class="Toastify__toast-container Toastify__toast-container--bottom-center"
+*/
+.Toastify__toast-container{
+    z-index: 10000000000000000000000000000000000000000000000000 !important;
 }
 .body{
     min-height: calc(100vh - 106px);
@@ -268,3 +275,16 @@ p{
 .update-product .col-4 img{
     width: 250px;
 } */
+
+
+/*  not found */
+.not-found{
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px ;
+    height: 200px;
+    margin-top: 200px;
+}

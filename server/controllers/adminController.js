@@ -21,6 +21,7 @@ exports.deleteUser = async(req,res) => {
         if(!user) return res.status(404).json({message: 'user not found'})
         if(user.image.public_id !== "lqvpcvcnrykdabnpjkmi") cloudinary.uploader.destroy(user.image.public_id);
         await User.findByIdAndDelete(req.params.id)
+        await Order.deleteMany({ 'userId': req.params.id });
         res.status(200).json({message: 'user deleted successfuly !'})
     } catch (error) {
         res.status(500).json({message: error.message})

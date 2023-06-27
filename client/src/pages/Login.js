@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {  login, reset } from "../redux/slices/authSlice";
 import Spinner from "../components/Spinner"
 import "../css/login.css";
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function Login() {
   
   return (
     <div className="container-xxl d-flex align-items-center" style={{height:"calc(100vh - 106px)"}}>
+      <HelmetTitle title="Tech-Shop | Login" />
       <div className="row login">
         <div className="col-12 col-md-6 p-0 img">
           <img

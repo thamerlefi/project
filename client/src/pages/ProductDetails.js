@@ -14,6 +14,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Product from "../components/Product";
 import { addToWish } from "../redux/slices/wishSlice";
+import NotFound from "./NotFound";
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function ProductDetails() {
   const [starsKey, setStarsKey] = useState(Math.random());
@@ -123,9 +125,15 @@ export default function ProductDetails() {
   };
 
   return (
+    products.message==="product not found" ? 
+    <>
+    <HelmetTitle title="Tech-Shop | Not Found" />
+    < NotFound msg="Product Not Found" />
+    </>:
     <>
       {/* ----------------------------------------- prod details */}
       <div className="container-xxl">
+      <HelmetTitle title={product.name} />
         <div className="prod-details p-3 mt-3 ">
           <div className="container-xxl">
             <div className="row">

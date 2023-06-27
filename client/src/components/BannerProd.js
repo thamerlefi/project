@@ -7,6 +7,7 @@ import Slider from "react-slick";
 import axios from "axios";
 import { baseURL } from "../baseURL";
 import { toast } from "react-toastify";
+import {LinkContainer} from "react-router-bootstrap"
 
 export default function BannerProd() {
   const [products, setProducts] = useState([]);
@@ -22,14 +23,13 @@ export default function BannerProd() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 1000,
+    speed: 1500,
     slidesToShow: 1,
     slidesToScroll: 1,
-      prevArrow: "",
     autoplaySpeed: 4000,
     pauseOnHover: false,
-    pauseOnFocus: true,
-    pauseOnDotsHover: true,
+    pauseOnFocus: false,
+    pauseOnDotsHover: false,
     appendDots: (dots) => {
       return <ul style={{ margin: "0px" }}>{dots}</ul>;
     },
@@ -46,9 +46,11 @@ export default function BannerProd() {
                 <p className="my-4 d-none d-md-block description">
                   {prod.description.slice(0, 350)}
                 </p>
-                <button className="button text-center" style={{ background: "#f02d34" }}>
+                <LinkContainer to={`/${prod._id}`} style={{ background: "#f02d34" }}>
+                <button className="button text-center" >
                   Buy Now
                 </button>
+                </LinkContainer>
               </div>
               <div className="col-4 text-end" >
                 <img
@@ -59,9 +61,7 @@ export default function BannerProd() {
               </div>
             </div>
           ))}
-          {/* <div>
-            <img src="img/lapcat.jpg" alt="" style={{width:"100%"}}/>
-          </div> */}
+          
         </Slider>
       </div>
       {/* <div className="part  col-12 col-md-6 d-flex flex-column justify-content-between gap-4 gap-md-0">

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "../redux/slices/authSlice";
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function Register() {
   const [firstName, setFirstName] = useState("");
@@ -26,6 +27,7 @@ export default function Register() {
  
   return (
     <div className="container-xxl d-flex align-items-center" style={{height:"calc(100vh - 106px)"}}>
+      <HelmetTitle title="Tech-Shop | Register" />
       <div className="row login">
         <div className="col-12 col-md-6 p-0 img">
           <img src="img/4.jpg" alt="" />

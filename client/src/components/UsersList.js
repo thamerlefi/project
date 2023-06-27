@@ -6,6 +6,7 @@ import { baseURL } from "../baseURL";
 import { fulfilled, pending, rejected } from "../redux/slices/authSlice";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import HelmetTitle from "./HelmetTitle";
 
 export default function UsersList() {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ export default function UsersList() {
 
   return (
     <>
+    <HelmetTitle title="Dashboard | Users" />
     <div className="users-list mt-4">
       <table className="table table-striped custom-table">
         <thead className="bg-light">
@@ -152,7 +154,7 @@ export default function UsersList() {
                 </p>
                 </td>
               <td>
-                <a href="/#" className="text-secondary">
+                <a href="#" className="text-secondary">
                   <i
                     onClick={() => deleteUserHandler(user)}
                     className="fa-solid fa-trash "

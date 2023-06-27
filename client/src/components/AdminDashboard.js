@@ -4,6 +4,7 @@ import { baseURL } from "../baseURL";
 import axios from "axios";
 import CategChart from "./CategChart";
 import { AdminChart } from "./AdminChart";
+import HelmetTitle from "./HelmetTitle";
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState(0);
@@ -33,6 +34,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="mt-3 admin-dash pe-0">
+      <HelmetTitle title="Tech-Shop | Dashboard" />
       {/* ----------------------------------- part-1 */}
       <div className="row gap-2 part-1">
         <div

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import "./App.css";
@@ -35,6 +35,8 @@ import UserOneOrder from "./pages/UserOneOrder";
 import OurStore from "./pages/OurStore";
 import Footer from "./components/Footer";
 import WishList from "./pages/WishList";
+import { clearCateg } from "./redux/slices/productSlice";
+import About from "./pages/About";
 // import { getAllProducts } from './redux/slices/productSlice';
 
 function App() {
@@ -44,10 +46,17 @@ function App() {
     toTop.classList.toggle("d-block", window.scrollY > 60);
   });
   const dispatch = useDispatch();
+  const location = useLocation()
   useEffect(() => {
     dispatch(getUser());
     dispatch(getTotal());
   }, []);
+  useEffect(()=>{
+    console.log("aa")
+    if (location.pathname !== '/store') {
+      dispatch(clearCateg());
+    }
+  },[location])
   return (
     <div className="App position-relative">
       <ToastContainer position="bottom-center" autoClose={2000} />
@@ -61,7 +70,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPass />} />
           <Route path="/register" element={<Register />} />
           <Route path="/wish-list" element={<WishList />} />
-          {/* <Route path="/cart" element={<Cart />} /> */}
+          <Route path="/about" element={<About />} />
           <Route path="/payment-success" element={<CheckoutSuccess />} />
           <Route path="/location" element={<GoogleMapLocation />} />
           <Route path="/user" element={<UserDash />}>
@@ -77,7 +86,7 @@ function App() {
             <Route path="orders/:orderId" element={<AdminOrder />} />
             <Route path="dashboard" element={<AdminDashboard />} />
           </Route>
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NotFound msg="404 Not Found"/>} />
         </Routes>
       </div>
       <div

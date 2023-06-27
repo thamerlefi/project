@@ -51,16 +51,16 @@ export default function Product({ product, col, inWish }) {
             <div className="position-absolute cart-action">
               <i
                 onClick={() => dispatch(addProduct(product))}
-                className={`fa-sharp fa-solid fa-cart-shopping fs-6 `}
+                className={`fa-sharp fa-solid fa-cart-shopping  `}
               ></i>
             </div>
           ) : (
             <div className="position-absolute btn-action cart-action-2">
-              <Link onClick={() => dispatch(decCount(product))}>
+              <Link style={{color:"#fff"}} onClick={() => dispatch(decCount(product))}>
                 {cartProd.count > 1 ? "-" : <i className="fa-solid   fa-xmark"></i>}
               </Link>
               <span >{cartProd.count}</span>
-              <Link onClick={() => dispatch(incCount(product))}>+</Link>
+              <Link style={{color:"#fff"}} onClick={() => dispatch(incCount(product))}>+</Link>
             </div>
           )}
         </div>
@@ -71,7 +71,7 @@ export default function Product({ product, col, inWish }) {
         ></i>:
         <div className="action-bar position-absolute ">
         <div className="d-flex flex-column gap-2 align-items-center">
-          <i className={`fa-regular fa-heart fs-6 ${wishProd ? "text-danger" : ""}`}
+          <i className={`${wishProd ? "fa-solid" : "fa-regular"} fa-heart fs-6 ${wishProd ? "text-danger" : ""}`}
             onClick={()=>dispatch(addToWish(product))}
           ></i>
           <Link to={"/" + product._id}>

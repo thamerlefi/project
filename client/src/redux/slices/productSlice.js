@@ -9,6 +9,7 @@ const initialState = {
     pages: 1,
     activePage: 1,
   },
+  currCateg: "",
   categories: [],
   isLoading: false,
   isSuccess: false,
@@ -17,7 +18,7 @@ const initialState = {
   prodSearch: "",
   product: {},
   miniPrice: 0,
-  maxiPrie:0
+  maxiPrice:0
 };
 
 // ------- get all products
@@ -115,6 +116,12 @@ const productSlice = createSlice({
     clearProdSearch: (state) => {
       return { ...state, prodSearch: "" };
     },
+    editCateg: (state,action)=>{
+      return {...state, currCateg: action.payload}
+    },
+    clearCateg: (state)=>{
+      return {...state, currCateg: ""}
+    }
   },
   extraReducers: (builder) => {
     builder //-----------------get all products cases
@@ -207,6 +214,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { pending, fulfilled, rejected, getProdSearch, clearProdSearch } =
+export const { pending, fulfilled, rejected, getProdSearch, clearProdSearch,editCateg,clearCateg } =
   productSlice.actions;
 export default productSlice.reducer;

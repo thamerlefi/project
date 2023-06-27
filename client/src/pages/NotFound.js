@@ -1,9 +1,11 @@
 import React from 'react'
+import HelmetTitle from '../components/HelmetTitle'
 
-export default function NotFound() {
+export default function NotFound({msg}) {
   return (
-    <div>
-      <h1>not found</h1>
+    <div className='container not-found'>
+      <HelmetTitle title="Tech-Shop | Not Found" />
+      <h1>{msg}</h1>
     </div>
   )
 }

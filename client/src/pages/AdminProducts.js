@@ -12,10 +12,15 @@ import axios from "axios";
 import { baseURL } from "../baseURL";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { deleteProd } from "../redux/slices/cartSlice";
+import { deleteFromWish } from "../redux/slices/wishSlice";
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function AdminProducts() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
+  const {cart} = useSelector((state) => state.shopCart);
+  const {wishList} = useSelector((state) => state.wishList);
 
   //------------- modal states
   const [show, setShow] = useState(false);
@@ -92,6 +97,10 @@ export default function AdminProducts() {
           "x-auth": localStorage.getItem("token"),
         },
       });
+      const prodInCart = cart.find(prod=>prod._id === id);
+      if (prodInCart) dispatch(deleteProd(prodInCart))
+      const prodInWish = wishList.find(prod=>prod._id === id);
+      if (prodInWish) dispatch(deleteFromWish(prodInCart))
       toast(res.data.message, { type: "success" });
       dispatch(getAllProducts({ limit: 5, page: 1, sortBy, order }));
       return res.data;
@@ -104,6 +113,7 @@ export default function AdminProducts() {
   return (
     // ------------------ add new product button
     <div className="mt-3 ">
+      <HelmetTitle title="Dashboard | Products" />
       <div className=" mb-3">
         <button className="newProd" onClick={handleShow}>
           <i className="fa-solid fa-plus"></i>

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner"
+import HelmetTitle from "../components/HelmetTitle";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ export default function Profile() {
 
   return (
     <div>
+      <HelmetTitle title="Tech-Shop | Profile" />
       {auth.user && (
         <div className="row">
           <div className="col-12 col-md-4">
