@@ -13,7 +13,7 @@ exports.forgotPassword = async(req,res,next) => {
         if(!oldUser) return next(newError(404, 'please enter your real email'))
         const secret = process.env.JWT_SECRET_KEY + oldUser.password
         const resetToken =  jwt.sign({id: oldUser._id, email: oldUser.email}, secret,{
-            expiresIn: '15m'
+            expiresIn: '1h'
         })
         const link = `${process.env.BASE_URL}/api/user/reset-password/${oldUser._id}/${resetToken}`
         const mailOptions = {
@@ -87,7 +87,7 @@ exports.userRegister = async(req,res,next)=>{
         }
         const user = await User.create(req.body)
         const token =  jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY,{
-            expiresIn: "1day"
+            expiresIn: "2 days"
         })
         res.status(201).json({token, user: {
             id: user._id,
@@ -110,7 +110,7 @@ exports.userLogin = async(req,res)=>{
         const isPassVerified = await bcrypt.compare(req.body.password, user.password)
         if(!isPassVerified) return res.status(404).json({message: 'wrong password'})
         const token = await jwt.sign({id: user._id}, process.env.JWT_SECRET_KEY,{
-            expiresIn: "1h"
+            expiresIn: "2 days"
         })
         res.cookie('token', token,{
             // httpOnly: true,
