@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { LinkContainer } from "react-router-bootstrap";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import "../css/adminDash.css";
 
 export default function Admin() {
   const [active, setActive] = useState("dash");
+  const location = useLocation()
+
+  useEffect(()=>{
+    if(location.pathname.includes("/admin/users") ) setActive("cust")
+    else if(location.pathname.includes("/admin/products") ) setActive("prod")
+    else if(location.pathname.includes("/admin/orders") ) setActive("ord")
+    else if(location.pathname.includes("/admin/dashboard") ) setActive("dash")
+  },[location.pathname])
+
   useEffect(()=>{
     const scrollListener= (()=>{
       const adminSide = document.querySelector('.side-bar-nav')

@@ -84,7 +84,7 @@ export default function NavBar() {
             <div className="col-sm-3 col-6 upper-elmnts">
               <h3 className="mb-0">
                 <Link className="text-white" to="/">
-                  Tek-Shop
+                  Teck-Shop
                 </Link>
               </h3>
             </div>
@@ -120,20 +120,22 @@ export default function NavBar() {
             </div>
             {/* ---------------------------------------------- LINKS ----------------- */}
             <div className="col-sm-5 col-6 upper-elmnts">
-              <div className="header-upper-links d-flex align-items-center justify-content-center gap-5">
+              <div className="header-upper-links d-flex align-items-center justify-content-end pe-2 pe-md-4 gap-5">
                 {/* ------------------------- whish icon ------ */}
-                <div>
+                <div className="position-relative">
                   <Link to="/wish-list">
-                    <i className="fa-regular  fa-heart text-white fs-4"></i>
+                    <i className="fa-regular   fa-heart text-white fs-4"></i>
                   </Link>
                   {wishList.length > 0 && (
                       <span
-                        className="ms-0"
+                        className="ms-0 position-absolute"
                         style={{
                           color: "#fff",
-                          background: "red",
+                          background: "#f02d34",
                           width: "20px",
-                          padding: "0px 5px",
+                          height: "20px",
+                          textAlign:"center",
+                          fontSize:"13px",
                           borderRadius: "50%",
                         }}
                       >
@@ -142,7 +144,7 @@ export default function NavBar() {
                     )}
                 </div>
                 {/* ------------------------- cart icon ------- */}
-                <div>
+                <div className="position-relative">
                   <a
                     data-bs-toggle="offcanvas"
                     href="#offcanvasExample8"
@@ -152,12 +154,14 @@ export default function NavBar() {
                     <i className="fa-sharp fa-solid text-white fa-cart-shopping fs-4"></i>
                     {shopCart.cart.length > 0 && (
                       <span
-                        className="ms-0"
+                        className="ms-0 position-absolute"
                         style={{
                           color: "#fff",
-                          background: "red",
+                          background: "#f02d34",
                           width: "20px",
-                          padding: "0px 5px",
+                          height: "20px",
+                          textAlign:"center",
+                          fontSize:"13px",
                           borderRadius: "50%",
                         }}
                       >
@@ -201,7 +205,10 @@ export default function NavBar() {
                       >
                         <li>
                           {
-                            <Link className="dropdown-item">{`${user?.firstName} ${user?.lastName}`}</Link>
+                            <div className="drop-profile text-center">
+                              <img src={user?.image?.secure_url} alt="" />
+                              <span className="">{`${user?.firstName} ${user?.lastName}`}</span>
+                            </div>
                           }
                         </li>
                         <li>
@@ -316,13 +323,13 @@ export default function NavBar() {
                   {/* --------------- nav bottom menu links ------ */}
                   <div className="menu-links">
                     <div className="d-flex align-items-center gap-2 gap-md-4 ">
-                      <Link to="/" className="text-white">
+                      <Link to="/" className="text-white nav-links">
                         HOME
                       </Link>
-                      <Link to="/store" className="text-white">
+                      <Link to="/store" className="text-white nav-links">
                         OUR STORE
                       </Link>
-                      <Link to="/about" className="text-white">
+                      <Link to="/about" className="text-white nav-links">
                         ABOUT US
                       </Link>
                     </div>

@@ -53,7 +53,12 @@ p{
     z-index: 99;
     
 }
-
+.header-upper .dropdown-menu{
+    overflow: hidden;
+}
+.header-upper .dropdown-item:focus{
+    background-color: #f02d34;
+}
 .header-upper .input-group-text{
     /* background-color: var(--color-search); */
     background-color: #fff;
@@ -171,6 +176,25 @@ p{
 .fade.modal{
     top: 90px !important;
     z-index: 1000000000000000 !important;
+}
+
+.nav-links:hover{
+    color: var(--color-search) !important;
+}
+.drop-profile{
+    height: 90px;
+    background-color: #f02d34;
+    margin-top: -8px;
+    padding-top: 8px;
+    color: #fff;
+    font-weight: 600;
+}
+.drop-profile img{
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: auto;
 }
 /* ----------- media ------------*/
 

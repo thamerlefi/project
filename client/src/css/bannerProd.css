@@ -33,6 +33,33 @@
         min-height: 30vh !important;
     }
 }
+@media (max-width:567px) {
+    .banner-prod{
+        height: 200px !important;
+        padding: 0 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .banner-prod .part{
+        /* height: 100% !important; */
+        margin-top: 15px !important;
+        padding-top: 0 !important;
+        
+    }
+    .banner-prod .slick-slider{
+        /* margin-top: calc(20vh - 30px) !important; */
+    }
+    .prod-slick h1{
+        font-size: 20px !important;
+    }
+    .prod-slick button{
+        width: 60px;
+        height: 25px;
+        font-size: 10px !important;
+        margin-top: 20px;
+    }
+}
 
 
 

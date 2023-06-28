@@ -115,7 +115,13 @@ export default function OrderHistory() {
           </tbody>
         </table>
       </div>
-      <div className="section mt-2 d-flex align-items-center justify-content-between">
+      
+    </>
+  );
+}
+
+/* 
+<div className="section mt-2 d-flex align-items-center justify-content-between">
         <div>
           <select
             // onChange={(e) => {
@@ -139,8 +145,6 @@ export default function OrderHistory() {
               {page}
             </Link>
           ))}
-        </div> */}
-      </div>
-    </>
-  );
-}
+        </div> 
+        </div>
+*/

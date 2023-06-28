@@ -10,22 +10,18 @@ export default function Footer() {
           </div>
 
           <div>
-            <a href="" className="me-4 link-secondary">
+            <a href="https://www.facebook.com/profile.php?id=100008373409490" target="_blank" rel="noreferrer" className="me-4 link-secondary">
               <i className="fab fa-facebook-f"></i>
             </a>
-            <a href="" className="me-4 link-secondary">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="" className="me-4 link-secondary">
+            
+            {/* <a href="" className="me-4 link-secondary">
               <i className="fab fa-google"></i>
-            </a>
-            <a href="" className="me-4 link-secondary">
-              <i className="fab fa-instagram"></i>
-            </a>
-            <a href="" className="me-4 link-secondary">
+            </a> */}
+            
+            <a href="https://www.linkedin.com/in/themer-lefi-a97bb6268/" target="_blank" rel="noreferrer" className="me-4 link-secondary">
               <i className="fab fa-linkedin"></i>
             </a>
-            <a href="" className="me-4 link-secondary">
+            <a href="https://github.com/thamerlefi" target="_blank" rel="noreferrer" className="me-4 link-secondary">
               <i className="fab fa-github"></i>
             </a>
           </div>
@@ -36,37 +32,36 @@ export default function Footer() {
             <div className="row mt-3">
               <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                 <h6 className="text-uppercase text-white fw-bold mb-4">
-                  <i className="fas fa-gem me-3 text-white"></i>Company name
+                  <i className="fas fa-gem me-3 text-white"></i>
+                  Teck-Shop
                 </h6>
                 <p>
-                  Here you can use rows and columns to organize your footer
-                  content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                  elit.
+                Seamless Shopping Experience For Tech Enthusiasts
                 </p>
               </div>
 
               <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                 <h6 className="text-uppercase text-white fw-bold mb-4">
-                  Products
+                  Categories
                 </h6>
                 <p>
                   <a href="#!" className="text-reset">
-                    Angular
+                    Accessories
                   </a>
                 </p>
                 <p>
                   <a href="#!" className="text-reset">
-                    React
+                    Camera
                   </a>
                 </p>
                 <p>
                   <a href="#!" className="text-reset">
-                    Vue
+                    Laptop
                   </a>
                 </p>
                 <p>
                   <a href="#!" className="text-reset">
-                    Laravel
+                    Phone
                   </a>
                 </p>
               </div>
@@ -126,8 +121,8 @@ export default function Footer() {
           style={{ background: "rgba(0, 0, 0, 0.025)" }}
         >
           © 2021 Copyright:
-          <a className="text-reset fw-bold" href="https://mdbootstrap.com/">
-            MDBootstrap.com
+          <a className="text-reset fw-bold" href="#!">
+            Tech-shop.com
           </a>
         </div>
       </footer>
