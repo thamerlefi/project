@@ -56,8 +56,11 @@ p{
 .header-upper .dropdown-menu{
     overflow: hidden;
 }
+.header-upper .dropdown-menu i{
+    color: #f02d34;
+}
 .header-upper .dropdown-item:focus{
-    background-color: #f02d34;
+    background-color: #f08083;
 }
 .header-upper .input-group-text{
     /* background-color: var(--color-search); */

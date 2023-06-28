@@ -213,11 +213,13 @@ export default function NavBar() {
                         </li>
                         <li>
                           <Link to="/user/profile" className="dropdown-item">
+                          <i class="fa-solid fa-user me-2"></i>
                             Profile
                           </Link>
                         </li>
                         <li>
                           <Link to="/user/orders" className="dropdown-item">
+                          <i className="fa-solid fa-pen me-2"></i>
                             Orders History
                           </Link>
                         </li>
