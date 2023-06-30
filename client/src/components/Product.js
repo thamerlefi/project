@@ -1,20 +1,17 @@
 import React from "react";
-// import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addProduct,
-  decCount,
-  incCount,
-} from "../redux/slices/cartSlice";
+import { addProduct, decCount, incCount } from "../redux/slices/cartSlice";
 import "../css/productCard.css";
 import ReactStars from "react-rating-stars-component";
 import { addToWish, deleteFromWish } from "../redux/slices/wishSlice";
+import { toast } from "react-toastify";
 
 export default function Product({ product, col, inWish }) {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.shopCart);
   const { wishList } = useSelector((state) => state.wishList);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const cartProd = cart.find((prod) => prod._id === product._id);
   const wishProd = wishList.find((prod) => prod._id === product._id);
 
@@ -48,39 +45,61 @@ export default function Product({ product, col, inWish }) {
         <div className="position-relative">
           <p className="product-price">${product.price}</p>
           {!cartProd ? (
-            <div className="position-absolute cart-action">
+            <div className="position-absolute cart-action cartt">
               <i
-                onClick={() => dispatch(addProduct(product))}
+                onClick={() => {
+                  isLoggedIn ? dispatch(addProduct(product)) :
+                  toast(`you must loggin first`,  {type: "error"})
+                }}
                 className={`fa-sharp fa-solid fa-cart-shopping  `}
               ></i>
             </div>
           ) : (
             <div className="position-absolute btn-action cart-action-2">
-              <Link style={{color:"#fff"}} onClick={() => dispatch(decCount(product))}>
-                {cartProd.count > 1 ? "-" : <i className="fa-solid   fa-xmark"></i>}
+              <Link
+                style={{ color: "#fff" }}
+                onClick={() => dispatch(decCount(product))}
+              >
+                {cartProd.count > 1 ? (
+                  "-"
+                ) : (
+                  <i className="fa-solid   fa-xmark"></i>
+                )}
               </Link>
-              <span >{cartProd.count}</span>
-              <Link style={{color:"#fff"}} onClick={() => dispatch(incCount(product))}>+</Link>
+              <span>{cartProd.count}</span>
+              <Link
+                style={{ color: "#fff" }}
+                onClick={() => dispatch(incCount(product))}
+              >
+                +
+              </Link>
             </div>
           )}
         </div>
       </div>
-      { inWish ?
-        <i className="fa-solid position-absolute rem-wish fa-xmark"  
-          onClick={()=>dispatch(deleteFromWish(product))}
-        ></i>:
+      {inWish ? (
+        <i
+          className="fa-solid position-absolute rem-wish fa-xmark"
+          onClick={() => dispatch(deleteFromWish(product))}
+        ></i>
+      ) : (
         <div className="action-bar position-absolute ">
-        <div className="d-flex flex-column gap-2 align-items-center">
-          <i className={`${wishProd ? "fa-solid" : "fa-regular"} fa-heart fs-6 ${wishProd ? "text-danger" : ""}`}
-            onClick={()=>dispatch(addToWish(product))}
-          ></i>
-          <Link to={"/" + product._id}>
-            <i className="fa-solid fa-eye fs-6"></i>
-          </Link>
+          <div className="d-flex flex-column gap-2 align-items-center">
+            <i
+              className={`${
+                wishProd ? "fa-solid" : "fa-regular"
+              } fa-heart fs-6 ${wishProd ? "text-danger" : ""}`}
+              onClick={() => {
+                isLoggedIn ? dispatch(addToWish(product)):
+                toast(`you must loggin first`,  {type: "error"})
+              }}
+            ></i>
+            <Link to={"/" + product._id}>
+              <i className="fa-solid fa-eye fs-6"></i>
+            </Link>
+          </div>
         </div>
-      </div>
-      }
+      )}
     </div>
   );
 }
-

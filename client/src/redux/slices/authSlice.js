@@ -8,6 +8,7 @@ const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 const initialState = {
     isLoading: false,
     isSuccess: false,
+    updatePending: false,
     isError: false,
     isLoggedIn: false,
     message: "",
@@ -90,6 +91,7 @@ const authSlice = createSlice({
             state.token = null
             state.user = null
             state.message = ''
+            
         },
         pending: (state) => {
             return {...state, isLoading: true,isSuccess: false,isError: false,message: ""}
@@ -127,12 +129,12 @@ const authSlice = createSlice({
                 isSuccess: false, 
                 message: action.payload}
         })
-
+        // ---------- register cases
         builder
-        .addCase(register.pending, (state)=>{
+        .addCase(register.pending, (state)=>{ // register pending
             return {...state, isLoading: true, isSuccess: false, isError: false, message:''}
         })
-        .addCase(register.fulfilled, (state,action)=>{
+        .addCase(register.fulfilled, (state,action)=>{ // register fulfilled
             return {...state, 
                 isSuccess:true, 
                 isLoading: false,
@@ -142,7 +144,7 @@ const authSlice = createSlice({
                 user: action.payload.user,
                 token: action.payload.token}
         })
-        .addCase(register.rejected, (state,action)=>{
+        .addCase(register.rejected, (state,action)=>{ // register rejected
             return {...state, 
                 isError: true, 
                 isLoading:false, 
@@ -172,13 +174,14 @@ const authSlice = createSlice({
         })
         //----------------------------------- update user cases
         builder.addCase(updateUser.pending, (state)=>{
-            return {...state, isLoading: true, isSuccess: false, isError: false, message:'' }
+            return {...state, updatePending: true, isSuccess: false, isError: false, message:'' }
         })
         builder.addCase(updateUser.fulfilled, (state,action)=>{
             return {...state, 
                     isSuccess:true, 
                     isLoading: false,
                     isError: false,
+                    updatePending: false,
                     isLoggedIn: true,
                     message:action.payload.message,
                     user: action.payload.user}
@@ -187,6 +190,7 @@ const authSlice = createSlice({
             return {...state, 
                     isError: true, 
                     isLoading:false, 
+                    updatePending: false,
                     isSuccess: false, 
                     message: action.payload}
         })
