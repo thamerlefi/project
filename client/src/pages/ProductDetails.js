@@ -16,6 +16,7 @@ import Product from "../components/Product";
 import { addToWish } from "../redux/slices/wishSlice";
 import NotFound from "./NotFound";
 import HelmetTitle from "../components/HelmetTitle";
+import PlaceHolders from "../components/PlaceHolders";
 
 export default function ProductDetails() {
   const [starsKey, setStarsKey] = useState(Math.random());
@@ -46,9 +47,13 @@ export default function ProductDetails() {
       rating,
     };
     e.preventDefault();
+
     try {
       setPending(true);
-      if (rating === 0) {
+      if (comment.trim() === "") {
+        setPending(false);
+        return toast("Comment is required", { type: "error" });
+      } else if (rating === 0) {
         setPending(false);
         return toast("Rating is required", { type: "error" });
       }
@@ -155,9 +160,29 @@ export default function ProductDetails() {
               <div className="container-xxl">
                 <div className="row">
                   <div className="col-12 col-md-6 img-wrapper">
-                    <img src={product.image?.secure_url} alt="" />
+                    {
+                      !products.isLoading ?
+                      <img src={product.image?.secure_url} alt="" />:
+                    <div
+                    className="spinner-border loading-store "
+                    style={{
+                      width: "4rem",
+                      height: "4rem",
+                      marginTop: "40px",
+                      marginBottom: "40px"
+                    }}
+                    role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    }
                   </div>
-                  <div className="col-12 col-md-6 info">
+                  {
+                    products.isLoading ?
+                    <div className="col-12 col-md-6 info">
+                      <PlaceHolders /> 
+                    </div>:
+                    <div className="col-12 col-md-6 info">
                     <h1 className="prod-title mt-3 mt-md-0 b-bottom">
                       {product.name}
                     </h1>
@@ -263,7 +288,7 @@ export default function ProductDetails() {
                         ""
                       )} */}
                     </div>
-                  </div>
+                  </div>}
                 </div>
               </div>
             </div>

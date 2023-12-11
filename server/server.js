@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
 
+
 const { errorHandler } = require("./middlewares/globErrorsHandler");
 const { newError } = require("./utils/Errors");
 
